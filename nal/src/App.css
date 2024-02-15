@@ -1,38 +1,34 @@
-.App {
-  text-align: center;
+#iPhone {
+    position: relative;
+    height: 100vh;
+    width: 50vh;
+    margin: auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#screen {
+    position: relative;
+    display: block;
+    margin: auto;
+    top: 6vh;
+    width: 78%;
+    height: 84%;
+    background-color:beige;
+    border-radius: 12%/6%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#exampleImg {
+    border-radius: 12%/6%;
+    display: block;
+    width: 100%;
+    display: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#iPhoneFrame {
+    position: absolute;
+    display: block;
+    /* display:none; */
+    top: 2.1vh;
+    width: 93%;
+    left: 50%;
+    transform: translate(-50%, 0%);
 }
