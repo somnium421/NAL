@@ -1,0 +1,11 @@
+#homeScroll {
+    position: absolute;
+    top: 54.5%;
+    height: 50%;
+    width: 100%;
+    border-radius: 4vh 4vh 0vh 0vh;
+    /* background-color: white; */
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(0.7vh);
+    box-shadow: 0 1vh 3vh 2vh rgba(0, 0, 0, 0.15);
+}

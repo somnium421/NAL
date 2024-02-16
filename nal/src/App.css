@@ -9,24 +9,17 @@
     position: relative;
     display: block;
     margin: auto;
-    top: 6vh;
+    top: 5.9vh;
     width: 78%;
     height: 84%;
     background-color:beige;
     border-radius: 12%/6%;
-}
-
-#exampleImg {
-    border-radius: 12%/6%;
-    display: block;
-    width: 100%;
-    display: none;
+    overflow: hidden;
 }
 
 #iPhoneFrame {
     position: absolute;
     display: block;
-    /* display:none; */
     top: 2.1vh;
     width: 93%;
     left: 50%;

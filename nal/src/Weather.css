@@ -1,0 +1,83 @@
+#weather { 
+    width: 100%;
+    height: 15.3vh;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'SF Pro Rounded', sans-serif;
+}
+
+#weatherLeft { 
+    margin-left: 2.5vh;
+    width: 20vh;
+    height: 100%;
+}
+
+#weatherRight {
+    margin-right: 2.3vh;
+    width: 12vh;
+    height: 100%;
+}
+
+#textInfo {
+    margin-top: 3.2vh;
+    width: 100%;
+    height: 4.5vh;
+    font-size: 1.7vh;
+}
+
+#buttonInfos {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 1.3vh;
+    width: 100%;
+    height: 5.4vh;
+}
+
+.buttonInfosRow {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 45%;
+}
+
+.buttonInfo {
+    border: 0.2vh solid #000;
+    border-radius: 1.5vh;
+    font-size: 1.3vh;
+    margin-right: 0.5vh;
+    padding: 0.2vh 0.8vh 0 0.8vh;
+}
+
+#iconTemp {
+    position: relative;
+    margin-top: 3vh;
+    width: 100%;
+    height: 8.5vh;
+}
+
+#weatherIcon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#currentTemp {
+    position: absolute;
+    width: 100%;
+    top: 0.6vh;
+    right: 1.3vh;
+    font-weight: lighter;
+    font-size: 7vh;
+    text-align: right;
+    letter-spacing: -0.4vh;
+}
+
+#highLowTemp {
+    margin-top: 1.2vh;
+    width: 100%;
+    height: 1.7vh;
+    font-size: 1.5vh;
+    text-align: center;
+}

@@ -18,11 +18,11 @@ const StatusBar = ()=> {
 
     return (
         <div id="statusBar">
-            <div id="left">
+            <div id="clockLocation">
                 <span id="clock">{nowTime()}</span>
                 <span id="location"><FontAwesomeIcon icon={faLocationArrow}/></span>
             </div>
-            <div id="right">
+            <div id="mobileWifiBattery">
                 <Mobile width="2vh"/>
                 <Wifi width="2vh"/>
                 <Battery width="3vh"/>

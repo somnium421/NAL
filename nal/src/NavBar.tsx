@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './NavBar.css'
 import { ReactComponent as Home } from "./svg/Home.svg";
 import { ReactComponent as Schedule } from "./svg/Schedule.svg";
@@ -8,9 +7,9 @@ const NavBar = ()=> {
     return (
         <div id="navBar">
             <div id="navBarIcons">
-                <span><Home/></span>
-                <span><Schedule/></span>
-                <span><More/></span>
+                <Home width="3vh"/>
+                <Schedule width="3vh"/>
+                <More width="3vh"/>
             </div>
             <div id="homeIndicator"></div>
         </div>
