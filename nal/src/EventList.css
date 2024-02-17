@@ -1,0 +1,14 @@
+#eventList {
+    font-weight: 400;
+    font-size: 1.7vh;
+}
+
+#horizontalLine {
+    border: solid 0.11vh black;
+    margin-top: 0.3vh;
+    margin-bottom: 1.6vh;
+}
+
+#events {
+    margin: 0 2.3vh 0 2.3vh;
+}

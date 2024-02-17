@@ -1,0 +1,10 @@
+#upcomingEvents {
+    height: 30vh;
+    padding: 0.4vh 2.3vh 3vh 2.3vh;
+}
+
+#upcomingEventsTitle {
+    margin-bottom: 1.2vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.06vh;
+}

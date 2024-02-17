@@ -1,8 +1,15 @@
 import './UpcomingEvents.css'
+import './font.css'
+import EventList from './EventList'
 
 const UpcomingEvents = () => {
     return (
-        <div></div>
+        <div id="upcomingEvents">
+            <div>
+                <div id="upcomingEventsTitle">Upcoming Events</div>
+                <EventList/>
+            </div>
+        </div>
     )
 }
 

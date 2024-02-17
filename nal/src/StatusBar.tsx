@@ -11,10 +11,10 @@ const StatusBar = ()=> {
         let now: Date = new Date();
         let hour: string = String(now.getHours()).padStart(2, "0"); 
         let minute: string = String(now.getMinutes()).padStart(2, "0");        
-        return `${hour}:${minute}`
-      }
-      const [clock, setClock] = useState<string>(nowTime);
-      setInterval(() => setClock(nowTime), 1000);
+        return `${hour}:${minute}`;
+    }
+    const [clock, setClock] = useState<string>(nowTime);
+    setInterval(() => setClock(nowTime), 1000);
 
     return (
         <div id="statusBar">

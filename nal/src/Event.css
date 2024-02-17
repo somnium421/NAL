@@ -1,0 +1,20 @@
+.event {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.3vh;    
+}
+
+.eventName {
+    font-weight: 300;
+    font-size: 1.6vh;
+}
+
+.eventLocation {
+    font-weight: 200;
+    font-size: 1.4vh;
+}
+
+.eventTime {
+    font-size: 1.4vh;
+    margin-bottom: 0.2vh;
+}
