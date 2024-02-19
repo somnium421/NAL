@@ -6,7 +6,7 @@
     border-radius: 0% 0% 5vh 5vh;
     box-shadow: 0 -1vh 10vh 0vh rgba(100,100,100,0.5);
     background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(0.1vh);
+    backdrop-filter: blur(0.3vh);
 }
 
 #navBarIcons {

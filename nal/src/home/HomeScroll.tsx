@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import './HomeScroll.css'
-import Weather from './Weather'
+import HomeWeather from './HomeWeather'
 import UpcomingEvents from './UpcomingEvents'
 
 const HomeScroll = () => {
@@ -27,7 +27,7 @@ const HomeScroll = () => {
     return (
         <div id="scroll">
             <div id="homeScroll">
-                <Weather/>
+                <HomeWeather/>
                 <UpcomingEvents/>
             </div>
         </div>
