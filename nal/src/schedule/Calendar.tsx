@@ -4,8 +4,13 @@ import { ReactComponent as AddButton } from '../svg/ScheduleAdd.svg'
 import { getCurrentLocation } from '../utils/util'
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const current = new Date();
+const currentYear = current.getFullYear();
+const currentMonth = current.getMonth();
+const currentDate = current.getDate();
+const currentDay = current.getDay();
 
-const daysComponent = () => {
+const DaysRow = () => {
     const content: JSX.Element[] = [];
     for (let i: number = 0; i<7; i++) {
         content.push(<div key={days[i]} className="day">{days[i]}</div>);
@@ -13,22 +18,16 @@ const daysComponent = () => {
     return content;
 }
 
-const datesComponent = () => {
-    const content: JSX.Element[] = [];
+const DatesRows = () => {
+    const content: JSX.Element[] = [];   
+    const prevLastDate = new Date(currentYear, currentMonth, 0).getDate();
+    const currentLastDay = new Date(currentYear, currentMonth+1, 0).getDay();
 
-    const date = new Date();
-    const currentYear = date.getFullYear();
-    const currentMonth = date.getMonth();
-    const currentDate = date.getDate();
-    const currentDay = date.getDay();
-    const prevDate = new Date(currentYear, currentMonth+1, 0)
     return content;
 }
 
 const Calendar = () => {
     const [currentLocationName, setCurrentLocationName] = useState<string>("");
-    const now = new Date();
-
     const location = getCurrentLocation();
     useEffect(() => {
         if (location instanceof Promise) {
@@ -37,16 +36,16 @@ const Calendar = () => {
             })
         }
         else setCurrentLocationName(location.name);
-    })
+    }, []);
 
     return (
         <div id="calendarBox">
             <div id="currentLocation">{currentLocationName}&nbsp;</div>
-            <div id="yearAndMonth">{month[now.getMonth()]+" "+now.getFullYear()}</div>
+            <div id="yearAndMonth">{month[currentMonth]+" "+currentYear}</div>
             <div id="calendar">
-                <div id="days">{daysComponent()}</div>
+                <div id="days">{DaysRow()}</div>
                 <div id="dates">
-                    {datesComponent()}
+                    {DatesRows()}
                 </div>
             </div>
             <div id="addButton">

@@ -7,10 +7,19 @@ type Location = {
     name: string
 }
 
-type Weather = {
-    current: string;
+type Temperature = {
+    current?: string;
+    feel?: string;
     high: string;
     low: string;
+}
+
+type Weather = {
+    temperature: Temperature;
+    humidity: number;
+    pressure: number;
+    main: string;
+    wind: [string, string];
 }
 
 const currentLocation: Location = {
@@ -19,10 +28,29 @@ const currentLocation: Location = {
     name: "",
 };
 
-const currentWeather: Weather = {
-    current: '',
-    high: '',
-    low: '',
+const todayWeather: Weather = {
+    temperature: {
+        current: "",
+        feel: "",
+        high: "",
+        low: "",
+    },
+    humidity: 0,
+    pressure: 0,
+    main: "",
+    wind: ["", ""],
+}
+
+const windDirection = (degree: number): string => {
+    if (degree > 337.5) return "N";
+    if (degree > 292.5) return "NW";
+    if (degree > 247.5) return "W";
+    if (degree > 202.5) return "SW";
+    if (degree > 157.5) return "S";
+    if (degree > 112.5) return "SE";
+    if (degree > 67.5) return "E";
+    if (degree > 22.5) return "NE";
+    else return "N"
 }
 
 let updated = false;
@@ -52,23 +80,33 @@ const getCurrentWeather = (): Weather | Promise<Weather> => {
         .then((response) => response.json())
         .then((json) => {
             console.log(json);
-            currentWeather.current = json.main.temp.toFixed();
-            currentWeather.high = json.main.temp_max.toFixed();
-            currentWeather.low = json.main.temp_min.toFixed();
+            if (todayWeather.temperature?.current !== undefined) {
+                todayWeather.temperature.current = json.main.temp.toFixed();
+            }
+            if (todayWeather.temperature?.feel !== undefined) {
+                todayWeather.temperature.feel = json.main.feels_like.toFixed();
+            }
+            todayWeather.humidity = json.main.humidity;
+            todayWeather.pressure = json.main.pressure;
+            todayWeather.main = json.weather[0].main;
+            todayWeather.wind = [windDirection(json.wind.deg), json.wind.speed.toFixed()];
+            return location;
+        })
+        .then((location) => {
+            return fetch(`https://pro.openweathermap.org/data/2.5/forecast/climate?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&cnt=1&units=metric`);
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json);
+            todayWeather.temperature.high = json.list[0].temp.max.toFixed();
+            todayWeather.temperature.low = json.list[0].temp.min.toFixed();
             updated = true;
-            return currentWeather;
-        });
+            console.log(todayWeather);
+            return todayWeather;
+        })
     }
-    else return currentWeather;
+    else return todayWeather;
 }
 
-// const getCurrentTemp = () => {
-//     console.log(location);
-    
-//     temperature.current = "23";
-//     temperature.high = "29";
-//     temperature.low = "16"
-// }
-
 export { getCurrentLocation, getCurrentWeather };
-export type { Location, Weather };
+export type { Location, Temperature, Weather };

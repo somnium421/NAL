@@ -7,7 +7,7 @@ import StatusBar from './components/StatusBar';
 import NavBar from './components/NavBar';
 
 const App = ()=> {
-  const [mode, setMode] = useState<string>("SCHEDULE");
+  const [mode, setMode] = useState<string>("HOME");
 
   return (
     <div>
