@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './StatusBar.css'
-import { ReactComponent as Mobile } from "./svg/Mobile.svg";
-import { ReactComponent as Wifi } from "./svg/Wifi.svg";
-import { ReactComponent as Battery } from "./svg/Battery.svg";
+import { ReactComponent as Mobile } from "../svg/Mobile.svg";
+import { ReactComponent as Wifi } from "../svg/Wifi.svg";
+import { ReactComponent as Battery } from "../svg/Battery.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons'
 

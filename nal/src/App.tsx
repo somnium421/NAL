@@ -1,25 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
-import './font.css';
-import StatusBar from './StatusBar';
-import NavBar from './NavBar';
-import HomePhoto from './HomePhoto';
-import HomeScroll from './HomeScroll';
+import './font/font.css';
+import HomePage from './home/HomePage';
+import SchedulePage from './schedule/SchedulePage';
+import StatusBar from './components/StatusBar';
+import NavBar from './components/NavBar';
 
 const App = ()=> {
-  const [mode, setMode] = useState<string>("HOME");
-
-  let content: JSX.Element = <></>;
-
-  if (mode === "HOME") {
-    content = <><HomePhoto/><HomeScroll/></>;
-  }
+  const [mode, setMode] = useState<string>("SCHEDULE");
 
   return (
     <div>
       <div id="iPhone">
         <div id="screen">
-          {content}
+          {mode === "HOME" && <HomePage/>}
+          {mode === "SCHEDULE" && <SchedulePage/>}
           <StatusBar/>
           <NavBar mode={mode} setMode={setMode}/>
         </div>

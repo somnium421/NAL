@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './Weather.css'
-import './font.css'
-import { config } from './apiKey'
-import { ReactComponent as WeatherIcon } from "./svg/WeatherIcon.svg";
+import '../font/font.css'
+import { config } from '../utils/apiKey'
+import { ReactComponent as WeatherIcon } from "../svg/WeatherIcon.svg";
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 
 interface ILocation {
@@ -74,7 +74,7 @@ const Weather = () => {
     const [currentTemp, setCurrentTemp] = useState<string>(temperature.current);
     const [highTemp, setHighTemp] = useState<string>(temperature.high);
     const [lowTemp, setLowTemp] = useState<string>(temperature.low);
-
+    
     if (!temperature.updated) getCurrentWeatherInfo(setCurrentTemp, setHighTemp, setLowTemp);
 
     return (

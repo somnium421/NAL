@@ -6,11 +6,11 @@
     overflow-y: scroll;
 }
 
-
 #homeScroll {
     position: absolute;
-    top: 70%;
+    top: 71%;
     width: 99%;
+    height: 47%;
     display: flex;
     flex-direction: column;
     margin-left: 0.2vh;

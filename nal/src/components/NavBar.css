@@ -20,6 +20,7 @@
 
 .navBarIcon { 
     width: 3vh;
+    height: 2.5vh;
 }
 
 #homeIndicator {
@@ -37,8 +38,8 @@
     left: 34vh;
 }
 
-#notiWithDot { 
+#notiDot { 
     position: absolute;
-    top: 7vh;
-    left: 34vh;
+    top: 6.8vh;
+    left: 36.3vh;
 }

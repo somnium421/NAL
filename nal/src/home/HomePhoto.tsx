@@ -1,5 +1,5 @@
 import './HomePhoto.css'
-import './font.css'
+import '../font/font.css'
 
 interface Props {
     top: string;

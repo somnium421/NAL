@@ -1,5 +1,5 @@
 import './EventList.css'
-import './font.css'
+import '../font/font.css'
 import Event, { IEvent } from './Event'
 
 
@@ -29,7 +29,7 @@ const event2: IEvent = {
 const EventList = () => {
     return (
         <div>
-            <div id="eventList">TODAY</div>
+            <div id="eventListTitle">TODAY</div>
             <hr id="horizontalLine"></hr>
             <div id="events">
                 <Event event={event1}/>

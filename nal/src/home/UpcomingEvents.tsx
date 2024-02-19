@@ -1,5 +1,5 @@
 import './UpcomingEvents.css'
-import './font.css'
+import '../font/font.css'
 import EventList from './EventList'
 
 const UpcomingEvents = () => {

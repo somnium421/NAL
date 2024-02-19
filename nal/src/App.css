@@ -5,6 +5,7 @@
     width: 50vh;
     margin: auto;
     animation: appear 1s ease-out;
+    font-size: 1.7vh;
 }
 
 #screen {
@@ -14,7 +15,6 @@
     top: 5.9vh;
     width: 78%;
     height: 84%;
-    background-color:beige;
     border-radius: 12%/6%;
     overflow: hidden;
     font-family: 'SF Pro Rounded';
