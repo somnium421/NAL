@@ -1,9 +1,13 @@
-import React from 'react'
+import React from 'react';
+import './ModiPage.css';
+import PageTitle from '../components/PageTitle';
 
 const ModiPage = () => {
   return (
-    <div>modiPage</div>
-  )
+    <div id="modiPage">
+      <PageTitle pageTitleMode="MODI"/>
+    </div>
+  );
 }
 
 export default ModiPage;

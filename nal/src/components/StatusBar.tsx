@@ -3,6 +3,7 @@ import './StatusBar.css'
 import { ReactComponent as Mobile } from "../svg/Mobile.svg";
 import { ReactComponent as Wifi } from "../svg/Wifi.svg";
 import { ReactComponent as Battery } from "../svg/Battery.svg";
+import { ReactComponent as GPS } from "../svg/GPS.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons'
 import { statusBarColorState } from '../utils/atom';
@@ -28,7 +29,7 @@ const StatusBar = () => {
         <div id="statusBar" ref={statusBar}>
             <div id="clockLocation">
                 <span id="clock">{clock}</span>
-                <span id="location"><FontAwesomeIcon icon={faLocationArrow}/></span>
+                {/* <span id="gps"><GPS width="1.7vh" height="1.7vh"/></span> */}
             </div>
             <div id="mobileWifiBattery">
                 <Mobile width="2vh"/>

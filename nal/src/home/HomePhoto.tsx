@@ -23,7 +23,7 @@ const HomePhoto = () => {
                 console.log("Image Clicked");
             }}/>
             <div id="homePhotoText">
-                <div id="homePhotoTextTop">Today is similar to <span className="gradient">Nov 30, 2022</span></div>
+                <div id="homePhotoTextTop">Today is similar to <span id="asdf" className="gradient">Nov 30, 2022</span></div>
                 <div id="homePhotoTextBottom"><span id="weatherFelt">Weather felt</span> cold.</div>
             </div>
             <div id="homeTags">

@@ -1,4 +1,6 @@
-import './Event.css'
+import './Event.css';
+import { useRecoilState } from 'recoil';
+import { modiModeState } from '../utils/atom';
 
 export interface IEvent {
     name: string;
@@ -12,10 +14,9 @@ interface Props {
 }
 
 const Event = (props: Props) => {
+    const [modiMode, setModiMode] = useRecoilState(modiModeState);
     return (
-        <div className="event" onClick={() => {
-            console.log('hi')
-        }}>
+        <div className="event" onClick={()=>setModiMode(true)}>
             <div className="eventNameIconLocation">
                 <div className="eventName">{props.event.name}</div>
                 <div className="eventLocation">{props.event.place}</div>

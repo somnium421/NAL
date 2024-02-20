@@ -12,16 +12,7 @@
 }
 
 #clockLocation {
-    margin-left: 10%;
-    display: flex;
-    justify-content: space-between;
-    width: 17%;
-}
-
-#mobileWifiBattery {
-    margin-right: 9%;
-    display: flex;
-    justify-content: space-between;
+    margin-left: 5vh;
     width: 20%;
 }
 
@@ -31,7 +22,15 @@
     font-size: 1.7vh;   
 }
 
-#location {
-    margin-top: 1%;
-    font-size: 1.7vh;
+#gps {
+    position: absolute;
+    margin-left: 1vh;
+    margin-top: 0.2vh;
+}
+
+#mobileWifiBattery {
+    margin-right: 9%;
+    display: flex;
+    justify-content: space-between;
+    width: 20%;
 }

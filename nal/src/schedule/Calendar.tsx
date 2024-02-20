@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react'
-import './Calendar.css'
-import { ReactComponent as AddButton } from '../svg/ScheduleAdd.svg'
-import { getCurrentLocation, getMonthlyWeather } from '../utils/util'
+import { useState, useEffect } from 'react';
+import './Calendar.css';
+import { ReactComponent as AddButton } from '../svg/ScheduleAdd.svg';
+import { getCurrentLocation, getMonthlyWeather } from '../utils/util';
+import { useRecoilState } from 'recoil';
+import { modiModeState } from '../utils/atom';
+
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const current = new Date();
@@ -27,6 +30,7 @@ const DatesRows = () => {
 }
 
 const Calendar = () => {
+    const [modiMode, setModiMode] = useRecoilState(modiModeState);
     const [currentLocationName, setCurrentLocationName] = useState<string>("");
     const location = getCurrentLocation();
     useEffect(() => {

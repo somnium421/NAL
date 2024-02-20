@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import './App.css';
 import './font/font.css';
@@ -9,6 +9,7 @@ import NavBar from './components/NavBar';
 import NotiPage from './noti/NotiPage';
 import ModiPage from './modi/ModiPage';
 import { modeState, notiModeState, modiModeState, statusBarColorState } from './utils/atom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const App = ()=> {
   const [mode, setMode] = useRecoilState(modeState); // HOME, SCHEDULE, MORE
@@ -21,6 +22,8 @@ const App = ()=> {
     else setStatusBarColor("black");
   });  
 
+  const nodeRef = useRef(null);
+
   return (
     <div>
       <div id="iPhone">
@@ -28,7 +31,16 @@ const App = ()=> {
           {mode === "HOME" && <HomePage/>}
           {mode === "SCHEDULE" && <SchedulePage/>}
           <NavBar/>
-          {notiMode && <NotiPage/>}
+          <CSSTransition
+            in={notiMode}
+            // nodeRef={nodeRef}
+            timeout={1000}
+            classNames="notiAni"
+            unmountOnExit>
+              <NotiPage/>
+          </CSSTransition>
+
+          {/* {notiMode && <NotiPage/>} */}
           {modiMode && <ModiPage/>}
           <StatusBar/>
         </div>
