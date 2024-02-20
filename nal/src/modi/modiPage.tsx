@@ -1,9 +1,9 @@
 import React from 'react'
 
-const modiPage = () => {
+const ModiPage = () => {
   return (
     <div>modiPage</div>
   )
 }
 
-export default modiPage;
+export default ModiPage;

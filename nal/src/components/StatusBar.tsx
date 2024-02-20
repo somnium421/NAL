@@ -5,26 +5,24 @@ import { ReactComponent as Wifi } from "../svg/Wifi.svg";
 import { ReactComponent as Battery } from "../svg/Battery.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons'
-
-interface Props {
-    color: string;
-}
+import { statusBarColorState } from '../utils/atom';
+import { useRecoilState } from 'recoil';
 
 const nowTime = () => {
     const now: Date = new Date();
     return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 }
 
-const StatusBar = (props: Props) => {
+const StatusBar = () => {
     const [clock, setClock] = useState<string>(nowTime());
+    const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
     setInterval(() => setClock(nowTime()), 1000);
 
-    const color = props.color;
     const statusBar = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (statusBar?.current !== null) statusBar.current.style.setProperty("color", color);
-    }, [color]);
+        if (statusBar?.current !== null) statusBar.current.style.setProperty("color", statusBarColor);
+    }, [statusBarColor]);
 
     return (
         <div id="statusBar" ref={statusBar}>

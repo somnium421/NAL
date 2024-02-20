@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import './App.css';
 import './font/font.css';
 import HomePage from './home/HomePage';
@@ -6,18 +7,19 @@ import SchedulePage from './schedule/SchedulePage';
 import StatusBar from './components/StatusBar';
 import NavBar from './components/NavBar';
 import NotiPage from './noti/NotiPage';
+import ModiPage from './modi/ModiPage';
+import { modeState, notiModeState, modiModeState, statusBarColorState } from './utils/atom';
 
 const App = ()=> {
-  const [mode, setMode] = useState<string>("HOME"); // HOME, SCHEDULE, MORE
-  const [notiMode, setNotiMode] = useState<boolean>(false);
-  const [statusBarColor, setStatusBarColor] = useState<string>("white");
+  const [mode, setMode] = useRecoilState(modeState); // HOME, SCHEDULE, MORE
+  const [notiMode, setNotiMode] = useRecoilState(notiModeState);
+  const [modiMode, setModiMode] = useRecoilState(modiModeState);
+  const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
 
   useEffect(() => {
     if ((mode === "HOME" || mode === "SCHEDULE") && notiMode === false) setStatusBarColor("white");
     else setStatusBarColor("black");
   });  
-
-  
 
   return (
     <div>
@@ -25,9 +27,10 @@ const App = ()=> {
         <div id="screen">
           {mode === "HOME" && <HomePage/>}
           {mode === "SCHEDULE" && <SchedulePage/>}
-          <NavBar mode={mode} notiMode={notiMode} setMode={setMode} setNotiMode={setNotiMode}/>
-          {notiMode && <NotiPage notiMode={notiMode} setNotiMode={setNotiMode}/>}
-          <StatusBar color={statusBarColor}/>
+          <NavBar/>
+          {notiMode && <NotiPage/>}
+          {modiMode && <ModiPage/>}
+          <StatusBar/>
         </div>
         <img id="iPhoneFrame" draggable="false" src="img/iPhoneFrame.png" alt=""/>
       </div>

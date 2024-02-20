@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import './NotiPage.css'
 import PageTitle from '../components/PageTitle';
 import NotiComp from '../components/NotiComp';
+import { notiModeState } from '../utils/atom';
 
-interface Props {
-    notiMode: boolean;
-    setNotiMode: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const NotiPage = (props: Props) => {
+const NotiPage = () => {
+    const [notiMode, setNotiMode] = useRecoilState(notiModeState);
     return (
         (<div id="notiPage">
-            <PageTitle notiMode={props.notiMode} pageTitleMode="NOTI" setNotiMode={props.setNotiMode}/>
+            <PageTitle pageTitleMode="NOTI"/>
             <div id="notiCompLists">
                 <div className="notiCompListTitle">Today</div>
                 <NotiComp/>
