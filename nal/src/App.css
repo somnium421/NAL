@@ -5,7 +5,7 @@
     width: 50vh;
     margin: auto;
     font-size: 1.7vh;
-    /* animation: appear 1s ease-out; */
+    animation: appear 1s ease-out;
 }
 
 #screen {

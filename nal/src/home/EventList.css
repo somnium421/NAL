@@ -6,9 +6,9 @@
 #horizontalLine {
     border: solid 0.11vh black;
     margin-top: 0.3vh;
-    margin-bottom: 1.6vh;
+    margin-bottom: 1vh;
 }
 
 #events {
-    margin: 0 2.3vh 0 2.3vh;
+    /* margin: 0 2.3vh 0 2.3vh; */
 }

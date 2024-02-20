@@ -13,7 +13,9 @@ interface Props {
 
 const Event = (props: Props) => {
     return (
-        <div className="event">
+        <div className="event" onClick={() => {
+            console.log('hi')
+        }}>
             <div className="eventNameIconLocation">
                 <div className="eventName">{props.event.name}</div>
                 <div className="eventLocation">{props.event.place}</div>

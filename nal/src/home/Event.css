@@ -1,7 +1,10 @@
 .event {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1.3vh;    
+    /* margin-bottom: 1.3vh;     */
+    padding: 0.5vh 2.3vh 0.5vh 2.3vh;
+    border-radius: 1.3vh;
+    transition: all 0.2s ease;
 }
 
 .eventName {
@@ -17,4 +20,8 @@
 .eventTime {
     font-size: 1.4vh;
     margin-bottom: 0.2vh;
+}
+
+.event:hover {
+    background-color: rgb(200,200,200);
 }
