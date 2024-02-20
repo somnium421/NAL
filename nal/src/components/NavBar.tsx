@@ -10,15 +10,21 @@ import { ReactComponent as NotiDot } from "../svg/NotiDot.svg";
 
 interface Props {
     mode: string;
+    notiMode: boolean;
     setMode: React.Dispatch<React.SetStateAction<string>>;
+    setNotiMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const NavBar = (props: Props)=> {
+    const changeNotiMode = () => {
+        props.setNotiMode(!props.notiMode)
+    }
+
     return (
         <div>
             {props.mode === "HOME" &&
-            <><Noti id="noti" width="3vh" height="2.4vh"/>
-            <NotiDot id="notiDot" width="0.6vh" height="0.6vh"/></>            
+            <><Noti id="noti" onClick={changeNotiMode} width="3vh" height="2.4vh"/>
+            <NotiDot id="notiDot" onClick={changeNotiMode} width="0.6vh" height="0.6vh"/></>            
             }
             <div id="navBar">
                 <div id="navBarIcons">

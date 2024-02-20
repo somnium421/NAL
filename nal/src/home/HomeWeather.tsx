@@ -25,8 +25,8 @@ const HomeWeather = () => {
                         <span className="buttonInfo">Feels like {todayWeather?.temperature?.feel}°</span>
                     </div>
                     <div className="buttonInfosRow">
-                        <span className="buttonInfo">Pres. {todayWeather?.pressure}hPA</span>
-                        <span className="buttonInfo">{todayWeather?.wind[0]+" "+todayWeather?.wind[1]}m/s</span>
+                        <span className="buttonInfo">Pres. {todayWeather?.pressure} hPA</span>
+                        <span className="buttonInfo">{todayWeather?.wind?.direction+" "+todayWeather?.wind?.speed}m/s</span>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@ const HomeWeather = () => {
                     <WeatherIcon id="weatherIcon"/>
                     <div id="currentTemp">{todayWeather?.temperature?.current}°</div>
                 </div>
-                <div id="highLowTemp">H:{todayWeather?.temperature.high}° L:{todayWeather?.temperature.low}°</div>
+                <div id="highLowTemp">H:{todayWeather?.temperature.high}°&nbsp;&nbsp;L:{todayWeather?.temperature.low}°</div>
             </div>
         </div>
     )

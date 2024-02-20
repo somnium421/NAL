@@ -8,7 +8,7 @@
     justify-content: space-between;
     width: 100%;
     height: 7%;
-    color: white;
+    color: black;
 }
 
 #clockLocation {
@@ -23,18 +23,15 @@
     display: flex;
     justify-content: space-between;
     width: 20%;
-    /* color: black; */
 }
 
 #clock {
     font-family: 'SF Pro Display', sans-serif;
     font-weight: bold; 
     font-size: 1.7vh;   
-    /* color: black; */
 }
 
 #location {
     margin-top: 1%;
     font-size: 1.7vh;
-    /* color: black; */
 }

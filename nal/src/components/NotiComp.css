@@ -1,0 +1,33 @@
+.notiComp {
+    background-color: #F9F7FF;
+    /* background-color: gray; */
+    border-radius: 1.5vh;
+    padding: 1vh 3vh 1vh 1vh;
+    margin-bottom: 0.7vh;
+    display: flex;
+    transition: background 0.3s ease;
+}
+
+.notiCompDotAndIcon {
+    display: flex;
+    align-items: center;
+}
+
+.notiCompDot {
+    width: 0.6vh;
+    height: 0.6vh;
+    border-radius: 50%;
+    margin-right: 1.9vh;
+    background-color: #7560FA;
+}
+
+.notiCompText {
+    margin-left: 1.4vh;
+    font-size: 1.3vh;
+    font-weight: 200;
+    align-self: center;
+}
+
+.notiComp:hover {
+    background-color: #E6E4ED;
+}

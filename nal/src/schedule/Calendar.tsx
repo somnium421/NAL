@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Calendar.css'
 import { ReactComponent as AddButton } from '../svg/ScheduleAdd.svg'
-import { getCurrentLocation } from '../utils/util'
+import { getCurrentLocation, getMonthlyWeather } from '../utils/util'
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const current = new Date();

@@ -1,0 +1,48 @@
+#notiPage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background-image: url('../../public/img/NOTIFICATION.png'); */
+    background-color: white;
+    background-size: cover;
+    box-sizing: border-box;
+    padding: 5.4vh 0 0 0;
+    box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0.1);
+    /* animation: pageAppear 0.3s ease-out; */
+}
+
+#notiCompLists {
+    height: 100%;
+    overflow-y: scroll;
+    margin: 3.3vh 2.4vh 0 2.4vh;
+}
+
+#notiCompLists::-webkit-scrollbar {
+	display:none 
+}
+
+.notiCompListTitle {
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+    color: #4E4E4E;
+}
+
+@keyframes pageAppear {
+    from{
+        left: 39vh;
+    }
+    to{
+        left: 0;
+    }
+}
+
+@keyframes pageDisappear {
+    from{
+        left: 0;
+    }
+    to{
+        left: 39vh;
+    }
+}

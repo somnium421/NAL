@@ -4,25 +4,25 @@ import HomeWeather from './HomeWeather'
 import UpcomingEvents from './UpcomingEvents'
 
 const HomeScroll = () => {
-    const scrollRef = useRef<HTMLDivElement>(null);
+    // const scrollRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const scrollRefCurrent = scrollRef.current;
-        const wheelHandler = (e: Event) => {
-            e.preventDefault();
-            if (scrollRefCurrent instanceof HTMLDivElement) {
-                console.log(e);                
-            }
-        }
-        if (scrollRefCurrent instanceof HTMLDivElement) {
-            scrollRefCurrent.addEventListener("wheel", wheelHandler);
-        }
-        return () => {
-            if (scrollRefCurrent instanceof HTMLDivElement) {
-            scrollRefCurrent?.removeEventListener("wheel", wheelHandler);
-            }
-        }
-    }, [])
+    // useEffect(() => {
+    //     const scrollRefCurrent = scrollRef.current;
+    //     const wheelHandler = (e: Event) => {
+    //         e.preventDefault();
+    //         if (scrollRefCurrent instanceof HTMLDivElement) {
+    //             console.log(e);                
+    //         }
+    //     }
+    //     if (scrollRefCurrent instanceof HTMLDivElement) {
+    //         scrollRefCurrent.addEventListener("wheel", wheelHandler);
+    //     }
+    //     return () => {
+    //         if (scrollRefCurrent instanceof HTMLDivElement) {
+    //         scrollRefCurrent?.removeEventListener("wheel", wheelHandler);
+    //         }
+    //     }
+    // }, [])
 
     return (
         <div id="scroll">

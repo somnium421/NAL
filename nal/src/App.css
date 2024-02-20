@@ -4,8 +4,8 @@
     height: 100vh;
     width: 50vh;
     margin: auto;
-    animation: appear 1s ease-out;
     font-size: 1.7vh;
+    /* animation: appear 1s ease-out; */
 }
 
 #screen {
