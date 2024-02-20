@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import './App.css';
-import './font/font.css';
-import HomePage from './home/HomePage';
-import SchedulePage from './schedule/SchedulePage';
+import './fonts/font.css';
+import HomePage from './pages/HomePage';
+import SchedulePage from './pages/SchedulePage';
 import StatusBar from './components/StatusBar';
 import NavBar from './components/NavBar';
-import NotiPage from './noti/NotiPage';
-import ModiPage from './modi/ModiPage';
+import NotiPage from './pages/NotiPage';
+import ModiPage from './pages/ModiPage';
 import { modeState, notiModeState, modiModeState, statusBarColorState } from './utils/atom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -22,8 +22,6 @@ const App = ()=> {
     else setStatusBarColor("black");
   });  
 
-  const nodeRef = useRef(null);
-
   return (
     <div>
       <div id="iPhone">
@@ -33,15 +31,18 @@ const App = ()=> {
           <NavBar/>
           <CSSTransition
             in={notiMode}
-            // nodeRef={nodeRef}
             timeout={1000}
-            classNames="notiAni"
+            classNames="sidePage"
             unmountOnExit>
               <NotiPage/>
           </CSSTransition>
-
-          {/* {notiMode && <NotiPage/>} */}
-          {modiMode && <ModiPage/>}
+          <CSSTransition
+            in={modiMode}
+            timeout={500}
+            classNames="sidePage"
+            unmountOnExit>
+              <ModiPage/>
+          </CSSTransition>
           <StatusBar/>
         </div>
         <img id="iPhoneFrame" draggable="false" src="img/iPhoneFrame.png" alt=""/>

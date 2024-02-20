@@ -1,6 +1,6 @@
 import './HomePage.css'
-import HomePhoto from './HomePhoto';
-import HomeScroll from './HomeScroll';
+import HomePhoto from '../components/HomePhoto';
+import HomeScroll from '../components/HomeScroll';
 
 const HomePage = () => {
     return (

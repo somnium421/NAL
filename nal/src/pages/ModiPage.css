@@ -9,6 +9,4 @@
     box-sizing: border-box;
     /* background-color: white; */
     padding: 5.4vh 0 0 0;
-    box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0.1);
-    animation: pageAppear 0.3s ease-out;
 }

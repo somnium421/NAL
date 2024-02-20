@@ -4,7 +4,7 @@
     width: 50vh;
     margin: auto;
     font-size: 1.7vh;
-    animation: appear 1s ease-out;
+    animation: appear 2s;
 }
 
 #screen {
@@ -31,7 +31,7 @@
 
 @keyframes appear {
     from{
-        bottom: -2vh;
+        bottom: -4vh;
         opacity: 0%;
     }
     to{
@@ -40,20 +40,24 @@
     }
 }
 
-.notiAni-enter {
+.sidePage-enter {
     transform: translateX(39vh);
+    box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0);
 }
 
-.notiAni-enter-active {
+.sidePage-enter-active {
     transform: translateX(0);
+    box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0.1);
     transition: all 0.5s;
 }
 
-.notiAni-exit {
+.sidePage-exit {
     transform: translateX(0);
+    box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0.1);
 }
 
-.notiAni-exit-active {
+.sidePage-exit-active {
     transform: translateX(39vh);
+    box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0);
     transition: all 0.5s;
 }

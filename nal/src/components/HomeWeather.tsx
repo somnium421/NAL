@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Weather, getCurrentWeather } from '../utils/util'
 import './HomeWeather.css'
-import '../font/font.css'
 import { ReactComponent as WeatherIcon } from "../svg/WeatherIcon.svg";
 
 const HomeWeather = () => {

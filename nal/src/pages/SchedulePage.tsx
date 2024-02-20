@@ -1,6 +1,6 @@
 import './SchedulePage.css'
-import Calendar from './Calendar'
-import EventList from '../home/EventList'
+import Calendar from '../components/Calendar'
+import EventList from '../components/EventList'
 
 
 const SchedulePage = () => {

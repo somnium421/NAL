@@ -1,5 +1,4 @@
 import './EventList.css'
-import '../font/font.css'
 import Event, { IEvent } from './Event'
 
 
