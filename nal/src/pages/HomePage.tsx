@@ -1,10 +1,9 @@
-import './HomePage.css'
-import HomePhoto from '../components/HomePhoto';
-import HomeScroll from '../components/HomeScroll';
+import HomePhoto from '../components/home/HomePhoto';
+import HomeScroll from '../components/home/HomeScroll';
 
 const HomePage = () => {
     return (
-        <div id="homePage">
+        <div id="homePage" className="page">
             <HomePhoto/>
             <HomeScroll/>
         </div>

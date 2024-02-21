@@ -1,9 +1,9 @@
-#eventListTitle {
+.eventListTitle {
     font-weight: 400;
     font-size: 1.7vh;
 }
 
-#horizontalLine {
+.horizontalLine {
     border: solid 0.11vh black;
     margin-top: 0.3vh;
     margin-bottom: 1vh;

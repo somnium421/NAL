@@ -14,9 +14,16 @@
     top: 5.9vh;
     width: 78%;
     height: 84%;
-    border-radius: 12%/6%;
+    border-radius: 4vh;
     overflow: hidden;
     font-family: 'SF Pro Rounded';
+    --purple: #7560FA;
+    --lightPurple: #F9F7FF;
+    --padding: 2.3vh;
+}
+
+.purple {
+    color: var(--purple);
 }
 
 #iPhoneFrame {
@@ -38,6 +45,15 @@
         bottom: 0vh;
         opacity: 100%;
     }
+}
+
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
 }
 
 .sidePage-enter {

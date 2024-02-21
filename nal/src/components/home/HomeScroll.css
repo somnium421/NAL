@@ -8,16 +8,26 @@
 
 #homeScroll {
     position: absolute;
-    top: 71%;
+    top: 30%;
     width: 99%;
-    height: 47%;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
-    margin-left: 0.2vh;
     border-radius: 4vh 4vh 0vh 0vh;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(0.7vh);
-    box-shadow: 0 1vh 3vh 2vh rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1vh 3vh 2vh rgba(0, 0, 0, 0.2);
+    padding: var(--padding);
+    box-sizing: border-box;
+}
+
+#feel {
+    margin-top: 1vh;
+}
+
+#upcomingEvents {
+    margin: 0.7vh 0 50vh 0;
 }
 
 #scroll::-webkit-scrollbar {

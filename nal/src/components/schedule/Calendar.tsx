@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import './Calendar.css';
-import { ReactComponent as AddButton } from '../svg/ScheduleAdd.svg';
-import { getCurrentLocation, getMonthlyWeather } from '../utils/util';
-import { useRecoilState } from 'recoil';
-import { modiModeState } from '../utils/atom';
+import { ReactComponent as AddButton } from '../../svg/ScheduleAdd.svg';
+import { getCurrentLocation, getMonthlyWeather } from '../../utils/util';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { currentEventState, showEventState, showModiState } from '../../utils/atom';
 
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -30,8 +30,11 @@ const DatesRows = () => {
 }
 
 const Calendar = () => {
-    const [modiMode, setModiMode] = useRecoilState(modiModeState);
+    const [showModi, setShowModi] = useRecoilState(showModiState);
+    const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const [currentLocationName, setCurrentLocationName] = useState<string>("");
+    const resetCurrentEvent = useResetRecoilState(currentEventState);
+
     const location = getCurrentLocation();
     useEffect(() => {
         if (location instanceof Promise) {
@@ -53,7 +56,10 @@ const Calendar = () => {
                 </div>
             </div>
             <div id="addButton">
-            <AddButton width="3vh" height="3vh"/>
+            <AddButton width="3vh" height="3vh" onClick={()=> {
+                resetCurrentEvent();
+                setShowEvent(true);
+            }}/>
             </div>
         </div>
     )

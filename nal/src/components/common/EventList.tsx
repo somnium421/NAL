@@ -13,23 +13,23 @@ const dailyEvents: IDailyEvents = {
 }
 
 const event1: IEvent = {
-    name: 'Meeting',
+    activity: 'Meeting',
     time: ["10:00", "12:00"],
-    place: 'Seongsu-dong, Seoul',
+    location: 'Seongsu-dong, Seoul',
     climate: 'sunny',
 }
 const event2: IEvent = {
-    name: 'Jogging',
+    activity: 'Jogging',
     time: ["16:00", "17:00"],
-    place: 'Banpo, Seoul',
+    location: 'Banpo, Seoul',
     climate: 'cloudy',
 }
 
 const EventList = () => {
     return (
         <div>
-            <div id="eventListTitle">TODAY</div>
-            <hr id="horizontalLine"></hr>
+            <div className="eventListTitle">TODAY</div>
+            <hr className="horizontalLine"></hr>
             <div id="events">
                 <Event event={event1}/>
                 <Event event={event2}/>

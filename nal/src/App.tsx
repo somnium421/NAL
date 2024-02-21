@@ -4,22 +4,25 @@ import './App.css';
 import './fonts/font.css';
 import HomePage from './pages/HomePage';
 import SchedulePage from './pages/SchedulePage';
-import StatusBar from './components/StatusBar';
-import NavBar from './components/NavBar';
+import MorePage from './pages/MorePage';
 import NotiPage from './pages/NotiPage';
+import EventPage from './pages/EventPage';
 import ModiPage from './pages/ModiPage';
-import { modeState, notiModeState, modiModeState, statusBarColorState } from './utils/atom';
+import StatusBar from './components/fund/StatusBar';
+import NavBar from './components/fund/NavBar';
+import { modeState, showNotiState, showModiState, showEventState, statusBarColorState } from './utils/atom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const App = ()=> {
   const [mode, setMode] = useRecoilState(modeState); // HOME, SCHEDULE, MORE
-  const [notiMode, setNotiMode] = useRecoilState(notiModeState);
-  const [modiMode, setModiMode] = useRecoilState(modiModeState);
+  const [showNoti, setshowNoti] = useRecoilState(showNotiState);
+  const [showModi, setshowModi] = useRecoilState(showModiState);
+  const [showEvent, setShowEvent] = useRecoilState(showEventState);
   const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
 
   useEffect(() => {
-    if ((mode === "HOME" || mode === "SCHEDULE") && notiMode === false) setStatusBarColor("white");
-    else setStatusBarColor("black");
+    if (showNoti || showModi || mode === "MORE") setStatusBarColor("black");
+    else setStatusBarColor("white");
   });  
 
   return (
@@ -28,16 +31,25 @@ const App = ()=> {
         <div id="screen">
           {mode === "HOME" && <HomePage/>}
           {mode === "SCHEDULE" && <SchedulePage/>}
+          {mode === "MORE" && <MorePage/>}
           <NavBar/>
           <CSSTransition
-            in={notiMode}
-            timeout={1000}
+            in={showNoti}
+            timeout={500}
             classNames="sidePage"
             unmountOnExit>
               <NotiPage/>
           </CSSTransition>
           <CSSTransition
-            in={modiMode}
+            in={showEvent}
+            timeout={500}
+            classNames="sidePage"
+            unmountOnExit>
+              <EventPage/>
+          </CSSTransition>
+
+          <CSSTransition
+            in={showModi}
             timeout={500}
             classNames="sidePage"
             unmountOnExit>

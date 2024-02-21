@@ -1,10 +1,10 @@
 import './NotiPage.css'
-import PageTitle from '../components/PageTitle';
-import NotiComp from '../components/NotiComp';
+import PageTitle from '../components/common/PageTitle';
+import NotiComp from '../components/noti/NotiComp';
 
 const NotiPage = () => {
     return (
-        <div id="notiPage">
+        <div id="notiPage" className="page">
             <PageTitle pageTitleMode="NOTI"/>
             <div id="notiCompLists">
                 <div className="notiCompListTitle">Today</div>

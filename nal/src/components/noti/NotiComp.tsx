@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import './NotiComp.css';
-import { ReactComponent as NotiWarning } from "../svg/NotiWarning.svg";
-import { ReactComponent as NotiFeel } from "../svg/NotiFeel.svg";
+import { ReactComponent as NotiWarning } from "../../svg/NotiWarning.svg";
+import { ReactComponent as NotiFeel } from "../../svg/NotiFeel.svg";
+import { showModiState } from '../../utils/atom';
 
 interface Props {
     notiType: string;
@@ -19,9 +20,10 @@ const exampleProps: Props = {
 // const NotiComp = (props: Props) => {
 const NotiComp = () => {
     const props: Props = exampleProps;
+    const [showModi, setShowModi] = useRecoilState(showModiState);
 
     return (
-        <div className="notiComp">
+        <div className="notiComp" onClick={() => setShowModi(!showModi)}>
             <div className="notiCompDotAndIcon">
                 <div className="notiCompDot"></div>
                 { props.notiType === "warning" && <NotiWarning width="5vh" height="5vh"/>}

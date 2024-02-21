@@ -9,9 +9,12 @@
     top: 0;
     width: 100%;
     height: 9.5vh;
-    box-shadow: 0 1vh 10vh 0vh rgba(100,100,100,0.1);
     background-color: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(0.3vh);
+}
+
+.titleBoxShadow {
+    box-shadow: 0 1vh 10vh 0vh rgba(100,100,100,0.1);
 }
 
 #titleLeft {
@@ -28,16 +31,21 @@
     text-wrap: nowrap;
 }
 
-#deleteAll {
+.titleRight {
     position: absolute;
     top: 6.2vh;
-    right: 2.1vh;
+    right: 2.6vh;
     font-size: 1.7vh;
     color: #C4C4C4;
+    text-align: right;;
+}
+
+.titleRight:hover {
+    color: gray;
 }
 
 #backward {
-    color: #7560FA;
+    color: var(--purple);
 }
 
 #backward:hover {

@@ -1,11 +1,10 @@
 import './SchedulePage.css'
-import Calendar from '../components/Calendar'
-import EventList from '../components/EventList'
-
+import Calendar from '../components/schedule/Calendar'
+import EventList from '../components/common/EventList'
 
 const SchedulePage = () => {
     return (
-        <div id="schedulePage">
+        <div id="schedulePage" className="page">
             <Calendar/>
             <div id="eventList">
                 <EventList/>
