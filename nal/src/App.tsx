@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import './App.css';
 import './fonts/font.css';
@@ -10,7 +10,7 @@ import EventPage from './pages/EventPage';
 import ModiPage from './pages/ModiPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { modeState, showNotiState, showModiState, showEventState, statusBarColorState } from './utils/atom';
+import { modeState, showNotiState, showModiState, showEventState, statusBarColorState, modalModeState } from './utils/atom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const App = ()=> {
@@ -18,12 +18,13 @@ const App = ()=> {
   const [showNoti, setshowNoti] = useRecoilState(showNotiState);
   const [showModi, setshowModi] = useRecoilState(showModiState);
   const [showEvent, setShowEvent] = useRecoilState(showEventState);
+  const [modalMode, setModalMode] = useRecoilState(modalModeState);
   const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
 
   useEffect(() => {
     if (showNoti || showModi || mode === "MORE") setStatusBarColor("black");
     else setStatusBarColor("white");
-  });  
+  }); 
 
   return (
     <div>
@@ -47,7 +48,6 @@ const App = ()=> {
             unmountOnExit>
               <EventPage/>
           </CSSTransition>
-
           <CSSTransition
             in={showModi}
             timeout={500}

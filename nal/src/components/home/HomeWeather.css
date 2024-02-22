@@ -30,11 +30,13 @@
 #iconTemp {
     position: relative;
     height: 8.5vh;
+    width: 12vh;
 }
 
 #weatherIcon {
     width: 12vh;
-    margin-top: -1.5vh;
+    height: 9vh;
+    margin-top: -0.4vh;
 }
 
 #currentTemp {

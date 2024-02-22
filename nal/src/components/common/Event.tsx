@@ -25,7 +25,7 @@ const Event = (props: Props) => {
     const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
 
     return (
-        <div className="event" onClick={() => {
+        <li className="event" onClick={() => {
             setCurrentEvent(event);
             setShowEvent(true);
         }}>
@@ -37,7 +37,7 @@ const Event = (props: Props) => {
                 <div className="eventTime">{props.event.time[0]}</div>
                 <div className="eventTime">{props.event.time[1]}</div>
             </div>
-        </div>
+        </li>
     )
 }
 

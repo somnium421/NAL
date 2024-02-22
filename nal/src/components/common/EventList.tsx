@@ -29,11 +29,11 @@ const EventList = () => {
     return (
         <div>
             <div className="eventListTitle">TODAY</div>
-            <hr className="horizontalLine"></hr>
-            <div id="events">
+            <hr className="eventListLine"></hr>
+            <ol id="events">
                 <Event event={event1}/>
                 <Event event={event2}/>
-            </div>
+            </ol>
         </div>
     )
 }

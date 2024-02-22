@@ -4,6 +4,7 @@ import './HomeScroll.css'
 import HomeWeather from './HomeWeather'
 import UpcomingEvents from './UpcomingEvents'
 import Feel from './Feel'
+import { CSSTransition } from 'react-transition-group'
 
 const HomeScroll = () => {
     const [showFeel, setShowFeel] = useRecoilState(showFeelState);
@@ -12,9 +13,12 @@ const HomeScroll = () => {
             <div id="homeScroll">
                 <HomeWeather/>
                 <div style={{height: "1vh"}}></div>
-                {showFeel && <Feel/>}
+                <CSSTransition in={showFeel} timeout={500} classNames="feel" unmountOnExit>
+                    <Feel/>
+                </CSSTransition>
+                <div style={{height: "1vh"}}></div>
                 <UpcomingEvents/>
-                <div style={{height: "30vh"}}></div>
+                <div style={{height: "5vh"}}></div>
             </div>
         </div>
     );

@@ -3,8 +3,8 @@
     font-size: 1.7vh;
 }
 
-.horizontalLine {
-    border: solid 0.11vh black;
+.eventListLine {
+    border-color: black;
     margin-top: 0.3vh;
     margin-bottom: 1vh;
 }

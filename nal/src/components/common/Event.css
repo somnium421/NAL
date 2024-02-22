@@ -3,7 +3,7 @@
     justify-content: space-between;
     padding: 0.6vh var(--padding);
     border-radius: 1.3vh;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease;
 }
 
 .eventActivity {

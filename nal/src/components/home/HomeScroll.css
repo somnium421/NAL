@@ -8,7 +8,7 @@
 
 #homeScroll {
     position: absolute;
-    top: 30%;
+    bottom: -20%;
     width: 99%;
     left: 50%;
     transform: translateX(-50%);
@@ -26,10 +26,24 @@
     margin-top: 1vh;
 }
 
-#upcomingEvents {
-    margin: 0.7vh 0 50vh 0;
-}
-
 #scroll::-webkit-scrollbar {
 	display:none 
+}
+
+.feel-enter {
+    opacity: 0;
+}
+
+.feel-enter-active {
+    opacity: 1;
+    transition: all 0.5s;
+}
+
+.feel-exit {
+    opacity: 1;
+}
+
+.feel-exit-active {
+    opacity: 0;
+    transition: all 0.5s;
 }
