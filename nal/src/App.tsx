@@ -1,30 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import './App.css';
 import './fonts/font.css';
 import HomePage from './pages/HomePage';
 import SchedulePage from './pages/SchedulePage';
 import MorePage from './pages/MorePage';
-import NotiPage from './pages/NotiPage';
 import EventPage from './pages/EventPage';
 import ModiPage from './pages/ModiPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { modeState, showNotiState, showModiState, showEventState, statusBarColorState, modalModeState } from './utils/atom';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { modeState, showModiState, showEventState } from './utils/atom';
+import { CSSTransition } from 'react-transition-group';
 
 const App = ()=> {
-  const [mode, setMode] = useRecoilState(modeState); // HOME, SCHEDULE, MORE
-  const [showNoti, setshowNoti] = useRecoilState(showNotiState);
-  const [showModi, setshowModi] = useRecoilState(showModiState);
-  const [showEvent, setShowEvent] = useRecoilState(showEventState);
-  const [modalMode, setModalMode] = useRecoilState(modalModeState);
-  const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
-
-  useEffect(() => {
-    if (showNoti || showModi || mode === "MORE") setStatusBarColor("black");
-    else setStatusBarColor("white");
-  }); 
+  const mode = useRecoilValue(modeState);
+  const showModi = useRecoilValue(showModiState);
+  const showEvent = useRecoilValue(showEventState);
 
   return (
     <div>
@@ -34,29 +24,15 @@ const App = ()=> {
           {mode === "SCHEDULE" && <SchedulePage/>}
           {mode === "MORE" && <MorePage/>}
           <NavBar/>
-          <CSSTransition
-            in={showNoti}
-            timeout={500}
-            classNames="sidePage"
-            unmountOnExit>
-              <NotiPage/>
-          </CSSTransition>
-          <CSSTransition
-            in={showEvent}
-            timeout={500}
-            classNames="sidePage"
-            unmountOnExit>
+          <CSSTransition in={showEvent} timeout={500} classNames="sidePage" unmountOnExit>
               <EventPage/>
           </CSSTransition>
-          <CSSTransition
-            in={showModi}
-            timeout={500}
-            classNames="sidePage"
-            unmountOnExit>
+          <CSSTransition in={showModi} timeout={500} classNames="sidePage" unmountOnExit>
               <ModiPage/>
           </CSSTransition>
           <StatusBar/>
         </div>
+        <div id="homeIndicator"/>
         <img id="iPhoneFrame" draggable="false" src="img/iPhoneFrame.png" alt=""/>
       </div>
     </div>

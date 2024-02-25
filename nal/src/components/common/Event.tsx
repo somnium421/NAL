@@ -13,20 +13,13 @@ interface Props {
     event: IEvent;
 }
 
-const event: IEvent = {
-    activity: 'Jogging',
-    time: ["16:00", "17:00"],
-    location: 'Banpo, Seoul',
-    climate: 'cloudy',
-}
-
 const Event = (props: Props) => {
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
 
     return (
         <li className="event" onClick={() => {
-            setCurrentEvent(event);
+            setCurrentEvent(props.event);
             setShowEvent(true);
         }}>
             <div>

@@ -4,7 +4,7 @@ import { ReactComponent as AddButton } from '../../svg/ScheduleAdd.svg';
 import { getCurrentLocation, getMonthlyWeather } from '../../utils/util';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { currentEventState, showEventState } from '../../utils/atom';
-import { ReactComponent as Rain } from '../../svg/Rain.svg';
+import Rain from '../../img/Rain.png';
 
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -23,6 +23,8 @@ const DaysRow = () => {
 }
 
 const Dates = () => {
+    const [clickedDate, setClickedDate] = useState<number | null>(currentDate);
+
     const dates: (number | null)[] = [];
     for (let i:number = 0; i<new Date(currentYear, currentMonth, 1).getDay(); i++) dates.push(null);
     for (let i:number = 1; i<=new Date(currentYear, currentMonth+1, 0).getDate(); i++) dates.push(i);
@@ -32,16 +34,19 @@ const Dates = () => {
 
     for (let row:number = 0; row<dates.length/7; row++) {
         if (row) content.push(<hr key={row} className="calendarLine"></hr>)
-        content.push(<div key={row} className="datesRow">
+        content.push(<div key={"row"+row} className="datesRow">
             {dates.slice(row*7, (row+1)*7).map((item, idx) => {
                 const key = row*7+idx;
                 let className = "dateComp";
                 if (dates[key]===null) className += " null";
                 else if (dates[key]===currentDate) className += " today";
+                if (dates[key]===clickedDate) className += " clicked";
                 return (
-                    <div key={key} className={className}>
+                    <div key={"date"+key} className={className} onClick={() => {
+                        if (typeof dates[key] === "number") setClickedDate(dates[key]);
+                    }}>
                         {dates[key]
-                        ?<><Rain width="2vh" height="2vh"/>
+                        ?<><img src={Rain} alt="" className="calendarWeatherIcon"></img>
                         <div>{dates[key]}</div>
                         <div className="calendarDots"><div className="calendarDot"/><div className="calendarDot"/></div></>
                         :<div>&nbsp;</div>}

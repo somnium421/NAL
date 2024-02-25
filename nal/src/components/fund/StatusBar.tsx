@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './StatusBar.css'
 import { ReactComponent as Mobile } from "../../svg/Mobile.svg";
 import { ReactComponent as Wifi } from "../../svg/Wifi.svg";
 import { ReactComponent as Battery } from "../../svg/Battery.svg";
-import { statusBarColorState } from '../../utils/atom';
-import { useRecoilState } from 'recoil';
+import { modeState, showEventState, showModiState, showNotiState, statusBarColorState } from '../../utils/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const nowTime = () => {
     const now: Date = new Date();
@@ -12,19 +12,23 @@ const nowTime = () => {
 }
 
 const StatusBar = () => {
-    const [clock, setClock] = useState<string>(nowTime());
+    const [time, setTime] = useState<string>(nowTime());
+    setInterval(() => setTime(nowTime()), 1000);
+    
     const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
-    setInterval(() => setClock(nowTime()), 1000);
-
-    const statusBarRef = useRef<HTMLDivElement>(null);
+    const mode = useRecoilValue(modeState);
+    const showNoti = useRecoilValue(showNotiState);
+    const showModi = useRecoilValue(showModiState);
+    const showEvent = useRecoilValue(showEventState);
 
     useEffect(() => {
-        if (statusBarRef?.current !== null) statusBarRef.current.style.setProperty("color", statusBarColor);
-    }, [statusBarColor]);
+        if (mode==="HOME" && !(showNoti || showModi || showEvent)) setStatusBarColor("white");
+        else setStatusBarColor("black");
+    }); 
 
     return (
-        <div id="statusBar" ref={statusBarRef}>
-            <div id="clock">{clock}</div>
+        <div id="statusBar" style={{color: statusBarColor}}>
+            <div id="clock">{time}</div>
             <div id="mobileWifiBattery">
                 <Mobile width="2vh"/>
                 <Wifi width="2vh"/>

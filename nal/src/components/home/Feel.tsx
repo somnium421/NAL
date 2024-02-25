@@ -14,7 +14,7 @@ const Buttons = () => {
   const [showFeel, setShowFeel] = useRecoilState(showFeelState);
   return (
     items.map(item => <div key={item[1]} className="feelButton" onClick={() => setShowFeel(false)}>
-      <img src={item[0]} alt="" className="feelButtonImg"></img>
+      <img src={item[0]} alt="" className="feelButtonImg"/>
       <div>{item[1]}</div>
     </div>)
   )
@@ -25,7 +25,7 @@ const Feel = () => {
   return (
     <div id="feel">
       <div>How did the weather feel today?</div>
-      <div style={{height: "1vh"}}></div>
+      <div style={{height: "1vh"}}/>
       <div id="feelButtons">{Buttons()}</div>
     </div>
   )

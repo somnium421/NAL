@@ -48,12 +48,6 @@
     font-weight: 300;
 }
 
-#homeTags {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
 #homeTag {
     position: absolute;
     display: flex;

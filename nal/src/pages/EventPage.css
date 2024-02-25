@@ -1,3 +1,80 @@
 #eventPage {
     padding: 5.4vh 0 0 0;
 }
+
+#eventPageContent {
+    padding: 0 var(--padding);
+}
+
+.activityLocation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4vh;
+}
+
+.eventBox {
+    border-radius: 1vh;
+    background-color: var(--lightPurple);
+    width: 100%;
+}
+
+#eventStartsEnds {
+    border: none;
+    outline: none;
+    font-weight: 300;
+    padding: 1vh 1vh 1vh 2vh;
+    box-sizing: border-box;
+}
+
+.eventStartsEnds {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.searchIcon {
+    width: 2vh;
+    height: 2vh;
+    margin-right: 1vh;
+    color: var(--purple);
+}
+
+.searchIcon:hover {
+    color: gray;
+}
+
+button {
+    border: none;
+    border-radius: 0.5vh;
+    background-color: white;
+    outline: none;
+    font-family: 'SF Pro Rounded';
+    font-weight: 300;
+    font-size: 1.7vh;
+    height: 3vh;
+    margin-left: 0.5vh;
+}
+
+input {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    outline: none;
+    font-family: 'SF Pro Rounded';
+    font-weight: 300;
+    font-size: 1.7vh;
+    padding-left: 2vh;
+}
+
+textarea {
+    border: none;
+    height: 20vh;
+    outline: none;
+    font-family: 'SF Pro Rounded';
+    font-weight: 300;
+    font-size: 1.7vh;
+    padding: 1vh 2vh;
+    box-sizing: border-box;
+    resize: none;
+}

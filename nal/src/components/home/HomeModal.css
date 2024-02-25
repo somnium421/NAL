@@ -1,0 +1,55 @@
+#homeModal {
+    background-color: rgba(0,0,0,0.3);
+    backdrop-filter: blur(2px);
+}
+
+#modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    background-color: rgba(200, 200, 200, 0.9);
+    border-radius: 2vh;
+    padding: 1.5vh;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+#modalPhotoBoxes {
+    height: 22vh;
+    
+    --photoBoxMargin: 0.4vh;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 1.5vh;
+    padding: calc(var(--photoBoxMargin) * 2);
+}
+
+#modalPhotoBox1 {
+    width: calc(50% - var(--photoBoxMargin));
+}
+
+#modalPhotoBox23 {
+    width: calc(50% - var(--photoBoxMargin));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+#modalPhotoBox2 {
+    height: calc(50% - var(--photoBoxMargin));
+}
+
+#modalPhotoBox3 {
+    height: calc(50% - var(--photoBoxMargin));
+}
+
+.modalPhotoBox {
+    border-radius: 1.5vh;
+    overflow: hidden;
+}

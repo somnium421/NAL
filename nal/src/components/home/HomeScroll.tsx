@@ -11,7 +11,7 @@ const HomeScroll = () => {
     return (
         <div id="scroll">
             <div id="homeScroll">
-                <HomeWeather/>
+                <HomeWeather weatherMode="HOME"/>
                 <div style={{height: "1vh"}}></div>
                 <CSSTransition in={showFeel} timeout={500} classNames="feel" unmountOnExit>
                     <Feel/>

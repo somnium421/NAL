@@ -21,9 +21,9 @@ export const showFeelState = atom({
     key: "showFeel",
     default: true,
 });
-export const modalModeState = atom({
-    key: "modalMode",
-    default: "tooCold",
+export const showModalState = atom({
+    key: "showModal",
+    default: false,
 })
 export const statusBarColorState = atom({
     key: "statusBarColor",
