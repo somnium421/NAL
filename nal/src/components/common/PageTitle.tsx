@@ -38,7 +38,7 @@ const PageTitle = (props: Props) => {
             <div className="titleRight">
                 { props.pageTitleMode === "NOTI"
                  ?<div id="deleteAll">Delete all</div> 
-                 :<div id="done">Done</div> }
+                 :<div id="done" onClick={() => setShowEvent(false)}>Done</div> }
             </div>
         </div>
     )

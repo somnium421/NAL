@@ -24,14 +24,11 @@
     height: 3vh;
     padding: 0.5vh;
     border-radius: 1vh;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease;
 }
 
 .navBarIcon:hover {
     background-color: rgba(150,150,150,0.3);
-    width: 2.8vh;
-    height: 2.8vh;
-    margin: 0.1vh;
 }
 
 #noti {

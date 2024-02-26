@@ -19,18 +19,19 @@
     width: 100%;
 }
 
-#eventStartsEnds {
+#timeBox {
     border: none;
     outline: none;
     font-weight: 300;
-    padding: 1vh 1vh 1vh 2vh;
+    padding: 1vh 2vh;
     box-sizing: border-box;
 }
 
-.eventStartsEnds {
+.timeBoxElem {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right: -1vh;
 }
 
 .searchIcon {

@@ -1,8 +1,20 @@
 #schedulePage { 
     display: flex;
     flex-direction: column;
-    /* background-image: url('../../public/img/CALENDAR PAGE.png'); */
-    /* background-size: cover; */
+}
+
+#calendarBox {
+    --calendarPadding: 4vh;
+    position: absolute;
+    width: 99%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 0 0 4vh 4vh;
+    background-color: white;
+    padding: 5.7vh var(--calendarPadding) 2vh var(--calendarPadding);
+    box-sizing: border-box;
+    color: black;
+    box-shadow: 0 1vh 10vh 0vh rgba(100,100,100,0.4);
 }
 
 #eventList {
@@ -11,4 +23,12 @@
     top: 47vh;
     padding: 0 2.5vh 0 2.5vh;
     box-sizing: border-box;
+}
+
+#addButton {
+    position: absolute;
+    top: 5.8vh;
+    right: 2.7vh;
+    width: 3vh;
+    height: 3vh;
 }

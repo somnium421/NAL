@@ -6,14 +6,13 @@ import HomeScroll from '../components/home/HomeScroll';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { showModalState, showNotiState } from '../utils/atom';
 import { ReactComponent as Noti } from "../svg/Noti.svg";
-import { ReactComponent as NotiDot } from "../svg/NotiDot.svg";
 import NotiPage from './NotiPage';
 
 const NotiIcon = () => {
     const setShowNoti = useSetRecoilState(showNotiState);
     return (<>
-        <Noti id="noti" onClick={()=>setShowNoti(true)} width="3vh" height="2.4vh"/>
-        <NotiDot id="notiDot" onClick={()=>setShowNoti(true)} width="0.6vh" height="0.6vh"/>
+        <Noti id="noti" onClick={()=>setShowNoti(true)}/>
+        <div id="notiDot"/>
     </>)
 }
 

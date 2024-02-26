@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import './Calendar.css';
-import { ReactComponent as AddButton } from '../../svg/ScheduleAdd.svg';
 import { getCurrentLocation, getMonthlyWeather } from '../../utils/util';
-import { useRecoilState, useResetRecoilState } from 'recoil';
-import { currentEventState, showEventState } from '../../utils/atom';
 import Rain from '../../img/Rain.png';
 
-const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-const current = new Date();
-const currentYear = current.getFullYear();
-const currentMonth = current.getMonth();
-const currentDate = current.getDate();
-const currentDay = current.getDay();
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth();
+const date = today.getDate();
+
+interface Props {
+    showDot: boolean;
+    // setClickedDate: React.Dispatch<React.SetStateAction<Date>>;
+}
 
 const DaysRow = () => {
     const content: JSX.Element[] = [];
@@ -22,12 +23,12 @@ const DaysRow = () => {
     return content;
 }
 
-const Dates = () => {
-    const [clickedDate, setClickedDate] = useState<number | null>(currentDate);
+const Dates = (props: Props) => {
+    const [clickedDate, setClickedDate] = useState<number | null>(date);
 
     const dates: (number | null)[] = [];
-    for (let i:number = 0; i<new Date(currentYear, currentMonth, 1).getDay(); i++) dates.push(null);
-    for (let i:number = 1; i<=new Date(currentYear, currentMonth+1, 0).getDate(); i++) dates.push(i);
+    for (let i:number = 0; i<new Date(year, month, 1).getDay(); i++) dates.push(null);
+    for (let i:number = 1; i<=new Date(year, month+1, 0).getDate(); i++) dates.push(i);
     while (dates.length%7) dates.push(null);
 
     let content:JSX.Element[] = [];
@@ -39,7 +40,7 @@ const Dates = () => {
                 const key = row*7+idx;
                 let className = "dateComp";
                 if (dates[key]===null) className += " null";
-                else if (dates[key]===currentDate) className += " today";
+                else if (dates[key]===date) className += " today";
                 if (dates[key]===clickedDate) className += " clicked";
                 return (
                     <div key={"date"+key} className={className} onClick={() => {
@@ -48,23 +49,22 @@ const Dates = () => {
                         {dates[key]
                         ?<><img src={Rain} alt="" className="calendarWeatherIcon"></img>
                         <div>{dates[key]}</div>
-                        <div className="calendarDots"><div className="calendarDot"/><div className="calendarDot"/></div></>
+                        {props.showDot && <div className="calendarDots"><div className="calendarDot"/><div className="calendarDot"/></div>}</>
                         :<div>&nbsp;</div>}
                     </div>
                 )
             })}
         </div>);
     }
-
     return content;
 }
 
-const Calendar = () => {
-    const [showEvent, setShowEvent] = useRecoilState(showEventState);
-    const [currentLocationName, setCurrentLocationName] = useState<string>("");
-    const resetCurrentEvent = useResetRecoilState(currentEventState);
 
+
+const Calendar = (props: Props) => {
+    const [currentLocationName, setCurrentLocationName] = useState<string>("");
     const location = getCurrentLocation();
+
     useEffect(() => {
         if (location instanceof Promise) {
             location.then((currentLocation) => {
@@ -75,25 +75,20 @@ const Calendar = () => {
     }, []);
 
     return (
-        <div id="calendarBox">
+        <>
+            {!props.showDot && <hr color='white'/>}
             <div id="currentLocation">{currentLocationName}&nbsp;</div>
             <div style={{height: "0.4vh"}}/>
-            <div id="yearAndMonth">{month[currentMonth]+" "+currentYear}</div>
+            <div id="yearAndMonth">{monthList[month%12]+" "+year}</div>
             <div style={{height: "1.3vh"}}/>
             <div id="calendar">
                 <div id="days">{DaysRow()}</div>
                 <div style={{height: "0.3vh"}}/>
                 <div id="dates">
-                    {Dates()}
+                    {Dates(props)}
                 </div>
             </div>
-            <div id="addButton">
-            <AddButton width="3vh" height="3vh" onClick={()=> {
-                resetCurrentEvent();
-                setShowEvent(true);
-            }}/>
-            </div>
-        </div>
+        </>
     )
 }
 
