@@ -10,7 +10,7 @@ const SchedulePage = () => {
     const resetCurrentEvent = useResetRecoilState(currentEventState);
     return (
         <div id="schedulePage" className="page">
-            <div id="calendarBox"><Calendar showDot={true}/></div>
+            <div id="calendarBox"><Calendar/></div>
             <div id="eventList"><EventList/></div>
             <AddButton id="addButton" onClick={()=> {
                     resetCurrentEvent();

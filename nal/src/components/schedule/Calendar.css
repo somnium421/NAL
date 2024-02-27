@@ -42,7 +42,7 @@
 .calendarWeatherIcon {
     width: 1.8vh;
     height: 1.8vh;
-    opacity: 80%;
+    /* opacity: 80%; */
 }
 
 .calendarDots {

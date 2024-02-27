@@ -23,7 +23,7 @@ const DaysRow = () => {
     return content;
 }
 
-const Dates = (props: Props) => {
+const Dates = (showWeather: boolean, showDot: boolean) => {
     const [clickedDate, setClickedDate] = useState<number | null>(date);
 
     const dates: (number | null)[] = [];
@@ -47,9 +47,9 @@ const Dates = (props: Props) => {
                         if (typeof dates[key] === "number") setClickedDate(dates[key]);
                     }}>
                         {dates[key]
-                        ?<><img src={Rain} alt="" className="calendarWeatherIcon"></img>
+                        ?<><img src={Rain} alt="" className="calendarWeatherIcon"/>
                         <div>{dates[key]}</div>
-                        {props.showDot && <div className="calendarDots"><div className="calendarDot"/><div className="calendarDot"/></div>}</>
+                        {showDot && <div className="calendarDots"><div className="calendarDot"/><div className="calendarDot"/></div>}</>
                         :<div>&nbsp;</div>}
                     </div>
                 )
@@ -59,9 +59,7 @@ const Dates = (props: Props) => {
     return content;
 }
 
-
-
-const Calendar = (props: Props) => {
+const Calendar = ({showWeather = true, showDot = true,}) => {
     const [currentLocationName, setCurrentLocationName] = useState<string>("");
     const location = getCurrentLocation();
 
@@ -76,7 +74,6 @@ const Calendar = (props: Props) => {
 
     return (
         <>
-            {!props.showDot && <hr color='white'/>}
             <div id="currentLocation">{currentLocationName}&nbsp;</div>
             <div style={{height: "0.4vh"}}/>
             <div id="yearAndMonth">{monthList[month%12]+" "+year}</div>
@@ -85,7 +82,7 @@ const Calendar = (props: Props) => {
                 <div id="days">{DaysRow()}</div>
                 <div style={{height: "0.3vh"}}/>
                 <div id="dates">
-                    {Dates(props)}
+                    {Dates(showWeather, showDot)}
                 </div>
             </div>
         </>

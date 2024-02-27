@@ -34,6 +34,10 @@
     margin-right: -1vh;
 }
 
+.activityLocationCarousel {
+    margin: 0 -2.1vh;
+}
+
 .searchIcon {
     width: 2vh;
     height: 2vh;
@@ -55,6 +59,11 @@ button {
     font-size: 1.7vh;
     height: 3vh;
     margin-left: 0.5vh;
+    transition: color 0.3s;
+}
+
+button:hover {
+    color: gray;
 }
 
 input {
@@ -70,7 +79,7 @@ input {
 
 textarea {
     border: none;
-    height: 20vh;
+    height: 15vh;
     outline: none;
     font-family: 'SF Pro Rounded';
     font-weight: 300;
@@ -78,4 +87,5 @@ textarea {
     padding: 1vh 2vh;
     box-sizing: border-box;
     resize: none;
+    overflow: hidden;
 }
