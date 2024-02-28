@@ -1,8 +1,8 @@
 #viewer {
     position: relative;
     width: 100%;
-    height: 5vh;
     overflow-x: hidden;
+    --borderWidth: 0.2vh;
 }
 
 #slider {
@@ -10,13 +10,12 @@
     gap: 1vh;
     position: absolute;
     left: 0vh;
-    pointer-events: none;
 }
 
 .activityCarouselItem {
     width: 10vh;
     height: 14.2vh;
-    border: solid 0.2vh gray;
+    border: solid var(--borderWidth) gray;
     border-radius: 1vh;
     overflow: hidden;
     background-color: white;
@@ -24,6 +23,7 @@
 
 .activityCarouselImg {
     height: 10vh;
+    pointer-events: none;
 }
 
 .carouselTitle {
@@ -48,20 +48,39 @@
     justify-content: space-between;
     padding: 0.4vh 0;
     box-sizing: border-box;
-    /* pointer-events: auto; */
+}
+
+.hourCarouselItem:hover {
+    color: gray;
+}
+
+.hourCarouselItemClicked {
+    border: solid var(--borderWidth) var(--purple);
+    padding: calc(0.4vh - var(--borderWidth)) 0;
 }
 
 .carouselWeatherIcon {
     width: 1.8vh;
     height: 1.8vh;
+    pointer-events: none;
 }
 
 .minuteCarouselItem {
     width: 3.5vh;
-    height: 3vh;
+    height: 2.6vh;
     background-color: white;
     border-radius: 0.5vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: var(--borderWidth);
+}
+
+.minuteCarouselItem:hover {
+    color: gray;
+}
+
+.minuteCarouselItemClicked {
+    border: solid var(--borderWidth) var(--purple);
+    padding: 0;
 }

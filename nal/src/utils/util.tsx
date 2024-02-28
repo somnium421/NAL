@@ -1,13 +1,13 @@
 import { config } from '../utils/apiKey'
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 
-type Location = {
+export type Location = {
     longitude: number
     latitude: number
     name: string
 };
 
-type Weather = {
+export type Weather = {
     temperature: {
         current?: string;
         feel?: string;
@@ -23,13 +23,13 @@ type Weather = {
     };
 };
 
-const currentLocation: Location = {
+export const currentLocation: Location = {
     longitude: 0,
     latitude: 0,
     name: "",
 };
 
-const todayWeather: Weather = {
+export const todayWeather: Weather = {
     temperature: {
         current: "",
         feel: "",
@@ -45,7 +45,7 @@ const todayWeather: Weather = {
     },
 };
 
-const windDirection = (degree: number): string => {
+export const windDirection = (degree: number): string => {
     if (degree > 337.5) return "N";
     if (degree > 292.5) return "NW";
     if (degree > 247.5) return "W";
@@ -59,7 +59,7 @@ const windDirection = (degree: number): string => {
 
 let updated = false;
 
-const getCurrentLocation = (): Location | Promise<Location> => {
+export const getCurrentLocation = (): Location | Promise<Location> => {
     if (updated) return currentLocation;
     return new Promise((res: (value: GeolocationPosition)=>void) =>
         navigator.geolocation.getCurrentPosition(res))
@@ -75,7 +75,7 @@ const getCurrentLocation = (): Location | Promise<Location> => {
     });
 };
 
-const getCurrentWeather = (): Weather | Promise<Weather> => {
+export const getCurrentWeather = (): Weather | Promise<Weather> => {
     const location = getCurrentLocation();
     if (location instanceof Promise) {
         return location.then((location) => {
@@ -112,7 +112,7 @@ const getCurrentWeather = (): Weather | Promise<Weather> => {
     else return todayWeather;
 };
 
-const getPrevWeather = (start: Date, end: Date) => {
+export const getPrevWeather = (start: Date, end: Date) => {
     const ret: Weather[] = [];
     // const location = getCurrentLocation() as Location;
     start = new Date(2024, 1, 16);
@@ -143,7 +143,7 @@ const getPrevWeather = (start: Date, end: Date) => {
     })
 };
 
-const getNextWeather = (cnt: number): Promise<Weather[]> => {
+export const getNextWeather = (cnt: number): Promise<Weather[]> => {
     const ret: Weather[] = [];
     if (cnt > 30) cnt = 30;
     // const location = getCurrentLocation() as Location;
@@ -172,7 +172,7 @@ const getNextWeather = (cnt: number): Promise<Weather[]> => {
     })
 };
 
-const getMonthlyWeather = (year: number, month: number) => {
+export const getMonthlyWeather = (year: number, month: number) => {
     const now = new Date();
     if (year === now.getFullYear() && month === now.getMonth()) {
 
@@ -185,5 +185,11 @@ const getMonthlyWeather = (year: number, month: number) => {
     }
 };
 
-export { getCurrentLocation, getCurrentWeather, getMonthlyWeather };
-export type { Location, Weather };
+export const dateToYearMonthDate = (date: Date) => `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}`;
+
+export const dateToHourMinute = (date: Date) => `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+
+export const yearMonthDateToDate = (yearMonthDate: string) => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]));
+
+export const isSameDate = (date1: Date, date2: Date) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+

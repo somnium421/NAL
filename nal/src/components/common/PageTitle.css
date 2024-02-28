@@ -24,14 +24,22 @@
     margin-left: 2.4vh;
 }
 
+#backward {
+    color: var(--purple);
+    width: 1vh;
+    height: 1.7vh;
+}
+
+#backward:hover {
+    color: gray;
+}
+
 #titleText {
-    position: absolute;
-    margin-left: 3.5vh;
-    width: 100%;
+    margin-left: 1.2vh;
     text-wrap: nowrap;
 }
 
-.titleRight {
+#titleRight {
     position: absolute;
     top: 6.2vh;
     right: 2.6vh;
@@ -40,14 +48,6 @@
     text-align: right;;
 }
 
-.titleRight:hover {
-    color: gray;
-}
-
-#backward {
-    color: var(--purple);
-}
-
-#backward:hover {
+#titleRight:hover {
     color: gray;
 }

@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import './PageTitle.css';
-import { ReactComponent as Backward } from "../../svg/Backward.svg";
+import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
 import { showNotiState, showModiState, showEventState, currentEventState } from '../../utils/atom';
 
 interface Props {
@@ -26,7 +26,7 @@ const PageTitle = (props: Props) => {
         <div id="title">
             <div id="titleBox" className={props.pageTitleMode==="NOTI"?"titleBoxShadow":""}></div>
             <div id="titleLeft">
-                <Backward id="backward" width="2vh" height="3vh" onClick={() => {
+                <Arrow id="backward" onClick={() => {
                     switch(props.pageTitleMode) {
                         case "NOTI": setShowNoti(false); break;
                         case "MODI": setShowModi(false); break;
@@ -35,7 +35,7 @@ const PageTitle = (props: Props) => {
                 }}/>
                 <div id="titleText">{TitleText()}</div>
             </div>
-            <div className="titleRight">
+            <div id="titleRight">
                 { props.pageTitleMode === "NOTI"
                  ?<div id="deleteAll">Delete all</div> 
                  :<div id="done" onClick={() => setShowEvent(false)}>Done</div> }

@@ -5,7 +5,6 @@ import HomePage from './pages/HomePage';
 import SchedulePage from './pages/SchedulePage';
 import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
-import ModiPage from './pages/ModiPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
 import { modeState, showModiState, showEventState } from './utils/atom';
@@ -26,9 +25,6 @@ const App = ()=> {
           <NavBar/>
           <CSSTransition in={showEvent} timeout={500} classNames="sidePage" unmountOnExit>
               <EventPage/>
-          </CSSTransition>
-          <CSSTransition in={showModi} timeout={500} classNames="sidePage" unmountOnExit>
-              <ModiPage/>
           </CSSTransition>
           <StatusBar/>
         </div>

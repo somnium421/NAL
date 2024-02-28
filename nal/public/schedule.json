@@ -1,0 +1,15 @@
+[
+    {
+        "activity": "Shopping",
+        "time": [["1", "13", "00"], ["1", "14", "00"]],
+        "location": "COEX",
+        "note": "with my roommate!",
+        "climate": "Sunny"
+    },
+    {
+        "activity": "Jogging",
+        "time": [["100", "16", "00"], ["100", "18", "30"]],
+        "location": "Seoul Olympic Park",
+        "climate": "Sunny"
+    }
+]

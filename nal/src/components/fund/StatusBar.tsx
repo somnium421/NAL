@@ -5,15 +5,11 @@ import { ReactComponent as Wifi } from "../../svg/Wifi.svg";
 import { ReactComponent as Battery } from "../../svg/Battery.svg";
 import { modeState, showEventState, showModiState, showNotiState, statusBarColorState } from '../../utils/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-
-const nowTime = () => {
-    const now: Date = new Date();
-    return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-}
+import { dateToHourMinute } from '../../utils/util';
 
 const StatusBar = () => {
-    const [time, setTime] = useState<string>(nowTime());
-    setInterval(() => setTime(nowTime()), 1000);
+    const [time, setTime] = useState<string>(dateToHourMinute(new Date));
+    setInterval(() => setTime(() => dateToHourMinute(new Date)), 1000);
     
     const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
     const mode = useRecoilValue(modeState);

@@ -27,8 +27,14 @@
 
 #addButton {
     position: absolute;
-    top: 5.8vh;
+    bottom: 9vh;
     right: 2.7vh;
     width: 3vh;
     height: 3vh;
+    color: var(--purple);
+    transition: color 0.3s;
+}
+
+#addButton:hover {
+    color: gray;
 }

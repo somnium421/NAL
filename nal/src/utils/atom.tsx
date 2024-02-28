@@ -29,12 +29,20 @@ export const statusBarColorState = atom({
     key: "statusBarColor",
     default: "white",
 });
+export const eventsState = atom<IEvent[]>({
+    key: "eventsState",
+    default: [],
+})
+
+const resetCurrentEvent = (): [Date, Date] => {
+    const date = new Date();
+    return [new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours()+1),
+        new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours()+2)];
+}
+
 export const currentEventState = atom<IEvent>({
     key: "currentEvent",
     default: {
-        activity: "",
-        time: ["", ""],
-        location: "",
-        climate: "",
+        time: resetCurrentEvent(),
     },
 })

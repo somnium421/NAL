@@ -1,5 +1,5 @@
 hr {border-width: 0.11vh; border-style: solid;}
-ol {padding-left: 0;}
+ol {padding: 0; margin: 0;}
 
 #iPhone {
     position: relative;

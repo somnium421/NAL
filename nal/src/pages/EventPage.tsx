@@ -6,6 +6,7 @@ import { ReactComponent as Search } from '../svg/Search.svg'
 import { useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
+import { dateToYearMonthDate, dateToHourMinute, yearMonthDateToDate } from '../utils/util';
 
 const EventPage = () => {
     const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
@@ -13,6 +14,13 @@ const EventPage = () => {
     const [showActivityCarousel, setShowActivityCarousel] = useState<boolean>(false);
     const [showLocationCarousel, setShowLocationCarousel] = useState<boolean>(false);
     const [showTimeCarousel, setShowTimeCarousel] = useState<string>("NO"); // NO or STARTS or ENDS
+
+    const [startsDate, setStartsDate] = useState<string>(dateToYearMonthDate(currentEvent.time[0]));
+    const [startsHour, setStartsHour] = useState<number>(currentEvent.time[0].getHours());
+    const [startsMinute, setStartsMinute] = useState<number>(currentEvent.time[0].getMinutes());
+    const [endsDate, setEndsDate] = useState<string>(dateToYearMonthDate(currentEvent.time[1]));
+    const [endsHour, setEndsHour] = useState<number>(currentEvent.time[1].getHours());
+    const [endsMinute, setEndsMinute] = useState<number>(currentEvent.time[1].getMinutes());
 
     const ActivityBox = () => (
         <>
@@ -25,9 +33,9 @@ const EventPage = () => {
                 setShowTimeCarousel("NO");
             }}/>
         </div>
-        {showActivityCarousel && 
+        {/* {showActivityCarousel && 
         <div style={{margin: "1vh -2.1vh"}}><Carousel mode="ACTIVITY" margin={2.1}/></div>
-        }
+        } */}
         </>
     );
 
@@ -42,9 +50,9 @@ const EventPage = () => {
                 setShowTimeCarousel("NO");
             }}/>
         </div>
-        {showLocationCarousel && 
+        {/* {showLocationCarousel && 
         <div style={{margin: "1vh -2.1vh"}}><Carousel mode="LOCATION" margin={2.1}/></div>
-        }
+        } */}
         </>
     );
 
@@ -56,25 +64,29 @@ const EventPage = () => {
                         if (showCalendar === "STARTS") setShowCalendar("NO");
                         else setShowCalendar("STARTS");
                         setShowTimeCarousel("NO");
-                    }}>2023. 12. 30.</button>
+                    }}>{startsDate}</button>
                     <button onClick={() => {
                         if (showTimeCarousel === "STARTS") setShowTimeCarousel("NO");
                         else setShowTimeCarousel("STARTS");
                         setShowCalendar("NO");
-                    }}>14:00</button>
+                    }}>{`${startsHour}:${String(startsMinute).padStart(2, "0")}`}</button>
                 </div>
             </div>
-            {showCalendar==="STARTS" && <><hr color="white"/><Calendar showDot={false}/></>}
+            {showCalendar==="STARTS" &&
+            <>
+                <hr color="white"/>
+                <Calendar onClick={setStartsDate} clickedDate={yearMonthDateToDate(startsDate)} showDot={false}/>
+            </>}
             {showTimeCarousel==="STARTS" && 
             <>
                 <hr color="white"/>
                 Hour
                 <div style={{height: "0.5vh"}}/>
-                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" margin={2}/></div>
+                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" onClick={setStartsHour} clicked={String(startsHour)} margin={2}/></div>
                 <div style={{height: "1vh"}}/>
                 Minute
                 <div style={{height: "0.5vh"}}/>
-                <div style={{margin: "0 -2vh"}}><Carousel mode="MINUTE" margin={2}/></div>
+                <div style={{margin: "0 -2vh"}}><Carousel mode="MINUTE" onClick={setStartsMinute} clicked={String(startsMinute)} margin={2}/></div>
             </>}
             <hr color="white"/>
             <div className="timeBoxElem">Ends
@@ -83,19 +95,29 @@ const EventPage = () => {
                         if (showCalendar === "ENDS") setShowCalendar("NO");
                         else setShowCalendar("ENDS");
                         setShowTimeCarousel("NO");
-                    }}>2023. 12. 30.</button>
+                    }}>{endsDate}</button>
                     <button onClick={() => {
                         if (showTimeCarousel === "ENDS") setShowTimeCarousel("NO");
                         else setShowTimeCarousel("ENDS");
                         setShowCalendar("NO");
-                    }}>15:00</button>
+                    }}>{`${endsHour}:${String(endsMinute).padStart(2, "0")}`}</button>
                 </div>
             </div>
-            {showCalendar==="ENDS" && <><hr color="white"/><Calendar showDot={false}/></>}
+            {showCalendar==="ENDS" &&
+            <>
+                <hr color="white"/>
+                <Calendar onClick={setEndsDate} clickedDate={yearMonthDateToDate(endsDate)} showDot={false}/>
+            </>}
             {showTimeCarousel==="ENDS" && 
             <>
                 <hr color="white"/>
-                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" margin={2}/></div>
+                Hour
+                <div style={{height: "0.5vh"}}/>
+                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" onClick={setEndsHour} clicked={String(endsHour)} margin={2}/></div>
+                <div style={{height: "1vh"}}/>
+                Minute
+                <div style={{height: "0.5vh"}}/>
+                <div style={{margin: "0 -2vh"}}><Carousel mode="MINUTE" onClick={setEndsMinute} clicked={String(endsMinute)} margin={2}/></div>
             </>}
         </div>
     );
@@ -111,7 +133,7 @@ const EventPage = () => {
                 <div style={{height: "1vh"}}/>
                 {TimeBox()}
                 <div style={{height: "1vh"}}/>
-                <textarea id="noteBox" className="eventBox" placeholder="Note"/>
+                <textarea id="noteBox" className="eventBox" placeholder="Note" defaultValue={currentEvent.note}/>
             </div>
         </div>
     )
