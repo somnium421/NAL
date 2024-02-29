@@ -69,6 +69,7 @@
 
 .calendarDots {
     display: flex;
+    height: 0.6vh;
 }
 
 .calendarDot {

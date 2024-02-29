@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css';
-import { getCurrentLocation, getMonthlyWeather, isSameDate } from '../../utils/util';
+import { dateToYearMonthDateNumber, getCurrentLocation, isSameDate } from '../../utils/util';
 import Rain from '../../img/Rain.png';
 import { useRecoilValue } from 'recoil';
-import { showEventState } from '../../utils/atom';
+import { eventsByDateState, eventsState, showEventState } from '../../utils/atom';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
 const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -14,6 +14,15 @@ interface Props {
     clickedDate?: Date;
 }
 
+const DaysRow = () => {
+    const content: JSX.Element[] = [];
+    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    for (let i: number = 0; i<7; i++) {
+        content.push(<div key={days[i]} className="day">{days[i]}</div>);
+    }
+    return content;
+}
+
 const Calendar = (props: Props) => {
     const today = new Date();
     const {onClick, showWeather = true, showDot = true, clickedDate = today} = props;
@@ -21,17 +30,20 @@ const Calendar = (props: Props) => {
     const showEvent = useRecoilValue(showEventState);
     const [currentLocationName, setCurrentLocationName] = useState<string>("");
     const location = getCurrentLocation();
-
     const [year, setYear] = useState<number>(clickedDate.getFullYear());
     const [month, setMonth] = useState<number>(clickedDate.getMonth());
+    const events = useRecoilValue(eventsState);
+    const eventsByDate = useRecoilValue(eventsByDateState);
+    const [isEventsByDateReady, setIsEventsByDateReady] = useState<boolean>(false);
 
-    const DaysRow = () => {
-        const content: JSX.Element[] = [];
-        const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-        for (let i: number = 0; i<7; i++) {
-            content.push(<div key={days[i]} className="day">{days[i]}</div>);
+    const CalendarDots = (date: Date) => {
+        let content:JSX.Element[] = [];
+        if (eventsByDate[dateToYearMonthDateNumber(date)]) {
+            for (let i: number = 0; i<Math.min(3, eventsByDate[dateToYearMonthDateNumber(date)].length); i++) {
+                content.push(<div key={i} className="calendarDot"/>);
+            }
         }
-        return content;
+        return (<div className="calendarDots">{content}</div>)
     }
 
     const Dates = () => {
@@ -64,7 +76,8 @@ const Calendar = (props: Props) => {
                             ?<>
                             {showWeather && <img src={Rain} alt="" className="calendarWeatherIcon"/>}
                             <div>{dates[key]}</div>
-                            {showDot && <div className="calendarDots"><div className="calendarDot"/><div className="calendarDot"/></div>}</>
+                            {showDot && CalendarDots(new Date(year, month, dates[key]))}
+                            </>
                             :<div>&nbsp;</div>}
                         </div>
                     )
@@ -81,6 +94,10 @@ const Calendar = (props: Props) => {
         }
         else setCurrentLocationName(location.name);
     }, []);
+
+    useEffect(() => {
+        if (eventsByDate) setIsEventsByDateReady(true);
+    }, [eventsByDate]);
 
     return (
     <>
@@ -106,7 +123,7 @@ const Calendar = (props: Props) => {
             <div id="days">{DaysRow()}</div>
             <div style={{height: "0.3vh"}}/>
             <div id="dates">
-                {Dates()}
+                {isEventsByDateReady && Dates()}
             </div>
         </div>
     </>

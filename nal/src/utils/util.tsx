@@ -1,4 +1,6 @@
+import { IEvent } from '../components/common/Event';
 import { config } from '../utils/apiKey'
+import { IEventsByDate } from './atom';
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 
 export type Location = {
@@ -22,6 +24,14 @@ export type Weather = {
         speed: string;
     };
 };
+
+export interface IJSONEvent {
+    activity: string;
+    time: [[string, string, string], [string, string, string]];
+    location: string;
+    note: string;
+    climate: string;
+}
 
 export const currentLocation: Location = {
     longitude: 0,
@@ -185,11 +195,36 @@ export const getMonthlyWeather = (year: number, month: number) => {
     }
 };
 
-export const dateToYearMonthDate = (date: Date) => `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}`;
+export const dateToYearMonthDate = (date: Date): string => `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}`;
 
-export const dateToHourMinute = (date: Date) => `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+export const dateToYearMonthDateNumber = (date: Date): number => parseInt(`${date.getFullYear()}${String(date.getMonth()+1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`);
 
-export const yearMonthDateToDate = (yearMonthDate: string) => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]));
+export const dateToHourMinute = (date: Date): string => `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+    
+export const yearMonthDateToDate = (yearMonthDate: string): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]));
 
-export const isSameDate = (date1: Date, date2: Date) => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+export const isSameDate = (date1: Date, date2: Date): boolean => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 
+export const eventsToEventsByDate = (events: IEvent[]) => {
+    const eventsByDate: IEventsByDate = {}; // NO or START or END
+
+    const nextDate = (date: number): number => dateToYearMonthDateNumber(new Date(Math.floor(date/10000), Math.floor(date/100)%100 - 1, date%100 + 1))
+
+    events.forEach((event, idx) => {
+        if (isSameDate(event.time[0], event.time[1])) {
+            if (!eventsByDate[dateToYearMonthDateNumber(event.time[0])]) eventsByDate[dateToYearMonthDateNumber(event.time[0])] = [];
+            eventsByDate[dateToYearMonthDateNumber(event.time[0])].push([idx, "NO"]);
+        }
+        else {
+            for(let i: number = dateToYearMonthDateNumber(event.time[0]); 
+                    i<=dateToYearMonthDateNumber(event.time[1]); 
+                    i = nextDate(i)) {
+                if (!eventsByDate[i]) eventsByDate[i] = [];
+                if (i === dateToYearMonthDateNumber(event.time[0])) eventsByDate[i].push([idx, "START"]);
+                else if (i === dateToYearMonthDateNumber(event.time[1])) eventsByDate[i].push([idx, "END"]);
+                else eventsByDate[i].push([idx, "NO"]);
+            }
+        }
+    });
+    return eventsByDate;
+}

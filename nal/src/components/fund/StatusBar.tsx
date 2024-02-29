@@ -3,7 +3,7 @@ import './StatusBar.css'
 import { ReactComponent as Mobile } from "../../svg/Mobile.svg";
 import { ReactComponent as Wifi } from "../../svg/Wifi.svg";
 import { ReactComponent as Battery } from "../../svg/Battery.svg";
-import { modeState, showEventState, showModiState, showNotiState, statusBarColorState } from '../../utils/atom';
+import { modeState, showEventState, showNotiState, statusBarColorState } from '../../utils/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { dateToHourMinute } from '../../utils/util';
 
@@ -14,11 +14,10 @@ const StatusBar = () => {
     const [statusBarColor, setStatusBarColor] = useRecoilState(statusBarColorState);
     const mode = useRecoilValue(modeState);
     const showNoti = useRecoilValue(showNotiState);
-    const showModi = useRecoilValue(showModiState);
     const showEvent = useRecoilValue(showEventState);
 
     useEffect(() => {
-        if (mode==="HOME" && !(showNoti || showModi || showEvent)) setStatusBarColor("white");
+        if (mode==="HOME" && !(showNoti || showEvent)) setStatusBarColor("white");
         else setStatusBarColor("black");
     }); 
 

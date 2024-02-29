@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import './PageTitle.css';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
-import { showNotiState, showModiState, showEventState, currentEventState } from '../../utils/atom';
+import { showNotiState, showEventState, currentEventState } from '../../utils/atom';
 
 interface Props {
     pageTitleMode: string; // NOTI or MODI // EVENT
@@ -10,7 +10,6 @@ interface Props {
 
 const PageTitle = (props: Props) => {
     const [showNoti, setShowNoti] = useRecoilState(showNotiState);
-    const [showModi, setShowModi] = useRecoilState(showModiState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
 
@@ -29,7 +28,6 @@ const PageTitle = (props: Props) => {
                 <Arrow id="backward" onClick={() => {
                     switch(props.pageTitleMode) {
                         case "NOTI": setShowNoti(false); break;
-                        case "MODI": setShowModi(false); break;
                         case "EVENT": setShowEvent(false); break;
                     }
                 }}/>

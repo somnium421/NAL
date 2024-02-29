@@ -11,17 +11,6 @@ const NotiPage = () => {
             <div id="notiCompLists">
                 <div className="notiCompListTitle">Today</div>
                 <NotiComp/>
-                <NotiComp/>
-                <div className="notiCompListTitle">Yesterday</div>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
-                <NotiComp/>
             </div>
         </div>
     );    

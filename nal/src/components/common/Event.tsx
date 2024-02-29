@@ -4,6 +4,7 @@ import { currentEventState, showEventState } from '../../utils/atom';
 import { dateToHourMinute } from '../../utils/util';
 
 export interface IEvent  {
+    idx?: number;
     activity?: string;
     time: [Date, Date];
     location?: string;

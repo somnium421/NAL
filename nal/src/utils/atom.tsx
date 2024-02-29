@@ -1,16 +1,16 @@
 import { atom } from 'recoil';
 import { IEvent } from '../components/common/Event';
 
+export interface IEventsByDate {
+    [key: number]: [number, string][];
+}
+
 export const modeState = atom({
     key: "mode",
     default: "HOME",
 });
 export const showNotiState = atom({
     key: "showNoti",
-    default: false,
-});
-export const showModiState = atom({
-    key: "showModi",
     default: false,
 });
 export const showEventState = atom({
@@ -32,6 +32,10 @@ export const statusBarColorState = atom({
 export const eventsState = atom<IEvent[]>({
     key: "eventsState",
     default: [],
+})
+export const eventsByDateState = atom<IEventsByDate>({
+    key: "eventsByDateState",
+    default: {},
 })
 
 const resetCurrentEvent = (): [Date, Date] => {

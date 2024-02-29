@@ -54,14 +54,19 @@ const HourCarouselItems = (props: Props) => {
     const {onClick, clicked = "0"} = props;
     const content: JSX.Element[] = [];
     const [clickedHour, setClickedHour] = useState<string>(clicked);
+    const [dragging, setDragging] = useState<boolean>(false);
     for (let i:number = 0; i<24; i++) {
         content.push(
         <div key={`hour${i}`} 
              className={"hourCarouselItem"+ (i===parseInt(clickedHour)?" hourCarouselItemClicked":"")}
-             onClick={() => {
-                setClickedHour(String(i));
-                onClick(String(i));
-            }}>
+             onMouseDown={()=>setDragging(false)}
+             onMouseMove={()=>setDragging(true)}
+             onMouseUp={() => {
+                if (!dragging) {
+                    setClickedHour(String(i));
+                    onClick(String(i));
+                }
+             }}>
             <img src={Clear} alt="" className="carouselWeatherIcon"/>
             <div style={{pointerEvents: "none"}}>{i}</div>
         </div>)
@@ -73,14 +78,19 @@ const MinuteCarouselItems = (props: Props) => {
     const {onClick, clicked = "0"} = props;
     const content: JSX.Element[] = [];
     const [clickedMinute, setClickedMinute] = useState<string>(clicked);
+    const [dragging, setDragging] = useState<boolean>(false);
     for (let i:number = 0; i<60; i+=5) {
         content.push(
         <div key={`minute${i}`} 
              className={"minuteCarouselItem"+ (i===parseInt(clickedMinute)?" minuteCarouselItemClicked":"")}
-             onClick={() => {
-                setClickedMinute(String(i));
-                onClick(String(i));
-            }}>
+             onMouseDown={()=>setDragging(false)}
+             onMouseMove={()=>setDragging(true)}
+             onMouseUp={() => {
+                if (!dragging) {
+                    setClickedMinute(String(i));
+                    onClick(String(i));
+                }
+             }}>
             <div style={{pointerEvents: "none"}}>{String(i).padStart(2, "0")}</div>
         </div>)
     }
