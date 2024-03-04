@@ -32,6 +32,11 @@
 	display:none 
 }
 
+#upcomingEventsTitle {
+    margin-bottom: 1.2vh;
+    letter-spacing: 0.06vh;
+}
+
 .feel-enter {
     opacity: 0;
 }

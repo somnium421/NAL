@@ -1,19 +1,27 @@
 import './EventPage.css';
 import PageTitle from '../components/common/PageTitle';
-import { useRecoilState } from 'recoil';
-import { currentEventState } from '../utils/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { currentEventState, eventsByDateState, eventsState, showEventState } from '../utils/atom';
 import { ReactComponent as Search } from '../svg/Search.svg'
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
-import { dateToYearMonthDate, dateToHourMinute, yearMonthDateToDate } from '../utils/util';
+import { dateToYearMonthDate, dateToHourMinute, yearMonthDateToDate, yearMonthDateHourMinuteToDate, eventsToEventsByDate } from '../utils/util';
+import { IEvent } from '../components/common/Event';
 
 const EventPage = () => {
     const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
+    const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const [showCalendar, setShowCalendar] = useState<string>("NO"); // NO or STARTS or ENDS
     const [showActivityCarousel, setShowActivityCarousel] = useState<boolean>(false);
     const [showLocationCarousel, setShowLocationCarousel] = useState<boolean>(false);
     const [showTimeCarousel, setShowTimeCarousel] = useState<string>("NO"); // NO or STARTS or ENDS
+    const [events, setEvents] = useRecoilState(eventsState);
+    const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
+
+    const activityRef = useRef<HTMLInputElement>(null);
+    const locationRef = useRef<HTMLInputElement>(null);
+    const noteRef = useRef<HTMLTextAreaElement>(null);
 
     const [startsDate, setStartsDate] = useState<string>(dateToYearMonthDate(currentEvent.time[0]));
     const [startsHour, setStartsHour] = useState<number>(currentEvent.time[0].getHours());
@@ -25,7 +33,7 @@ const EventPage = () => {
     const ActivityBox = () => (
         <>
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Activity" defaultValue={currentEvent.activity}/>
+            <input type="text" placeholder="Activity" defaultValue={currentEvent.activity} ref={activityRef}/>
             <Search className="searchIcon" onClick={() => {
                 setShowActivityCarousel(prev => !prev);
                 setShowLocationCarousel(false);
@@ -42,7 +50,7 @@ const EventPage = () => {
     const LocationBox = () => (
         <>
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Location" defaultValue={currentEvent.location}/>
+            <input type="text" placeholder="Location" defaultValue={currentEvent.location} ref={locationRef}/>
             <Search className="searchIcon" onClick={() => {
                 setShowLocationCarousel(prev => !prev);
                 setShowActivityCarousel(false);
@@ -75,7 +83,8 @@ const EventPage = () => {
             {showCalendar==="STARTS" &&
             <>
                 <hr color="white"/>
-                <Calendar onClick={setStartsDate} clickedDate={yearMonthDateToDate(startsDate)} showDot={false}/>
+                <Calendar onClick={setStartsDate} clickedDate={yearMonthDateToDate(startsDate)} showDot={false}
+                          location={locationRef.current?.value===""?"":locationRef.current?.value}/>
             </>}
             {showTimeCarousel==="STARTS" && 
             <>
@@ -106,7 +115,8 @@ const EventPage = () => {
             {showCalendar==="ENDS" &&
             <>
                 <hr color="white"/>
-                <Calendar onClick={setEndsDate} clickedDate={yearMonthDateToDate(endsDate)} showDot={false}/>
+                <Calendar onClick={setEndsDate} clickedDate={yearMonthDateToDate(endsDate)} showDot={false}
+                          location={locationRef.current?.value===""?"":locationRef.current?.value}/>
             </>}
             {showTimeCarousel==="ENDS" && 
             <>
@@ -122,9 +132,36 @@ const EventPage = () => {
         </div>
     );
 
+    const doneOnClick = () => {
+        const tmpEvents = [...events];
+        const tmpEvent: IEvent = {
+            activity: activityRef.current?.value,
+            location: locationRef.current?.value,
+            time: [yearMonthDateHourMinuteToDate(startsDate, startsHour, startsMinute), yearMonthDateHourMinuteToDate(endsDate, endsHour, endsMinute)],
+            note: noteRef.current?.value,
+        }
+        if (showEvent === "true" && currentEvent.idx !== undefined) tmpEvents[currentEvent.idx] = tmpEvent;
+        else tmpEvents.push(tmpEvent);
+        setEvents(tmpEvents);
+        setShowEvent("false");
+    }
+
+    const deleteOnClick = () => {
+        const tmpEvents = [...events];
+        if (currentEvent.idx !== undefined) {
+            tmpEvents.splice(currentEvent.idx, 1)
+            setEvents(tmpEvents);
+        }
+        setShowEvent("false");
+    }
+
+    useEffect(() => {
+        if (events) setEventsByDate(eventsToEventsByDate(events));
+    }, [events]);
+
     return (
         <div id="eventPage" className="page">
-            <PageTitle pageTitleMode="EVENT"/>
+            <PageTitle pageTitleMode="EVENT" onClickRight={doneOnClick}/>
             <div id="eventPageContent">
                 <div style={{height: "5vh"}}/>
                 {ActivityBox()}
@@ -133,7 +170,8 @@ const EventPage = () => {
                 <div style={{height: "1vh"}}/>
                 {TimeBox()}
                 <div style={{height: "1vh"}}/>
-                <textarea id="noteBox" className="eventBox" placeholder="Note" defaultValue={currentEvent.note}/>
+                <textarea id="noteBox" className="eventBox" placeholder="Note" defaultValue={currentEvent.note} ref={noteRef}/>
+                <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>
             </div>
         </div>
     )

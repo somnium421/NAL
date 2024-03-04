@@ -203,11 +203,12 @@ export const dateToHourMinute = (date: Date): string => `${String(date.getHours(
     
 export const yearMonthDateToDate = (yearMonthDate: string): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]));
 
+export const yearMonthDateHourMinuteToDate = (yearMonthDate: string, hour: number, minute: number): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]), hour, minute);
+
 export const isSameDate = (date1: Date, date2: Date): boolean => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 
 export const eventsToEventsByDate = (events: IEvent[]) => {
-    const eventsByDate: IEventsByDate = {}; // NO or START or END
-
+    const eventsByDate: IEventsByDate = {};
     const nextDate = (date: number): number => dateToYearMonthDateNumber(new Date(Math.floor(date/10000), Math.floor(date/100)%100 - 1, date%100 + 1))
 
     events.forEach((event, idx) => {
@@ -222,9 +223,10 @@ export const eventsToEventsByDate = (events: IEvent[]) => {
                 if (!eventsByDate[i]) eventsByDate[i] = [];
                 if (i === dateToYearMonthDateNumber(event.time[0])) eventsByDate[i].push([idx, "START"]);
                 else if (i === dateToYearMonthDateNumber(event.time[1])) eventsByDate[i].push([idx, "END"]);
-                else eventsByDate[i].push([idx, "NO"]);
+                else eventsByDate[i].push([idx, "ALL"]);
             }
         }
     });
+    console.log("eventsByDate : ", eventsByDate)
     return eventsByDate;
 }

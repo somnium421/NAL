@@ -7,24 +7,25 @@ import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { eventsByDateState, eventsState, modeState, showEventState } from './utils/atom';
+import { eventsByDateState, eventsState, modeState, showEventState, showNotiState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
 import { IJSONEvent, eventsToEventsByDate } from './utils/util';
+import NotiPage from './pages/NotiPage';
 
 const App = ()=> {
   const mode = useRecoilValue(modeState);
   const showEvent = useRecoilValue(showEventState);
   const [events, setEvents] = useRecoilState(eventsState);
   const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
+  const showNoti = useRecoilValue(showNotiState);
 
   useEffect(() => {
     fetch("schedule.json")
     .then(response => response.json())
     .then(items => {
       const date = new Date();
-      setEvents(items.map((item: IJSONEvent, idx: number) => ({
-                idx: idx,
+      setEvents(items.map((item: IJSONEvent) => ({
                 activity: item.activity,
                 time: [new Date(date.getFullYear(), date.getMonth(), date.getDate()+parseInt(item.time[0][0]), parseInt(item.time[0][1]), parseInt(item.time[0][2])), 
                        new Date(date.getFullYear(), date.getMonth(), date.getDate()+parseInt(item.time[1][0]), parseInt(item.time[1][1]), parseInt(item.time[1][2]))],
@@ -47,7 +48,10 @@ const App = ()=> {
           {mode === "SCHEDULE" && <SchedulePage/>}
           {mode === "MORE" && <MorePage/>}
           <NavBar/>
-          <CSSTransition in={showEvent} timeout={500} classNames="sidePage" unmountOnExit>
+          <CSSTransition in={showNoti} timeout={500} classNames="sidePage" unmountOnExit>
+              <NotiPage/>
+          </CSSTransition>
+          <CSSTransition in={showEvent !== "false"} timeout={500} classNames="sidePage" unmountOnExit>
               <EventPage/>
           </CSSTransition>
           <StatusBar/>
@@ -60,3 +64,6 @@ const App = ()=> {
 }
 
 export default App;
+
+
+            

@@ -8,13 +8,13 @@
     },
     {
         "activity": "Jogging",
-        "time": [["1", "16", "00"], ["2", "18", "30"]],
+        "time": [["1", "16", "00"], ["3", "18", "30"]],
         "location": "Seoul Olympic Park",
         "climate": "Sunny"
     },
     {
         "activity": "Hello",
-        "time": [["3", "2", "05"], ["3", "2", "10"]],
+        "time": [["5", "2", "05"], ["5", "2", "10"]],
         "location": "Hello",
         "climate": "Hello"
     }

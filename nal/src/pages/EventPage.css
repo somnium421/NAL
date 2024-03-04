@@ -6,6 +6,19 @@
     padding: 0 var(--padding);
 }
 
+/* #done {
+    position: absolute;
+    top: 6.2vh;
+    right: var(--padding);
+    font-size: 1.7vh;
+    color: var(--purple);
+    text-align: right;
+} */
+
+#done:hover {
+    color: gray;
+}
+
 .activityLocation {
     display: flex;
     justify-content: space-between;
@@ -88,4 +101,16 @@ textarea {
     box-sizing: border-box;
     resize: none;
     overflow: hidden;
+}
+
+#deleteEvent {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 8vh;
+    color: var(--purple);
+}
+
+#deleteEvent:hover {
+    color: gray;
 }

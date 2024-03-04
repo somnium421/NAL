@@ -13,9 +13,13 @@ export const showNotiState = atom({
     key: "showNoti",
     default: false,
 });
+export const notiCheckedState = atom({
+    key: "atomChecked",
+    default: false,
+})
 export const showEventState = atom({
     key: "showEvent",
-    default: false,
+    default: "false",
 });
 export const showFeelState = atom({
     key: "showFeel",

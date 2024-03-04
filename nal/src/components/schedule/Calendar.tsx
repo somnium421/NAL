@@ -12,6 +12,7 @@ interface Props {
     showWeather?: boolean;
     showDot?: boolean;
     clickedDate?: Date;
+    location?: string;
 }
 
 const DaysRow = () => {
@@ -59,18 +60,15 @@ const Calendar = (props: Props) => {
                 {dates.slice(row*7, (row+1)*7).map((item, idx) => {
                     const key = row*7+idx;
                     let className = "dateComp";
-                    if (dates[key] === null) className += " null";
+                    if (dates[key] === 0) className += " null";
+                    else if (isSameDate(calendarClickedDate, new Date(year, month, dates[key]))) className += " clicked";
                     else if (isSameDate(today, new Date(year, month, dates[key]))) className += " today";
-                    if (isSameDate(calendarClickedDate, new Date(year, month, dates[key]))) className += " clicked";
                     return (
                         <div key={"date"+key} className={className} onClick={() => {
                             if (dates[key] !== 0) {
                                 setCalendarClickedDate(new Date(year, month, dates[key]));
-                                if (showEvent) onClick(`${year}. ${month+1}. ${dates[key]}`);
-                                else onClick({
-                                    time: [new Date(year, month, dates[key], new Date().getHours()+1), 
-                                           new Date(year, month, dates[key], new Date().getHours()+2)],
-                                });
+                                if (showEvent!=="false") onClick(`${year}. ${month+1}. ${dates[key]}`);
+                                else onClick(new Date(year, month, dates[key]));
                         }}}>
                             {dates[key] !== 0
                             ?<>
@@ -88,7 +86,8 @@ const Calendar = (props: Props) => {
     }
 
     useEffect(() => {
-        if (location instanceof Promise) {
+        if (props.location && props.location !== "") setCurrentLocationName(props.location);
+        else if (location instanceof Promise) {
             location
             .then(currentLocation => setCurrentLocationName(currentLocation.name));
         }

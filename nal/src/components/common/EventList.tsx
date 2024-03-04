@@ -1,21 +1,53 @@
 import './EventList.css'
 import Event from './Event'
-import { useRecoilValue } from 'recoil';
-import { eventsByDateState, eventsState } from '../../utils/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { eventsByDateState, eventsState, modeState } from '../../utils/atom';
+import { dateToYearMonthDateNumber, eventsToEventsByDate } from '../../utils/util';
+import { useEffect, useState } from 'react';
 
-const EventList = () => {
+interface Props {
+    date?: Date;
+}
+
+const EventList = (props: Props) => {
+    const {date = new Date()} = props;
     const events = useRecoilValue(eventsState);
-    const eventsByDate = useRecoilValue(eventsByDateState);
+    const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
+    const mode = useRecoilValue(modeState);
+    const [closestNextDate, setClosestNextDate] = useState<number>(0);
+    
+    useEffect(() => {
+        let tmp = 99999999;
+        Object.keys(eventsByDate).forEach(key => {
+            if (parseInt(key) < tmp && dateToYearMonthDateNumber(new Date()) <= parseInt(key)) tmp = parseInt(key);
+        });    
+        setClosestNextDate(tmp);
+    }, [eventsByDate]);
 
-    console.log(Object.keys(eventsByDate));
+    const eventListTitle = () => {
+        let title: string;
+        const monthDateYear = () => {
+            const monthText = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return `${monthText[Math.floor(closestNextDate/100)%100-1]} ${closestNextDate%100}, ${Math.floor(closestNextDate/10000)}`
+        }
 
+        if (dateToYearMonthDateNumber(new Date()) === closestNextDate) title = "Today";
+        else if (dateToYearMonthDateNumber(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1)) === closestNextDate) title = "Tomorrow";
+        else title = monthDateYear();
+
+        return <>
+            <div className="eventListTitle">{title}</div>
+            <hr style={{borderColor: "black"}}/>
+        </>
+    }
+    
     return (
         <div>
-            <div className="eventListTitle">Tomorrow</div>
-            <hr style={{borderColor: "black"}}/>
-            <ol id="events">{events?.map((event, idx) => {
-                return <Event key={idx} activity={event.activity} time={event.time} location={event.location} note={event.note} climate={event.climate}></Event>
-            })}</ol>
+            {mode === "HOME" && eventListTitle()}
+            <ol id="events">
+            {eventsByDate[mode === "HOME"?closestNextDate:dateToYearMonthDateNumber(date)]?.map(item => 
+                <Event key={item[0]} idx={item[0]} timeMode={item[1]}/>)}
+            </ol>
         </div>
     )
 }

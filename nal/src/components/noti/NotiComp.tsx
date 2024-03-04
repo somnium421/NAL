@@ -1,7 +1,8 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import './NotiComp.css';
 import { ReactComponent as NotiWarning } from "../../svg/NotiWarning.svg";
 import { ReactComponent as NotiFeel } from "../../svg/NotiFeel.svg";
+import { notiCheckedState } from '../../utils/atom';
 
 interface Props {
     notiType: string;
@@ -19,11 +20,12 @@ const exampleProps: Props = {
 // const NotiComp = (props: Props) => {
 const NotiComp = () => {
     const props: Props = exampleProps;
+    const notiChecked = useRecoilValue(notiCheckedState);
 
     return (
         <div className="notiComp">
             <div className="notiCompDotAndIcon">
-                <div className="notiCompDot"></div>
+                <div className="notiCompDot" style={{backgroundColor: notiChecked?"transparent":"var(--purple)"}}></div>
                 { props.notiType === "warning" && <NotiWarning width="5vh" height="5vh"/>}
                 { props.notiType === "feel" && <NotiFeel width="5vh" height="5vh"/>}
             </div>

@@ -44,8 +44,8 @@
     top: 6.2vh;
     right: 2.6vh;
     font-size: 1.7vh;
-    color: #C4C4C4;
-    text-align: right;;
+    color: var(--purple);
+    text-align: right;
 }
 
 #titleRight:hover {

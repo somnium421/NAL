@@ -3,7 +3,7 @@
     justify-content: space-between;
     padding: 0.6vh var(--padding);
     border-radius: 1.3vh;
-    transition: background 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .eventActivity {
@@ -23,5 +23,5 @@
 }
 
 .event:hover {
-    background-color: rgb(200,200,200);
+    color: gray;
 }

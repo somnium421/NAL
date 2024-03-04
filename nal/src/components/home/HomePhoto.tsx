@@ -11,8 +11,8 @@ const HomePhoto = () => {
     const [showModal, setShowModal] = useRecoilState(showModalState);
 
     return (
-        <div id="homePhoto">
-            <img id="exampleImg" src="img/DSCF9377.jpg" alt=""  onClick={()=>setShowModal(true)}/>
+        <div id="homePhoto" onClick={()=>setShowModal(true)}>
+            <img id="exampleImg" src="img/DSCF9377.jpg" alt=""/>
             <div id="homePhotoText">
                 <div id="homePhotoTextTop">Today is similar to <span id="asdf" className="gradient">Nov 30, 2022</span></div>
                 <div id="homePhotoTextBottom"><span id="weatherFelt">Weather felt</span> cold</div>
