@@ -1,6 +1,6 @@
 import './EventPage.css';
 import PageTitle from '../components/common/PageTitle';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentEventState, eventsByDateState, eventsState, showEventState } from '../utils/atom';
 import { ReactComponent as Search } from '../svg/Search.svg'
 import { useEffect, useRef, useState } from 'react';

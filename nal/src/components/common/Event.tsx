@@ -42,12 +42,12 @@ const Event = (props: Props) => {
             setShowEvent("true");
         }}>
             <div>
-                <div className="eventActivity">{events[idx].activity}</div>
-                <div className="eventLocation">{events[idx].location}</div>
+                <div className="eventActivity">{events[idx]?.activity}</div>
+                <div className="eventLocation">{events[idx]?.location}</div>
             </div>
             <div>
-                <div className="eventTime">{startTime()}</div>
-                <div className="eventTime">{endTime()}</div>
+                <div className="eventTime">{events[idx] && startTime()}</div>
+                <div className="eventTime">{events[idx] && endTime()}</div>
             </div>
         </li>
     )
