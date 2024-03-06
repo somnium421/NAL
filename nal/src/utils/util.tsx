@@ -33,6 +33,12 @@ export interface IJSONEvent {
     climate: string;
 }
 
+export interface IJSONNotification {
+    type: string;
+    date: string;
+    checked: string;
+}
+
 export const currentLocation: Location = {
     longitude: 0,
     latitude: 0,
@@ -227,6 +233,6 @@ export const eventsToEventsByDate = (events: IEvent[]) => {
             }
         }
     });
-    console.log("eventsByDate : ", eventsByDate)
+    // console.log("eventsByDate : ", eventsByDate);
     return eventsByDate;
 }

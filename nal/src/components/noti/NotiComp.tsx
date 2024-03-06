@@ -2,36 +2,40 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import './NotiComp.css';
 import { ReactComponent as NotiWarning } from "../../svg/NotiWarning.svg";
 import { ReactComponent as NotiFeel } from "../../svg/NotiFeel.svg";
-import { notiCheckedState } from '../../utils/atom';
+import { notificationState } from '../../utils/atom';
+import { useEffect } from 'react';
+
+// const exampleProps: Props = {
+//     notiType: "feel",
+//     notiChecked: false,
+//     text: ["How do you feel today?", "Help us to improve your experience"],
+// }
 
 interface Props {
-    notiType: string;
-    notiChecked: boolean;
-    text: string[];
+    idx: number;
 }
 
-const exampleProps: Props = {
-    notiType: "feel",
-    notiChecked: false,
-    text: ["How do you feel today?", "Help us to improve your experience"],
-}
+const NotiComp = (props: Props) => {
+    const {idx} = props;
+    const notification = useRecoilValue(notificationState);
 
+    const NotiIcon = () => {
+        switch (notification[idx].type) {
+            case "feel": return <NotiFeel width="5vh" height="5vh"/>;
+        }
+    }
 
-// const NotiComp = (props: Props) => {
-const NotiComp = () => {
-    const props: Props = exampleProps;
-    const notiChecked = useRecoilValue(notiCheckedState);
+    useEffect(() => {console.log(notification)})
 
     return (
         <div className="notiComp">
             <div className="notiCompDotAndIcon">
-                <div className="notiCompDot" style={{backgroundColor: notiChecked?"transparent":"var(--purple)"}}></div>
-                { props.notiType === "warning" && <NotiWarning width="5vh" height="5vh"/>}
-                { props.notiType === "feel" && <NotiFeel width="5vh" height="5vh"/>}
+                <div className="notiCompDot" style={{backgroundColor: notification[idx].checked?"transparent":"var(--purple"}}/>
+                {NotiIcon()}
             </div>
-            <div className="notiCompText">{props.text[0]}<br/>{props.text[1]}</div>
+            <div className="notiCompText">hi<br/>hello</div>
         </div>
-    );
+    )
 }
 
 export default NotiComp;

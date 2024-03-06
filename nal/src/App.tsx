@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import './App.css';
 import './fonts/font.css';
 import HomePage from './pages/HomePage';
@@ -7,10 +7,10 @@ import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { eventsByDateState, eventsState, modeState, showEventState, showNotiState } from './utils/atom';
+import { eventsByDateState, eventsState, modeState, notificationState, showEventState, showNotiState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
-import { IJSONEvent, eventsToEventsByDate } from './utils/util';
+import { IJSONEvent, IJSONNotification, eventsToEventsByDate } from './utils/util';
 import NotiPage from './pages/NotiPage';
 
 const App = ()=> {
@@ -19,6 +19,7 @@ const App = ()=> {
   const [events, setEvents] = useRecoilState(eventsState);
   const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
   const showNoti = useRecoilValue(showNotiState);
+  const setNotification = useSetRecoilState(notificationState);
 
   useEffect(() => {
     fetch("schedule.json")
@@ -35,6 +36,18 @@ const App = ()=> {
       })));
     })
   }, []);
+
+  useEffect(() => {
+    fetch("notification.json")
+    .then(response => response.json())
+    .then(items => {
+        setNotification(items.map((item: IJSONNotification) => ({
+            type: item.type,
+            date: parseInt(item.date),
+            checked: item.checked==="true"?true:false,
+        })))
+    })
+}, []);
 
   useEffect(() => {
     if (events) setEventsByDate(eventsToEventsByDate(events));

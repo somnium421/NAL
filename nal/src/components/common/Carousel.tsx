@@ -11,7 +11,7 @@ interface Props {
     clicked?: string;
 }
 
-const ActivityCarouselItems = () => {
+const ActivityCarouselItems = (props: Props) => {
     const content: JSX.Element[] = [];
     return (
         <>
@@ -137,7 +137,7 @@ const Carousel = (props: Props) => {
         onMouseDown={handleMouseDown} onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpLeave} onMouseLeave={handleMouseUpLeave}>
             <div id="slider" ref={sliderRef} style={{transform: `translateX(${currentX}vh)`}}>
-                {mode === "ACTIVITY" && ActivityCarouselItems()}
+                {mode === "ACTIVITY" && ActivityCarouselItems(props)}
                 {mode === "LOCATION" && LocationCarouselItems()}
                 {mode === "HOUR" && HourCarouselItems(props)}
                 {mode === "MINUTE" && MinuteCarouselItems(props)}

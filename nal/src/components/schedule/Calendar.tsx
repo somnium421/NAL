@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Calendar.css';
 import { dateToYearMonthDateNumber, getCurrentLocation, isSameDate } from '../../utils/util';
 import Rain from '../../img/Rain.png';
+import Clear from '../../img/Clear.png';
+import Clouds from '../../img/Clouds.png';
 import { useRecoilValue } from 'recoil';
 import { eventsByDateState, eventsState, showEventState } from '../../utils/atom';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
@@ -47,6 +49,17 @@ const Calendar = (props: Props) => {
         return (<div className="calendarDots">{content}</div>)
     }
 
+    const CalendarWeatherIcon = (date: Date) => {
+        if (isSameDate(new Date(), new Date(date.getFullYear(), date.getMonth(), date.getDate()-1))) {
+            return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
+        }
+        switch (Math.floor(Math.random()*3)) {
+            case 0: return <img src={Clear} alt="" className="calendarWeatherIcon"/>;
+            case 1: return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
+            case 2: return <img src={Clouds} alt="" className="calendarWeatherIcon"/>;
+        }
+    }
+
     const Dates = () => {
         let content:JSX.Element[] = [];
         const dates: number[] = [];
@@ -72,7 +85,7 @@ const Calendar = (props: Props) => {
                         }}}>
                             {dates[key] !== 0
                             ?<>
-                            {showWeather && <img src={Rain} alt="" className="calendarWeatherIcon"/>}
+                            {showWeather && CalendarWeatherIcon(new Date(year, month, dates[key]))}
                             <div>{dates[key]}</div>
                             {showDot && CalendarDots(new Date(year, month, dates[key]))}
                             </>

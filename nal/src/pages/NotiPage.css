@@ -1,19 +1,9 @@
-#notiPage {
-    padding: 5.4vh 0 0 0;
-}
-
 #notiCompLists {
     height: 100%;
     overflow-y: scroll;
-    margin: 3.3vh 2.4vh 0 2.4vh;
+    margin: 10vh var(--padding);
 }
 
 #notiCompLists::-webkit-scrollbar {
 	display:none 
-}
-
-.notiCompListTitle {
-    margin-top: 2vh;
-    margin-bottom: 1vh;
-    color: #4E4E4E;
 }

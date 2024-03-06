@@ -1,16 +1,17 @@
 import './NotiPage.css'
 import PageTitle from '../components/common/PageTitle';
 import NotiComp from '../components/noti/NotiComp';
-import { useSetRecoilState } from 'recoil';
-import { statusBarColorState } from '../utils/atom';
+import { useRecoilValue } from 'recoil';
+import { notificationState } from '../utils/atom';
 
 const NotiPage = () => {
+    const notification = useRecoilValue(notificationState);
+
     return (
         <div id="notiPage" className="page">
             <PageTitle pageTitleMode="NOTI"/>
             <div id="notiCompLists">
-                <div className="notiCompListTitle">Today</div>
-                <NotiComp/>
+                {notification?.map((item, idx) => <NotiComp key={idx} idx={idx}/>)}
             </div>
         </div>
     );    

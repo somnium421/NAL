@@ -20,7 +20,9 @@ const EventPage = () => {
     const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
 
     const activityRef = useRef<HTMLInputElement>(null);
+    const [activityValue, setActivityValue] = useState<string>(currentEvent.activity?currentEvent.activity:"");
     const locationRef = useRef<HTMLInputElement>(null);
+    const [locationValue, setLocationValue] = useState<string>(currentEvent.location?currentEvent.location:"")
     const noteRef = useRef<HTMLTextAreaElement>(null);
 
     const [startsDate, setStartsDate] = useState<string>(dateToYearMonthDate(currentEvent.time[0]));
@@ -33,7 +35,7 @@ const EventPage = () => {
     const ActivityBox = () => (
         <>
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Activity" defaultValue={currentEvent.activity} ref={activityRef}/>
+            <input type="text" placeholder="Activity" defaultValue={activityValue} ref={activityRef}/>
             <Search className="searchIcon" onClick={() => {
                 setShowActivityCarousel(prev => !prev);
                 setShowLocationCarousel(false);
@@ -41,16 +43,16 @@ const EventPage = () => {
                 setShowTimeCarousel("NO");
             }}/>
         </div>
-        {/* {showActivityCarousel && 
-        <div style={{margin: "1vh -2.1vh"}}><Carousel mode="ACTIVITY" margin={2.1}/></div>
-        } */}
+        {showActivityCarousel && 
+        <div style={{margin: "1vh -2.1vh"}}><Carousel mode="ACTIVITY" onClick={setActivityValue} margin={2.1}/></div>
+        }
         </>
     );
 
     const LocationBox = () => (
         <>
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Location" defaultValue={currentEvent.location} ref={locationRef}/>
+            <input type="text" placeholder="Location" defaultValue={locationValue} ref={locationRef}/>
             <Search className="searchIcon" onClick={() => {
                 setShowLocationCarousel(prev => !prev);
                 setShowActivityCarousel(false);
@@ -161,7 +163,6 @@ const EventPage = () => {
 
     return (
         <div id="eventPage" className="page">
-            <PageTitle pageTitleMode="EVENT" onClickRight={doneOnClick}/>
             <div id="eventPageContent">
                 <div style={{height: "5vh"}}/>
                 {ActivityBox()}
@@ -171,8 +172,10 @@ const EventPage = () => {
                 {TimeBox()}
                 <div style={{height: "1vh"}}/>
                 <textarea id="noteBox" className="eventBox" placeholder="Note" defaultValue={currentEvent.note} ref={noteRef}/>
-                <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>
+                <div style={{height: showEvent==="true"?"11vh":"8vh"}}/>
             </div>
+            <PageTitle pageTitleMode="EVENT" onClickRight={doneOnClick}/>
+            {showEvent==="true" && <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>}
         </div>
     )
 }

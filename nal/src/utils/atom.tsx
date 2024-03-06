@@ -5,6 +5,12 @@ export interface IEventsByDate {
     [key: number]: [number, string][];
 }
 
+export interface INotification {
+    type: string;
+    date: number;
+    checked: boolean;
+}
+
 export const modeState = atom({
     key: "mode",
     default: "HOME",
@@ -29,10 +35,6 @@ export const showModalState = atom({
     key: "showModal",
     default: false,
 })
-export const statusBarColorState = atom({
-    key: "statusBarColor",
-    default: "white",
-});
 export const eventsState = atom<IEvent[]>({
     key: "eventsState",
     default: [],
@@ -53,4 +55,9 @@ export const currentEventState = atom<IEvent>({
     default: {
         time: resetCurrentEvent(),
     },
+})
+
+export const notificationState = atom<INotification[]>({
+    key: "notificationState",
+    default: [],
 })
