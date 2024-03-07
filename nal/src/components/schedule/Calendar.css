@@ -59,17 +59,19 @@
     width: var(--compWidth);
     transition: color 0.3s ease;
     border-radius: 1vh;
-    padding: 0.3vh 0;
 }
 
 .calendarWeatherIcon {
-    width: 1.8vh;
-    height: 1.8vh;
+    width: 1.7vh;
+    height: 1.7vh;
+    margin: 0.1vh 0 -0.2vh 0;
 }
 
 .calendarDots {
     display: flex;
     height: 0.6vh;
+    gap: 0.1vh;
+    margin: 0.3vh 0 0.5vh 0;
 }
 
 .calendarDot {
@@ -77,7 +79,6 @@
     height: 0.6vh;
     border-radius: 50%;
     background-color: rgba(180,180,180,1);
-    margin: 0 0.05vh;
 }
 
 .calendarLine {

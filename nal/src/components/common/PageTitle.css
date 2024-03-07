@@ -37,7 +37,6 @@
 #titleRight {
     margin: 0 var(--padding) 1vh;
     font-size: 1.7vh;
-    color: var(--purple);
 }
 
 #titleRight:hover {

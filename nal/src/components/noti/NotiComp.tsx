@@ -22,10 +22,15 @@ const NotiComp = (props: Props) => {
     const NotiIcon = () => {
         switch (notification[idx].type) {
             case "feel": return <NotiFeel width="5vh" height="5vh"/>;
+            case "warn": return <NotiWarning width="5vh" height="5vh"/>;
         }
     }
 
-    useEffect(() => {console.log(notification)})
+    const NotiContent = () => {
+        switch (notification[idx].type) {
+            case "feel": return <><span style={{fontWeight: "300"}}>How do you feel today?</span><br/>Help us to improve your experience</>
+        }
+    }
 
     return (
         <div className="notiComp">
@@ -33,7 +38,7 @@ const NotiComp = (props: Props) => {
                 <div className="notiCompDot" style={{backgroundColor: notification[idx].checked?"transparent":"var(--purple"}}/>
                 {NotiIcon()}
             </div>
-            <div className="notiCompText">hi<br/>hello</div>
+            <div className="notiCompContent">{NotiContent()}</div>
         </div>
     )
 }

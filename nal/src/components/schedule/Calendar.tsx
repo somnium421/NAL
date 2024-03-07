@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css';
-import { dateToYearMonthDateNumber, getCurrentLocation, isSameDate } from '../../utils/util';
+import { dateToYearMonthDateNumber, getCurrentLocation, getDateWeather, isSameDate } from '../../utils/util';
 import Rain from '../../img/Rain.png';
 import Clear from '../../img/Clear.png';
 import Clouds from '../../img/Clouds.png';
+import Snow from '../../img/Snow.png';
 import { useRecoilValue } from 'recoil';
 import { eventsByDateState, eventsState, showEventState } from '../../utils/atom';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
@@ -38,6 +39,7 @@ const Calendar = (props: Props) => {
     const events = useRecoilValue(eventsState);
     const eventsByDate = useRecoilValue(eventsByDateState);
     const [isEventsByDateReady, setIsEventsByDateReady] = useState<boolean>(false);
+    const [todayWeatherIcon, setTodayWeatherIcon] = useState<string>();
 
     const CalendarDots = (date: Date) => {
         let content:JSX.Element[] = [];
@@ -50,13 +52,13 @@ const Calendar = (props: Props) => {
     }
 
     const CalendarWeatherIcon = (date: Date) => {
-        if (isSameDate(new Date(), new Date(date.getFullYear(), date.getMonth(), date.getDate()-1))) {
-            return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
-        }
-        switch (Math.floor(Math.random()*3)) {
-            case 0: return <img src={Clear} alt="" className="calendarWeatherIcon"/>;
-            case 1: return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
-            case 2: return <img src={Clouds} alt="" className="calendarWeatherIcon"/>;
+        const dateWeather = getDateWeather(date) as string;
+        switch (dateWeather) {
+            case "Clear": return <img src={Clear} alt="" className="calendarWeatherIcon"/>;
+            case "Rain": return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
+            case "Clouds": return <img src={Clouds} alt="" className="calendarWeatherIcon"/>;
+            case "Snow": return <img src={Snow} alt="" className="calendarWeatherIcon"/>;
+            case "No": return <div style={{height: "1.6vh"}}/>
         }
     }
 

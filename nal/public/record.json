@@ -1,0 +1,22 @@
+[
+    {
+        "temperature": {
+            "feel": 0,
+            "high": 5,
+            "low": -2
+        },
+        "humidity": 40,
+        "pressure": 1019,
+        "main": "Clouds",
+        "wind": {
+            "direction": "NW",
+            "speed": 2
+        },
+        "photos": {
+            "main": "DSCF9377.jpg",
+            "other": ["DSC01673.jpg", "DSC01686.jpg", "DSCF9438.jpg"]
+        },
+        "felt": "cold",
+        "date": "2022-03-01T00:00:00.000Z"
+    }
+]

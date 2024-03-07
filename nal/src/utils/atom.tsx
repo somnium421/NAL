@@ -1,5 +1,7 @@
 import { atom } from 'recoil';
 import { IEvent } from '../components/common/Event';
+import { IRecord } from '../components/home/HomePhoto';
+import { Weather } from './util';
 
 export interface IEventsByDate {
     [key: number]: [number, string][];
@@ -20,7 +22,7 @@ export const showNotiState = atom({
     default: false,
 });
 export const notiCheckedState = atom({
-    key: "atomChecked",
+    key: "notiCheckedState",
     default: false,
 })
 export const showEventState = atom({
@@ -60,4 +62,58 @@ export const currentEventState = atom<IEvent>({
 export const notificationState = atom<INotification[]>({
     key: "notificationState",
     default: [],
+})
+
+export const pageTitleRightClickAvailableState = atom<boolean>({
+    key: "pageTitleRightClickAvailableState",
+    default: false,
+})
+
+export const recordState = atom<IRecord[]>({
+    key: "recordState",
+    default: [],
+})
+
+export const todayWeatherState = atom<Weather>({
+    key: "todayWeatherState",
+    default: {
+        temperature: {
+            current: 0,
+            feel: 0,
+            high: 0,
+            low: 0,
+        },
+        humidity: 0,
+        pressure: 0,
+        main: "",
+        wind: {
+            direction: "",
+            speed: 0,
+        },
+    },
+})
+
+export const similarDateRecordState = atom<IRecord>({
+    key: "similarDateWeatherState",
+    default: {
+        temperature: {
+            current: 0,
+            feel: 0,
+            high: 0,
+            low: 0,
+        },
+        humidity: 0,
+        pressure: 0,
+        main: "",
+        wind: {
+            direction: "",
+            speed: 0,
+        },
+        photos: {
+            main: "",
+            other: [],
+        },
+        felt: "",
+        date: new Date(),
+    }
 })

@@ -7,6 +7,10 @@
     transition: background 0.3s ease;
 }
 
+.notiComp:hover {
+    background-color: rgb(230,230,230);
+}
+
 .notiCompDotAndIcon {
     display: flex;
     align-items: center;
@@ -20,13 +24,10 @@
     background-color: var(--purple);
 }
 
-.notiCompText {
+.notiCompContent {
     margin-left: 1.4vh;
     font-size: 1.3vh;
     font-weight: 200;
     align-self: center;
 }
 
-.notiComp:hover {
-    background-color: #E6E4ED;
-}

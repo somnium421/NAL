@@ -1,10 +1,12 @@
 import './HomeModal.css';
-import { useRecoilState } from 'recoil';
-import { showModalState } from '../../utils/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { showModalState, similarDateRecordState } from '../../utils/atom';
 import HomeWeather from '../../components/home/HomeWeather';
 
 const HomeModal = () => {
     const [showModal, setShowModal] = useRecoilState(showModalState);
+    const similarDateRecord = useRecoilValue(similarDateRecordState);
+
     return (
         <div id="homeModal" className="page" onClick={()=>setShowModal(false)}>
             <div id="modal">
@@ -12,14 +14,14 @@ const HomeModal = () => {
                 <div style={{height: "1.5vh"}}></div>
                 <div id="modalPhotoBoxes">
                     <div id="modalPhotoBox1" className="modalPhotoBox">
-                        <img style={{width: "100%", marginTop: "-1vh"}} src="img/DSC01673.jpg" alt=""/>
+                        <img style={{width: "100%", marginTop: "-1vh"}} src={`img/${similarDateRecord.photos.other[0]}`} alt=""/>
                     </div>
                     <div id="modalPhotoBox23">
                         <div id="modalPhotoBox2" className="modalPhotoBox">
-                            <img style={{width: "100%", marginTop: "-7vh"}} src="img/DSC01686.jpg" alt=""/>
+                            <img style={{width: "100%", marginTop: "-7vh"}} src={`img/${similarDateRecord.photos.other[1]}`} alt=""/>
                         </div>
                         <div id="modalPhotoBox3" className="modalPhotoBox">
-                            <img style={{width: "100%", marginTop: ""}} src="img/DSCF9438.jpg" alt=""/>
+                            <img style={{width: "100%", marginTop: ""}} src={`img/${similarDateRecord.photos.other[2]}`} alt=""/>
                         </div>
                     </div>                        
                 </div>

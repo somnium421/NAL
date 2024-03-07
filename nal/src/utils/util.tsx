@@ -2,65 +2,47 @@ import { IEvent } from '../components/common/Event';
 import { config } from '../utils/apiKey'
 import { IEventsByDate } from './atom';
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
+let updated = false;
+const weatherData: {[key: number]: string} = {};
 
 export type Location = {
     longitude: number
     latitude: number
     name: string
 };
-
 export type Weather = {
     temperature: {
-        current?: string;
-        feel?: string;
-        high: string;
-        low: string;
+        current?: number;
+        feel?: number;
+        high: number;
+        low: number;
     };
     humidity: number;
     pressure: number;
     main: string;
     wind?: {
         direction: string;
-        speed: string;
+        speed: number;
     };
 };
-
 export interface IJSONEvent {
     activity: string;
-    time: [[string, string, string], [string, string, string]];
+    time: [[number, number, number], [number, number, number]];
     location: string;
     note: string;
     climate: string;
-}
-
+};
 export interface IJSONNotification {
     type: string;
     date: string;
     checked: string;
-}
-
+};
 export const currentLocation: Location = {
     longitude: 0,
     latitude: 0,
     name: "",
 };
-
-export const todayWeather: Weather = {
-    temperature: {
-        current: "",
-        feel: "",
-        high: "",
-        low: "",
-    },
-    humidity: 0,
-    pressure: 0,
-    main: "",
-    wind: {
-        direction: "",
-        speed: "",
-    },
-};
-
+let todayWeather: Weather;
 export const windDirection = (degree: number): string => {
     if (degree > 337.5) return "N";
     if (degree > 292.5) return "NW";
@@ -72,9 +54,16 @@ export const windDirection = (degree: number): string => {
     if (degree > 22.5) return "NE";
     else return "N"
 };
-
-let updated = false;
-
+export const dateToYearMonthDate = (date: Date): string => `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}`;
+export const dateToYearMonthDateNumber = (date: Date): number => parseInt(`${date.getFullYear()}${String(date.getMonth()+1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`);
+export const dateToHourMinute = (date: Date): string => `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;   
+export const yearMonthDateToDate = (yearMonthDate: string): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]));
+export const yearMonthDateHourMinuteToDate = (yearMonthDate: string, hour: number, minute: number): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]), hour, minute);
+export const numberToMonthDateYear = (date: number) => {
+    const monthText = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `${monthText[Math.floor(date/100)%100-1]} ${date%100}, ${Math.floor(date/10000)}`;
+};
+export const isSameDate = (date1: Date, date2: Date): boolean => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 export const getCurrentLocation = (): Location | Promise<Location> => {
     if (updated) return currentLocation;
     return new Promise((res: (value: GeolocationPosition)=>void) =>
@@ -90,27 +79,26 @@ export const getCurrentLocation = (): Location | Promise<Location> => {
         return currentLocation;
     });
 };
-
 export const getCurrentWeather = (): Weather | Promise<Weather> => {
     const location = getCurrentLocation();
     if (location instanceof Promise) {
-        return location.then((location) => {
-            return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&units=metric`);
-        })
+        return location.then((location) => fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&units=metric`))
         .then((response) => response.json())
         .then((json) => {
-            if (todayWeather.temperature?.current !== undefined) {
-                todayWeather.temperature.current = json.main.temp.toFixed();
-            }
-            if (todayWeather.temperature?.feel !== undefined) {
-                todayWeather.temperature.feel = json.main.feels_like.toFixed();
-            }
-            todayWeather.humidity = json.main.humidity;
-            todayWeather.pressure = json.main.pressure;
-            todayWeather.main = json.weather[0].main;
-            if (todayWeather.wind !== undefined) {
-                todayWeather.wind.direction = windDirection(json.wind.deg)
-                todayWeather.wind.speed = json.wind.speed.toFixed();
+            todayWeather = {
+                temperature: {
+                    current: parseInt(json.main.temp.toFixed()),
+                    feel: parseInt(json.main.feels_like.toFixed()),
+                    high: 0,
+                    low: 0,
+                },
+                humidity: json.main.humidity,
+                pressure: json.main.pressure,
+                main: json.weather[0].main,
+                wind: {
+                    direction: windDirection(json.wind.deg),
+                    speed: parseInt(json.wind.speed.toFixed()),
+                }
             }
             return location;
         })
@@ -119,15 +107,14 @@ export const getCurrentWeather = (): Weather | Promise<Weather> => {
         })
         .then((response) => response.json())
         .then((json) => {
-            todayWeather.temperature.high = json.list[0].temp.max.toFixed();
-            todayWeather.temperature.low = json.list[0].temp.min.toFixed();
+            todayWeather.temperature.high = parseInt(json.list[0].temp.max.toFixed());
+            todayWeather.temperature.low = parseInt(json.list[0].temp.min.toFixed());
             updated = true;
             return todayWeather;
         })
     }
     else return todayWeather;
 };
-
 export const getPrevWeather = (start: Date, end: Date) => {
     const ret: Weather[] = [];
     // const location = getCurrentLocation() as Location;
@@ -158,7 +145,6 @@ export const getPrevWeather = (start: Date, end: Date) => {
         console.log(ret);
     })
 };
-
 export const getNextWeather = (cnt: number): Promise<Weather[]> => {
     const ret: Weather[] = [];
     if (cnt > 30) cnt = 30;
@@ -188,30 +174,31 @@ export const getNextWeather = (cnt: number): Promise<Weather[]> => {
     })
 };
 
-export const getMonthlyWeather = (year: number, month: number) => {
-    const now = new Date();
-    if (year === now.getFullYear() && month === now.getMonth()) {
-
+export const getDateWeather = (date: Date): string | Promise<Weather> => {
+    if (isSameDate(new Date(), date)) {
+        const currentWeather = getCurrentWeather();
+        if (currentWeather instanceof Promise) return currentWeather;
+        else return currentWeather.main;
     }
-    else if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth())) {
-
+    if (isSameDate(new Date(), new Date(date.getFullYear(), date.getMonth(), date.getDate()-1))) return "Rain";
+    if (dateToYearMonthDateNumber(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+7)) < dateToYearMonthDateNumber(date)) {
+        return "No";
     }
+
+    if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)];
     else {
-
+        const value = Math.floor(Math.random()*10);
+        let weather: string;
+        if (value < 5) weather = "Clear";
+        else if (value < 8) weather = "Clouds";
+        else {
+            if (date.getMonth() < 2) weather = "Snow";
+            else weather = "Rain";
+        }
+        weatherData[dateToYearMonthDateNumber(date)] = weather;
+        return weather;
     }
-};
-
-export const dateToYearMonthDate = (date: Date): string => `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}`;
-
-export const dateToYearMonthDateNumber = (date: Date): number => parseInt(`${date.getFullYear()}${String(date.getMonth()+1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`);
-
-export const dateToHourMinute = (date: Date): string => `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-    
-export const yearMonthDateToDate = (yearMonthDate: string): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]));
-
-export const yearMonthDateHourMinuteToDate = (yearMonthDate: string, hour: number, minute: number): Date => new Date(parseInt(yearMonthDate.split(". ")[0]), parseInt(yearMonthDate.split(". ")[1])-1, parseInt(yearMonthDate.split(". ")[2]), hour, minute);
-
-export const isSameDate = (date1: Date, date2: Date): boolean => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+}
 
 export const eventsToEventsByDate = (events: IEvent[]) => {
     const eventsByDate: IEventsByDate = {};
@@ -233,6 +220,5 @@ export const eventsToEventsByDate = (events: IEvent[]) => {
             }
         }
     });
-    // console.log("eventsByDate : ", eventsByDate);
     return eventsByDate;
 }

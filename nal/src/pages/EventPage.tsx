@@ -1,7 +1,7 @@
 import './EventPage.css';
 import PageTitle from '../components/common/PageTitle';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentEventState, eventsByDateState, eventsState, showEventState } from '../utils/atom';
+import { currentEventState, eventsByDateState, eventsState, pageTitleRightClickAvailableState, showEventState } from '../utils/atom';
 import { ReactComponent as Search } from '../svg/Search.svg'
 import { useEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
@@ -18,8 +18,8 @@ const EventPage = () => {
     const [showTimeCarousel, setShowTimeCarousel] = useState<string>("NO"); // NO or STARTS or ENDS
     const [events, setEvents] = useRecoilState(eventsState);
     const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
+    const setPageTitleRightClickAvailable = useSetRecoilState(pageTitleRightClickAvailableState);
 
-    const activityRef = useRef<HTMLInputElement>(null);
     const [activityValue, setActivityValue] = useState<string>(currentEvent.activity?currentEvent.activity:"");
     const locationRef = useRef<HTMLInputElement>(null);
     const [locationValue, setLocationValue] = useState<string>(currentEvent.location?currentEvent.location:"")
@@ -35,7 +35,7 @@ const EventPage = () => {
     const ActivityBox = () => (
         <>
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Activity" defaultValue={activityValue} ref={activityRef}/>
+            <input type="text" placeholder="Activity" defaultValue={activityValue} onChange={(e)=> setActivityValue(e.target.value)}/>
             <Search className="searchIcon" onClick={() => {
                 setShowActivityCarousel(prev => !prev);
                 setShowLocationCarousel(false);
@@ -137,8 +137,8 @@ const EventPage = () => {
     const doneOnClick = () => {
         const tmpEvents = [...events];
         const tmpEvent: IEvent = {
-            activity: activityRef.current?.value,
-            location: locationRef.current?.value,
+            activity: activityValue,
+            location: locationValue,
             time: [yearMonthDateHourMinuteToDate(startsDate, startsHour, startsMinute), yearMonthDateHourMinuteToDate(endsDate, endsHour, endsMinute)],
             note: noteRef.current?.value,
         }
@@ -160,6 +160,11 @@ const EventPage = () => {
     useEffect(() => {
         if (events) setEventsByDate(eventsToEventsByDate(events));
     }, [events]);
+
+    useEffect(() => {
+        if (activityValue) setPageTitleRightClickAvailable(true);
+        else setPageTitleRightClickAvailable(false);
+    }, [activityValue])
 
     return (
         <div id="eventPage" className="page">

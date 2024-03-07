@@ -2,7 +2,7 @@ import './EventList.css'
 import Event from './Event'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { eventsByDateState, eventsState, modeState } from '../../utils/atom';
-import { dateToYearMonthDateNumber, eventsToEventsByDate } from '../../utils/util';
+import { dateToYearMonthDateNumber, eventsToEventsByDate, numberToMonthDateYear } from '../../utils/util';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -26,14 +26,10 @@ const EventList = (props: Props) => {
 
     const eventListTitle = () => {
         let title: string;
-        const monthDateYear = () => {
-            const monthText = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            return `${monthText[Math.floor(closestNextDate/100)%100-1]} ${closestNextDate%100}, ${Math.floor(closestNextDate/10000)}`
-        }
 
         if (dateToYearMonthDateNumber(new Date()) === closestNextDate) title = "Today";
         else if (dateToYearMonthDateNumber(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1)) === closestNextDate) title = "Tomorrow";
-        else title = monthDateYear();
+        else title = numberToMonthDateYear(closestNextDate);
 
         return <>
             <div className="eventListTitle">{title}</div>

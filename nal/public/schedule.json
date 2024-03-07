@@ -1,20 +1,20 @@
 [
     {
         "activity": "Shopping",
-        "time": [["1", "13", "00"], ["1", "14", "00"]],
+        "time": [[1, 13, 0], [1, 14, 0]],
         "location": "COEX",
         "note": "with my roommate!",
         "climate": "Sunny"
     },
     {
         "activity": "Jogging",
-        "time": [["1", "16", "00"], ["3", "18", "30"]],
+        "time": [[1, 16, 0], [3, 18, 30]],
         "location": "Seoul Olympic Park",
         "climate": "Sunny"
     },
     {
         "activity": "Hello",
-        "time": [["5", "2", "05"], ["5", "2", "10"]],
+        "time": [[5, 2, 5], [5, 2, 10]],
         "location": "Hello",
         "climate": "Hello"
     }

@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import './PageTitle.css';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
-import { showNotiState, showEventState, currentEventState, notiCheckedState, notificationState } from '../../utils/atom';
+import { showNotiState, showEventState, currentEventState, notiCheckedState, notificationState, pageTitleRightClickAvailableState } from '../../utils/atom';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -18,6 +18,7 @@ const PageTitle = (props: Props) => {
     const setNotiChecked = useSetRecoilState(notiCheckedState);
     const [notification, setNotification] = useRecoilState(notificationState);
     const [backwardClicked, setBackwardClicked] = useState<boolean>(false);
+    const pageTitleRightClickAvailable = useRecoilValue(pageTitleRightClickAvailableState);
 
     const TitleText = () => {
         switch(pageTitleMode){
@@ -56,9 +57,11 @@ const PageTitle = (props: Props) => {
                 <Arrow id="backward" onClick={backwardOnClick}/>
                 <div id="titleText">{TitleText()}</div>
             </div>
-            <div id="titleRight" onClick={onClickRight}>
-                {pageTitleMode === "NOTI" && <div id="deleteAll">Delete all</div>}
-                {pageTitleMode === "EVENT" && <div id="done">Done</div> }
+            <div id="titleRight" onClick={pageTitleRightClickAvailable?onClickRight:()=>{}}>
+                {pageTitleMode === "NOTI" && 
+                <div id="deleteAll" style={{color: pageTitleRightClickAvailable?"var(--purple)":"gray"}}>Delete all</div>}
+                {pageTitleMode === "EVENT" && 
+                <div id="done" style={{color: pageTitleRightClickAvailable?"var(--purple)":"gray"}}>Done</div> }
             </div>
         </div>
     )

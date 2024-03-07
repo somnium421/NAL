@@ -7,7 +7,7 @@ import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { eventsByDateState, eventsState, modeState, notificationState, showEventState, showNotiState } from './utils/atom';
+import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
 import { IJSONEvent, IJSONNotification, eventsToEventsByDate } from './utils/util';
@@ -20,6 +20,7 @@ const App = ()=> {
   const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
   const showNoti = useRecoilValue(showNotiState);
   const setNotification = useSetRecoilState(notificationState);
+  const setRecord = useSetRecoilState(recordState);
 
   useEffect(() => {
     fetch("schedule.json")
@@ -28,30 +29,28 @@ const App = ()=> {
       const date = new Date();
       setEvents(items.map((item: IJSONEvent) => ({
                 activity: item.activity,
-                time: [new Date(date.getFullYear(), date.getMonth(), date.getDate()+parseInt(item.time[0][0]), parseInt(item.time[0][1]), parseInt(item.time[0][2])), 
-                       new Date(date.getFullYear(), date.getMonth(), date.getDate()+parseInt(item.time[1][0]), parseInt(item.time[1][1]), parseInt(item.time[1][2]))],
+                time: [new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[0][0], item.time[0][1], item.time[0][2]), 
+                       new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[1][0], item.time[1][1], item.time[1][2])],
                 location: item.location,
                 note: item.note,
                 climate: item.climate,
       })));
+    });
+    fetch("notification.json")
+    .then(response => response.json())
+    .then(items => {
+        setNotification(items);
+    });
+    fetch("record.json")
+    .then(response => response.json())
+    .then(items => {
+      setRecord(items);
     })
   }, []);
 
   useEffect(() => {
-    fetch("notification.json")
-    .then(response => response.json())
-    .then(items => {
-        setNotification(items.map((item: IJSONNotification) => ({
-            type: item.type,
-            date: parseInt(item.date),
-            checked: item.checked==="true"?true:false,
-        })))
-    })
-}, []);
-
-  useEffect(() => {
     if (events) setEventsByDate(eventsToEventsByDate(events));
-  }, [events])
+  }, [events]);
 
   return (
     <div>
