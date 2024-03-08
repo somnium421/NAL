@@ -2,6 +2,7 @@ import './Event.css';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentEventState, eventsState, showEventState } from '../../utils/atom';
 import { dateToHourMinute } from '../../utils/util';
+import { useEffect, useState } from 'react';
 
 export interface IEvent  {
     idx?: number;
@@ -23,6 +24,7 @@ const Event = (props: Props) => {
     const events = useRecoilValue(eventsState);
     const setShowEvent = useSetRecoilState(showEventState);
     const setCurrentEvent = useSetRecoilState(currentEventState);
+    const [needModify, setNeedModify] = useState(false);
 
     const startTime = () => {
         if (timeMode === "NO" || timeMode === "START") return dateToHourMinute(events[idx].time[0]);
@@ -36,8 +38,12 @@ const Event = (props: Props) => {
         else return <>&nbsp;</>
     }
 
+    useEffect(() => {
+        if (events[idx].activity === "Shopping") setNeedModify(true);
+    }, [])
+
     return (
-        <li className="event" onClick={() => {
+        <li className={`event ${needModify?"needModify":""}`} onClick={() => {
             setCurrentEvent({...events[idx], idx: idx});
             setShowEvent("true");
         }}>

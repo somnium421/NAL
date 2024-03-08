@@ -6,7 +6,7 @@ import { ReactComponent as Search } from '../svg/Search.svg'
 import { useEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
-import { dateToYearMonthDate, dateToHourMinute, yearMonthDateToDate, yearMonthDateHourMinuteToDate, eventsToEventsByDate } from '../utils/util';
+import { dateToYearMonthDate, eventsToEventsByDate } from '../utils/util';
 import { IEvent } from '../components/common/Event';
 
 const EventPage = () => {
@@ -24,11 +24,14 @@ const EventPage = () => {
     const locationRef = useRef<HTMLInputElement>(null);
     const [locationValue, setLocationValue] = useState<string>(currentEvent.location?currentEvent.location:"")
     const noteRef = useRef<HTMLTextAreaElement>(null);
+    const endsDateButtonRef = useRef<HTMLButtonElement>(null);
+    const endsHourMinuteButtonRef = useRef<HTMLButtonElement>(null);
 
-    const [startsDate, setStartsDate] = useState<string>(dateToYearMonthDate(currentEvent.time[0]));
+
+    const [startsDate, setStartsDate] = useState<Date>(currentEvent.time[0]);
     const [startsHour, setStartsHour] = useState<number>(currentEvent.time[0].getHours());
     const [startsMinute, setStartsMinute] = useState<number>(currentEvent.time[0].getMinutes());
-    const [endsDate, setEndsDate] = useState<string>(dateToYearMonthDate(currentEvent.time[1]));
+    const [endsDate, setEndsDate] = useState<Date>(currentEvent.time[1]);
     const [endsHour, setEndsHour] = useState<number>(currentEvent.time[1].getHours());
     const [endsMinute, setEndsMinute] = useState<number>(currentEvent.time[1].getMinutes());
 
@@ -74,7 +77,7 @@ const EventPage = () => {
                         if (showCalendar === "STARTS") setShowCalendar("NO");
                         else setShowCalendar("STARTS");
                         setShowTimeCarousel("NO");
-                    }}>{startsDate}</button>
+                    }}>{dateToYearMonthDate(startsDate)}</button>
                     <button onClick={() => {
                         if (showTimeCarousel === "STARTS") setShowTimeCarousel("NO");
                         else setShowTimeCarousel("STARTS");
@@ -85,7 +88,7 @@ const EventPage = () => {
             {showCalendar==="STARTS" &&
             <>
                 <hr color="white"/>
-                <Calendar onClick={setStartsDate} clickedDate={yearMonthDateToDate(startsDate)} showDot={false}
+                <Calendar onClick={setStartsDate} clickedDate={startsDate} showDot={false}
                           location={locationRef.current?.value===""?"":locationRef.current?.value}/>
             </>}
             {showTimeCarousel==="STARTS" && 
@@ -93,7 +96,7 @@ const EventPage = () => {
                 <hr color="white"/>
                 Hour
                 <div style={{height: "0.5vh"}}/>
-                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" onClick={setStartsHour} clicked={String(startsHour)} margin={2}/></div>
+                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" onClick={setStartsHour} clicked={String(startsHour)} margin={2} date={startsDate}/></div>
                 <div style={{height: "1vh"}}/>
                 Minute
                 <div style={{height: "0.5vh"}}/>
@@ -102,12 +105,12 @@ const EventPage = () => {
             <hr color="white"/>
             <div className="timeBoxElem">Ends
                 <div>
-                    <button onClick={() => {
+                    <button ref={endsDateButtonRef} onClick={() => {
                         if (showCalendar === "ENDS") setShowCalendar("NO");
                         else setShowCalendar("ENDS");
                         setShowTimeCarousel("NO");
-                    }}>{endsDate}</button>
-                    <button onClick={() => {
+                    }}>{dateToYearMonthDate(endsDate)}</button>
+                    <button ref={endsHourMinuteButtonRef} onClick={() => {
                         if (showTimeCarousel === "ENDS") setShowTimeCarousel("NO");
                         else setShowTimeCarousel("ENDS");
                         setShowCalendar("NO");
@@ -117,7 +120,7 @@ const EventPage = () => {
             {showCalendar==="ENDS" &&
             <>
                 <hr color="white"/>
-                <Calendar onClick={setEndsDate} clickedDate={yearMonthDateToDate(endsDate)} showDot={false}
+                <Calendar onClick={setEndsDate} clickedDate={endsDate} showDot={false}
                           location={locationRef.current?.value===""?"":locationRef.current?.value}/>
             </>}
             {showTimeCarousel==="ENDS" && 
@@ -125,7 +128,7 @@ const EventPage = () => {
                 <hr color="white"/>
                 Hour
                 <div style={{height: "0.5vh"}}/>
-                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" onClick={setEndsHour} clicked={String(endsHour)} margin={2}/></div>
+                <div style={{margin: "0 -2vh"}}><Carousel mode="HOUR" onClick={setEndsHour} clicked={String(endsHour)} margin={2} date={endsDate}/></div>
                 <div style={{height: "1vh"}}/>
                 Minute
                 <div style={{height: "0.5vh"}}/>
@@ -139,7 +142,8 @@ const EventPage = () => {
         const tmpEvent: IEvent = {
             activity: activityValue,
             location: locationValue,
-            time: [yearMonthDateHourMinuteToDate(startsDate, startsHour, startsMinute), yearMonthDateHourMinuteToDate(endsDate, endsHour, endsMinute)],
+            time: [new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute),
+                   new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute),],
             note: noteRef.current?.value,
         }
         if (showEvent === "true" && currentEvent.idx !== undefined) tmpEvents[currentEvent.idx] = tmpEvent;
@@ -165,6 +169,20 @@ const EventPage = () => {
         if (activityValue) setPageTitleRightClickAvailable(true);
         else setPageTitleRightClickAvailable(false);
     }, [activityValue])
+
+    useEffect(() => {
+        if (new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute) <
+            new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute)) {
+                endsDateButtonRef.current?.style.setProperty("text-decoration", "none");
+                endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "none");
+                setPageTitleRightClickAvailable(true)
+        }
+        else {
+            endsDateButtonRef.current?.style.setProperty("text-decoration", "line-through");
+            endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "line-through");
+            setPageTitleRightClickAvailable(false)
+        }
+    }, [startsDate, startsHour, startsMinute, endsDate, endsHour, endsMinute])
 
     return (
         <div id="eventPage" className="page">

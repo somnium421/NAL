@@ -3,7 +3,7 @@ import { config } from '../utils/apiKey'
 import { IEventsByDate } from './atom';
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 let updated = false;
-const weatherData: {[key: number]: string} = {};
+const weatherData: {[key: number]: {main: string, hourly: string[]}} = {};
 
 export type Location = {
     longitude: number
@@ -185,18 +185,33 @@ export const getDateWeather = (date: Date): string | Promise<Weather> => {
         return "No";
     }
 
-    if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)];
+    if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)].main;
     else {
-        const value = Math.floor(Math.random()*10);
+        const value = Math.random();
         let weather: string;
-        if (value < 5) weather = "Clear";
-        else if (value < 8) weather = "Clouds";
+        if (value < 0.5) weather = "Clear";
+        else if (value < 0.8) weather = "Clouds";
         else {
             if (date.getMonth() < 2) weather = "Snow";
             else weather = "Rain";
         }
-        weatherData[dateToYearMonthDateNumber(date)] = weather;
+        weatherData[dateToYearMonthDateNumber(date)] = {main: weather, hourly: []};
         return weather;
+    }
+}
+
+export const getHourlyWeather = (date: Date) => {
+    const weather = getDateWeather(date) as string;
+    switch (weather) {
+        case "Clear": return ["Clear", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear",
+                              "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clouds", "Clouds", "Clear", "Clear",];
+        case "Clouds": return ["Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", 
+                               "Clouds", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds",];
+        case "Snow": return ["Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Clouds", "Clouds", "Clouds", "Clouds", "Snow", "Snow", 
+                             "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow",];
+        case "Rain": return ["Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", 
+                             "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Clouds", "Clouds", "Clouds", "Clouds",];
+        default: return [];
     }
 }
 

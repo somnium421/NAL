@@ -1,14 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './Carousel.css';
 import Clear from '../../img/Clear.png';
+import Clouds from '../../img/Clouds.png';
+import Snow from '../../img/Snow.png';
+import Rain from '../../img/Rain.png';
 import Shopping from '../../img/Shopping.jpg';
+import { getHourlyWeather } from '../../utils/util';
 
 interface Props {
     mode: string; // ACTIVITY or LOCATION or HOUR or MINUTE
     margin: number;
     onClick: React.Dispatch<React.SetStateAction<any>>;
-    start?: number;
     clicked?: string;
+    date?: Date;
 }
 
 const ActivityCarouselItems = (props: Props) => {
@@ -51,25 +55,37 @@ const LocationCarouselItems = () => {
 }
 
 const HourCarouselItems = (props: Props) => {
-    const {onClick, clicked = "0"} = props;
+    const {onClick, clicked = "0", date = new Date()} = props;
     const content: JSX.Element[] = [];
     const [clickedHour, setClickedHour] = useState<string>(clicked);
     const [dragging, setDragging] = useState<boolean>(false);
-    for (let i:number = 0; i<24; i++) {
+    const hourlyWeather = getHourlyWeather(date);
+
+    const CarouselWeatherIcon = (props: {weather: string}) => {
+        switch(props.weather) {
+            case "Clear": return <img src={Clear} alt="" className="carouselWeatherIcon"/>
+            case "Clouds": return <img src={Clouds} alt="" className="carouselWeatherIcon"/>
+            case "Snow": return <img src={Snow} alt="" className="carouselWeatherIcon"/>
+            case "Rain": return <img src={Rain} alt="" className="carouselWeatherIcon"/>
+            default: return <></>
+        }
+    }
+
+    for (let i = 0; i<24; i++) {
         content.push(
-        <div key={`hour${i}`} 
-             className={"hourCarouselItem"+ (i===parseInt(clickedHour)?" hourCarouselItemClicked":"")}
-             onMouseDown={()=>setDragging(false)}
-             onMouseMove={()=>setDragging(true)}
-             onMouseUp={() => {
-                if (!dragging) {
-                    setClickedHour(String(i));
-                    onClick(String(i));
-                }
-             }}>
-            <img src={Clear} alt="" className="carouselWeatherIcon"/>
-            <div style={{pointerEvents: "none"}}>{i}</div>
-        </div>)
+            <div key={`hour${i}`} 
+                className={"hourCarouselItem"+ (i===parseInt(clickedHour)?" hourCarouselItemClicked":"")}
+                onMouseDown={()=>setDragging(false)}
+                onMouseMove={()=>setDragging(true)}
+                onMouseUp={() => {
+                    if (!dragging) {
+                        setClickedHour(String(i));
+                        onClick(String(i));
+                    }
+                }}>
+                <CarouselWeatherIcon weather={hourlyWeather[i]}/>
+                <div style={{pointerEvents: "none"}}>{i}</div>
+            </div>)
     }
     return content;
 }
@@ -98,12 +114,11 @@ const MinuteCarouselItems = (props: Props) => {
 }
 
 const Carousel = (props: Props) => {
-    const {mode, margin = 0, start,} = props;
+    const {mode, margin = 0, clicked,} = props;
     const vh = (px: number) => px/window.innerHeight*100;
-    const px = (vh: number) => vh*window.innerHeight/100;
-    const [dragging, setDragging] = useState(false);
-    const [startX, setStartX] = useState(margin);
-    const [currentX, setCurrentX] = useState(margin);
+    const [dragging, setDragging] = useState<boolean>(false);
+    const [startX, setStartX] = useState<number>(margin);
+    const [currentX, setCurrentX] = useState<number>(0);
     const viewerRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -112,12 +127,10 @@ const Carousel = (props: Props) => {
         else if (mode === "HOUR") return "5vh";
         else if (mode === "MINUTE") return "3vh";
     }
-
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         setDragging(true);
         setStartX(vh(e.pageX) - currentX);
     };
-
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!dragging) return;
         const x = vh(e.pageX) - startX;
@@ -129,8 +142,22 @@ const Carousel = (props: Props) => {
             else setCurrentX(x);
         }
     };
-
     const handleMouseUpLeave = () => setDragging(false);
+
+    useLayoutEffect(() => {
+        if (mode === "HOUR" && clicked) {
+            const hour = parseInt(clicked);
+            if (hour < 4) setCurrentX(margin);
+            else if (19 < hour) setCurrentX(-74.7)
+            else setCurrentX(-4.5*hour+15.5);
+        }
+        else if (mode === "MINUTE" && clicked) {
+            const minute = Math.floor(parseInt(clicked)/5);
+            if (minute < 4) setCurrentX(margin);
+            else if (7 < minute) setCurrentX(-20.7)
+            else setCurrentX(-4.5*minute+15.5);
+        }
+    }, []);
 
     return (
         <div id="viewer" ref={viewerRef} style={{height: getHeight()}}

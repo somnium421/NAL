@@ -73,7 +73,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--borderWidth);
+    box-sizing: border-box;
 }
 
 .minuteCarouselItem:hover {

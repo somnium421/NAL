@@ -16,7 +16,7 @@ const StatusBar = () => {
     const showEvent = useRecoilValue(showEventState);
 
     useEffect(() => {
-        if (mode==="HOME" && !(showNoti || showEvent !== "false")) setStatusBarColor("white");
+        if ((mode==="HOME" && !(showNoti || showEvent !== "false")) || mode==="LAUNCH") setStatusBarColor("white");
         else setStatusBarColor("black");
     }); 
 

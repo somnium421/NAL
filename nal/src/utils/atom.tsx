@@ -15,7 +15,7 @@ export interface INotification {
 
 export const modeState = atom({
     key: "mode",
-    default: "HOME",
+    default: "LAUNCH",
 });
 export const showNotiState = atom({
     key: "showNoti",

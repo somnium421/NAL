@@ -1,0 +1,11 @@
+#launchPage {
+    background: linear-gradient(109deg, rgba(184,225,255,1) 0%, rgba(188,176,255,1) 50%, rgba(255,206,206,1) 100%);
+}
+
+#logo {
+    position: absolute;
+    width: 8vh;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

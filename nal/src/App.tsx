@@ -7,20 +7,22 @@ import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState } from './utils/atom';
+import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, todayWeatherState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
-import { IJSONEvent, IJSONNotification, eventsToEventsByDate } from './utils/util';
+import { IJSONEvent, IJSONNotification, eventsToEventsByDate, getCurrentWeather } from './utils/util';
 import NotiPage from './pages/NotiPage';
+import LaunchPage from './pages/LaunchPage';
 
 const App = ()=> {
-  const mode = useRecoilValue(modeState);
+  const [mode, setMode] = useRecoilState(modeState);
   const showEvent = useRecoilValue(showEventState);
   const [events, setEvents] = useRecoilState(eventsState);
   const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
   const showNoti = useRecoilValue(showNotiState);
   const setNotification = useSetRecoilState(notificationState);
   const setRecord = useSetRecoilState(recordState);
+  const [todayWeather, setTodayWeather] = useRecoilState(todayWeatherState);
 
   useEffect(() => {
     fetch("schedule.json")
@@ -49,8 +51,20 @@ const App = ()=> {
   }, []);
 
   useEffect(() => {
+      const weather = getCurrentWeather();
+      if (weather instanceof Promise) {
+          weather.then((weather) => setTodayWeather(weather));
+      }
+      else setTodayWeather(weather);
+  }, []);
+
+  useEffect(() => {
     if (events) setEventsByDate(eventsToEventsByDate(events));
   }, [events]);
+
+  useEffect(() => {
+    if (todayWeather.main !== "") setMode("HOME");
+  }, [todayWeather])
 
   return (
     <div>
@@ -66,6 +80,7 @@ const App = ()=> {
           <CSSTransition in={showEvent !== "false"} timeout={500} classNames="sidePage" unmountOnExit>
               <EventPage/>
           </CSSTransition>
+          {mode === "LAUNCH" && <LaunchPage/>}
           <StatusBar/>
         </div>
         <div id="homeIndicator"/>

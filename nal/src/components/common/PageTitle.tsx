@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import './PageTitle.css';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
-import { showNotiState, showEventState, currentEventState, notiCheckedState, notificationState, pageTitleRightClickAvailableState } from '../../utils/atom';
+import { showNotiState, showEventState, notiCheckedState, notificationState, pageTitleRightClickAvailableState } from '../../utils/atom';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -12,7 +12,6 @@ interface Props {
 
 const PageTitle = (props: Props) => {
     const {pageTitleMode, modiMode, onClickRight} = props;
-    const currentEvent = useRecoilValue(currentEventState);
     const setShowNoti = useSetRecoilState(showNotiState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const setNotiChecked = useSetRecoilState(notiCheckedState);

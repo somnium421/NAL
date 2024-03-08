@@ -1,29 +1,18 @@
-import { useState, useEffect } from 'react'
-import { Weather, dateToYearMonthDateNumber, getCurrentWeather, numberToMonthDateYear } from '../../utils/util'
+import { dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util'
 import './HomeWeather.css'
 import { ReactComponent as WeatherIcon } from "../../svg/WeatherIcon.svg";
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { similarDateRecordState, todayWeatherState } from '../../utils/atom';
 
 interface Props {
     weatherMode: string; // HOME or MODAL
 }
 
-
-
 const HomeWeather = (props: Props) => {
     const {weatherMode} = props;
-    const [todayWeather, setTodayWeather] = useRecoilState(todayWeatherState);
+    const todayWeather = useRecoilValue(todayWeatherState);
     const similarDateRecord = useRecoilValue(similarDateRecordState);
     
-    useEffect(() => {
-        const weather = getCurrentWeather();
-        if (weather instanceof Promise) {
-            weather.then((weather) => setTodayWeather(weather));
-        }
-        else setTodayWeather(weather);
-    }, []);
-
     const TextInfo = () => {
         return (
             <div id="textInfo">{

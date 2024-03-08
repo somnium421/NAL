@@ -82,7 +82,7 @@ const Calendar = (props: Props) => {
                         <div key={"date"+key} className={className} onClick={() => {
                             if (dates[key] !== 0) {
                                 setCalendarClickedDate(new Date(year, month, dates[key]));
-                                if (showEvent!=="false") onClick(`${year}. ${month+1}. ${dates[key]}`);
+                                if (showEvent!=="false") onClick(new Date(year, month, dates[key]));
                                 else onClick(new Date(year, month, dates[key]));
                         }}}>
                             {dates[key] !== 0

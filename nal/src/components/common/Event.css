@@ -6,6 +6,10 @@
     transition: color 0.2s ease;
 }
 
+.needModify {
+    color: red;
+}
+
 .eventActivity {
     font-weight: 300;
     font-size: 1.6vh;
