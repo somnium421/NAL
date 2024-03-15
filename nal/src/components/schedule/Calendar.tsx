@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css';
-import { dateToYearMonthDateNumber, getCurrentLocation, getDateWeather, isSameDate } from '../../utils/util';
+import { DateWeather, dateToYearMonthDateNumber, getCurrentLocation, getDateWeather, isSameDate } from '../../utils/util';
 import Rain from '../../img/Rain.png';
 import Clear from '../../img/Clear.png';
 import Clouds from '../../img/Clouds.png';
@@ -52,8 +52,8 @@ const Calendar = (props: Props) => {
     }
 
     const CalendarWeatherIcon = (date: Date) => {
-        const dateWeather = getDateWeather(date) as string;
-        switch (dateWeather) {
+        const dateWeather = getDateWeather(date) as DateWeather;
+        switch (dateWeather.main) {
             case "Clear": return <img src={Clear} alt="" className="calendarWeatherIcon"/>;
             case "Rain": return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
             case "Clouds": return <img src={Clouds} alt="" className="calendarWeatherIcon"/>;
@@ -70,7 +70,7 @@ const Calendar = (props: Props) => {
         while (dates.length%7) dates.push(0);
     
         for (let row:number = 0; row<dates.length/7; row++) {
-            if (row) content.push(<hr key={row} className="calendarLine"></hr>)
+            if (row) content.push(<hr key={row} className="calendarLine"/>)
             content.push(<div key={"row"+row} className="datesRow">
                 {dates.slice(row*7, (row+1)*7).map((item, idx) => {
                     const key = row*7+idx;

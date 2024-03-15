@@ -6,7 +6,7 @@ import { ReactComponent as Search } from '../svg/Search.svg'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
-import { dateToYearMonthDate, eventsToEventsByDate } from '../utils/util';
+import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, checkEventsWeather } from '../utils/util';
 import { IEvent } from '../components/common/Event';
 
 const EventPage = () => {
@@ -33,12 +33,15 @@ const EventPage = () => {
     const [endsDate, setEndsDate] = useState<Date>(currentEvent.time[1]);
     const [endsHour, setEndsHour] = useState<number>(currentEvent.time[1].getHours());
     const [endsMinute, setEndsMinute] = useState<number>(currentEvent.time[1].getMinutes());
+    const [eventWeather, setEventWeather] = useState<string>("No");
 
     const Alert = () => {
-        return <>
-            <div className="alert">Rain is expected at that time</div>
+        return <>{eventWeather !== "No" && 
+        <>
+            <div className="alert">{eventWeather} is expected during that time</div>
             <div style={{height: "1vh"}}/>
         </>
+        }</>
     }
 
     const ActivityBox = () => (
@@ -59,20 +62,9 @@ const EventPage = () => {
     );
 
     const LocationBox = () => (
-        <>
         <div className="eventBox activityLocation">
             <input type="text" placeholder="Location" defaultValue={locationValue} ref={locationRef}/>
-            <Search className="searchIcon" onClick={() => {
-                setShowLocationCarousel(prev => !prev);
-                setShowActivityCarousel(false);
-                setShowCalendar("NO");
-                setShowTimeCarousel("NO");
-            }}/>
         </div>
-        {/* {showLocationCarousel && 
-        <div style={{margin: "1vh -2.1vh"}}><Carousel mode="LOCATION" margin={2.1}/></div>
-        } */}
-        </>
     );
 
     const TimeBox = () => (
@@ -145,12 +137,15 @@ const EventPage = () => {
 
     const doneOnClick = () => {
         const tmpEvents = [...events];
+        const startsTime = new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute);
+        const endsTime = new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute);
+        const eventWeather = getEventWeather(startsTime, endsTime);
         const tmpEvent: IEvent = {
             activity: activityValue,
             location: locationValue,
-            time: [new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute),
-                   new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute),],
+            time: [startsTime, endsTime],
             note: noteRef.current?.value,
+            modify: eventWeather === "Rain" || eventWeather === "Snow",
         }
         if (showEvent === "true" && currentEvent.idx !== undefined) tmpEvents[currentEvent.idx] = tmpEvent;
         else tmpEvents.push(tmpEvent);
@@ -172,19 +167,19 @@ const EventPage = () => {
     }, [events]);
 
     useEffect(() => {
-        if (activityValue !== "") {
-            if (new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute) <
-            new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute)) {
-                endsDateButtonRef.current?.style.setProperty("text-decoration", "none");
-                endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "none");
-                setPageTitleRightClickAvailable(true);                
-            }
-            else {
-                endsDateButtonRef.current?.style.setProperty("text-decoration", "line-through");
-                endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "line-through");
-                setPageTitleRightClickAvailable(false);
-            }
+        const startsTime = new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute);
+        const endsTime = new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute);
+
+        if (startsTime < endsTime) {
+            endsDateButtonRef.current?.style.setProperty("text-decoration", "none");
+            endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "none");
+            setEventWeather(getEventWeather(startsTime, endsTime));
         }
+        else {
+            endsDateButtonRef.current?.style.setProperty("text-decoration", "line-through");
+            endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "line-through");
+        }
+        if (activityValue !== "" && startsTime < endsTime) setPageTitleRightClickAvailable(true);                
         else setPageTitleRightClickAvailable(false);
     }, [startsDate, startsHour, startsMinute, endsDate, endsHour, endsMinute, activityValue]);
 
@@ -203,7 +198,7 @@ const EventPage = () => {
                 <textarea id="noteBox" className="eventBox" placeholder="Note" defaultValue={currentEvent.note} ref={noteRef}/>
                 <div style={{height: showEvent==="true"?"11vh":"8vh"}}/>
             </div>
-             {showEvent==="true" && <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>}
+            {showEvent==="true" && <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>}
         </div>
     )
 }

@@ -5,7 +5,7 @@ import Clouds from '../../img/Clouds.png';
 import Snow from '../../img/Snow.png';
 import Rain from '../../img/Rain.png';
 import Shopping from '../../img/Shopping.jpg';
-import { getHourlyWeather } from '../../utils/util';
+import { DateWeather, getDateWeather, getHourlyWeather } from '../../utils/util';
 
 interface Props {
     mode: string; // ACTIVITY or LOCATION or HOUR or MINUTE
@@ -59,7 +59,7 @@ const HourCarouselItems = (props: Props) => {
     const content: JSX.Element[] = [];
     const [clickedHour, setClickedHour] = useState<string>(clicked);
     const [dragging, setDragging] = useState<boolean>(false);
-    const hourlyWeather = getHourlyWeather(date);
+    const dateWeather = getDateWeather(date) as DateWeather;
 
     const CarouselWeatherIcon = (props: {weather: string}) => {
         switch(props.weather) {
@@ -83,7 +83,7 @@ const HourCarouselItems = (props: Props) => {
                         onClick(String(i));
                     }
                 }}>
-                <CarouselWeatherIcon weather={hourlyWeather[i]}/>
+                <CarouselWeatherIcon weather={dateWeather.hourly[i]}/>
                 <div style={{pointerEvents: "none"}}>{i}</div>
             </div>)
     }

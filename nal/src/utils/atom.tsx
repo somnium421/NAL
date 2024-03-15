@@ -5,7 +5,10 @@ import { WeatherSnapshot } from './util';
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
 export interface IEventsByDate {
-    [key: number]: [number, string][];
+    [key: number]: {
+        idx: number;
+        timeMode: string;
+        }[];
 }
 
 export interface INotification {

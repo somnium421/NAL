@@ -1,4 +1,3 @@
-import React from 'react'
 import './Feel.css';
 import tooCold from '../../img/TooCold.png';
 import cold from '../../img/Cold.png';
@@ -26,7 +25,7 @@ const Buttons = () => {
           high: currentWeather.temperature.high,
           low: currentWeather.temperature.low,
         },
-        main: "Clouds",
+        main: currentWeather.main,
         humidity: currentWeather.humidity,
         pressure: currentWeather.pressure,
         wind: {
@@ -37,7 +36,7 @@ const Buttons = () => {
           main: "",
           other: [],
         },
-        felt: feel[1],
+        felt: feel[1].toLowerCase(),
         date: new Date(),
       });
       setRecord(tmp);

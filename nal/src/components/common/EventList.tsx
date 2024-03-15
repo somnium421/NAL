@@ -42,7 +42,7 @@ const EventList = (props: Props) => {
             {mode === "HOME" && eventListTitle()}
             <ol id="events">
             {eventsByDate[mode === "HOME"?closestNextDate:dateToYearMonthDateNumber(date)]?.map(item => 
-                <Event key={item[0]} idx={item[0]} timeMode={item[1]}/>)}
+                <Event key={item.idx} idx={item.idx} timeMode={item.timeMode}/>)}
             </ol>
         </div>
     )

@@ -4,7 +4,7 @@ import { IEventsByDate } from './atom';
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 let updated = false;
 let currentWeather: WeatherSnapshot;
-const weatherData: {[key: number]: {main: string, hourly: string[]}} = {};
+const weatherData: {[key: number]: DateWeather} = {};
 
 export type Location = {
     longitude: number
@@ -31,6 +31,10 @@ export type WeatherSnapshot = Weather & {
         direction: string;
         speed: number;
     }
+}
+export type DateWeather = {
+    main: string;
+    hourly: string[];
 }
 export interface IJSONEvent {
     activity: string;
@@ -178,66 +182,83 @@ export const getNextWeather = (cnt: number): Promise<Weather[]> => {
 };
 */
 
-export const getDateWeather = (date: Date): string | Promise<Weather> => {
-    if (isSameDate(new Date(), date)) {
-        const currentWeather = getCurrentWeather();
-        if (currentWeather instanceof Promise) return currentWeather;
-        else return currentWeather.main;
-    }
-    if (isSameDate(new Date(), new Date(date.getFullYear(), date.getMonth(), date.getDate()-1))) return "Rain";
-    if (dateToYearMonthDateNumber(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+7)) < dateToYearMonthDateNumber(date)) {
-        return "No";
-    }
+export const getDateWeather = (date: Date): DateWeather | Promise<Weather> => {
+    // if (isSameDate(new Date(), date)) {
+    //     const currentWeather = getCurrentWeather();
+    //     if (currentWeather instanceof Promise) return currentWeather;
+    //     else return currentWeather.main;
+    // }
+    if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)];
+    else return makeDateWeather(date);
+}
 
-    if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)].main;
+export const makeDateWeather = (date: Date): DateWeather => {
+    let value = Math.random();
+    if (isSameDate(new Date(), new Date(date.getFullYear(), date.getMonth(), date.getDate()-1))) value = 1;
+
+    if (dateToYearMonthDateNumber(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+7)) < dateToYearMonthDateNumber(date)) weatherData[dateToYearMonthDateNumber(date)] = {main: "No", hourly: []};
+    else if (value < 0.5) weatherData[dateToYearMonthDateNumber(date)] = {main: "Clear", hourly: ["Clear", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear",
+                                                                                             "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clouds", "Clouds", "Clear", "Clear",]};
+    else if (value < 0.8) weatherData[dateToYearMonthDateNumber(date)] = {main: "Clouds", hourly: ["Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", 
+                                                                                                   "Clouds", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds",]};
     else {
-        const value = Math.random();
-        let weather: string;
-        if (value < 0.5) weather = "Clear";
-        else if (value < 0.8) weather = "Clouds";
-        else {
-            if (date.getMonth() < 2) weather = "Snow";
-            else weather = "Rain";
-        }
-        weatherData[dateToYearMonthDateNumber(date)] = {main: weather, hourly: []};
-        return weather;
+        if (date.getMonth() < 2) weatherData[dateToYearMonthDateNumber(date)] = {main: "Snow", hourly: ["Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Clouds", "Clouds", "Clouds", "Clouds", "Snow", "Snow", 
+                                                                                                        "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow",]};
+        else weatherData[dateToYearMonthDateNumber(date)] = {main: "Rain", hourly: ["Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", 
+                                                                                    "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Clouds", "Clouds", "Clouds", "Clouds",]};
     }
-}
-
+    return weatherData[dateToYearMonthDateNumber(date)];
+};
 export const getHourlyWeather = (date: Date) => {
-    const weather = getDateWeather(date) as string;
-    switch (weather) {
-        case "Clear": return ["Clear", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear",
-                              "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clouds", "Clouds", "Clear", "Clear",];
-        case "Clouds": return ["Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", 
-                               "Clouds", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds", "Clouds",];
-        case "Snow": return ["Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Clouds", "Clouds", "Clouds", "Clouds", "Snow", "Snow", 
-                             "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow", "Snow",];
-        case "Rain": return ["Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", 
-                             "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Rain", "Clouds", "Clouds", "Clouds", "Clouds",];
-        default: return [];
-    }
+};
+export const checkEventsWeather = (events: IEvent[]) => {
+    return events.map((event) => {
+        const eventWeather = getEventWeather(event.time[0], event.time[1]);
+        return {
+            ...event, modify: eventWeather === "Snow" || eventWeather === "Rain",
+        }
+    });
 }
-
 export const eventsToEventsByDate = (events: IEvent[]) => {
     const eventsByDate: IEventsByDate = {};
-    const nextDate = (date: number): number => dateToYearMonthDateNumber(new Date(Math.floor(date/10000), Math.floor(date/100)%100 - 1, date%100 + 1))
-
+    
     events.forEach((event, idx) => {
+        
         if (isSameDate(event.time[0], event.time[1])) {
             if (!eventsByDate[dateToYearMonthDateNumber(event.time[0])]) eventsByDate[dateToYearMonthDateNumber(event.time[0])] = [];
-            eventsByDate[dateToYearMonthDateNumber(event.time[0])].push([idx, "NO"]);
+            eventsByDate[dateToYearMonthDateNumber(event.time[0])].push({idx, timeMode: "NO"});
         }
         else {
-            for(let i: number = dateToYearMonthDateNumber(event.time[0]); 
-                    i<=dateToYearMonthDateNumber(event.time[1]); 
-                    i = nextDate(i)) {
-                if (!eventsByDate[i]) eventsByDate[i] = [];
-                if (i === dateToYearMonthDateNumber(event.time[0])) eventsByDate[i].push([idx, "START"]);
-                else if (i === dateToYearMonthDateNumber(event.time[1])) eventsByDate[i].push([idx, "END"]);
-                else eventsByDate[i].push([idx, "ALL"]);
+            for(let date = event.time[0]; date <= event.time[1]; date = new Date(date.getFullYear(), date.getMonth(), date.getDate()+1)) {
+                if (!eventsByDate[dateToYearMonthDateNumber(date)]) eventsByDate[dateToYearMonthDateNumber(date)] = [];
+
+                if (isSameDate(date, event.time[0])) eventsByDate[dateToYearMonthDateNumber(date)].push({idx, timeMode: "START"});
+                else if (isSameDate(date, event.time[1])) eventsByDate[dateToYearMonthDateNumber(date)].push({idx, timeMode: "END"});
+                else eventsByDate[dateToYearMonthDateNumber(date)].push({idx, timeMode: "ALL"});
             }
         }
     });
     return eventsByDate;
+};
+export const getEventWeather = (startsTime: Date, endsTime: Date): string => {
+    for (let date = new Date(startsTime.getFullYear(), startsTime.getMonth(), startsTime.getDate());
+         date <= endsTime; date = new Date(date.getFullYear(), date.getMonth(), date.getDate()+1)) {
+        let dateWeather = getDateWeather(date) as DateWeather;
+        if (isSameDate(date, startsTime)) {
+            const hourly = dateWeather.hourly.slice(startsTime.getHours());
+            if (hourly.includes("Rain")) return "Rain";
+            if (hourly.includes("Snow")) return "Snow";
+        }
+        else if (isSameDate(date, endsTime)) {
+            const hourly = dateWeather.hourly.slice(0, endsTime.getHours());
+            if (hourly.includes("Rain")) return "Rain";
+            if (hourly.includes("Snow")) return "Snow";
+        }
+        else {
+            const hourly = dateWeather.hourly;
+            if (hourly.includes("Rain")) return "Rain";
+            if (hourly.includes("Snow")) return "Snow";
+        }
+    }
+    return "No";    
 }

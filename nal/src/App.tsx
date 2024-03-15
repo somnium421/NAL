@@ -10,11 +10,12 @@ import NavBar from './components/fund/NavBar';
 import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, currentWeatherState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
-import { IJSONEvent, IJSONNotification, eventsToEventsByDate, getCurrentWeather } from './utils/util';
+import { IJSONEvent, IJSONNotification, checkEventsWeather, eventsToEventsByDate, getCurrentWeather, getEventWeather } from './utils/util';
 import NotiPage from './pages/NotiPage';
 import LaunchPage from './pages/LaunchPage';
 import OpenAI from "openai";
 import { config } from './utils/apiKey';
+import iPhoneFrame from './img/iPhoneFrame.png';
 const openai = new OpenAI({
   apiKey: config.OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
@@ -37,14 +38,18 @@ const App = ()=> {
     .then(response => response.json())
     .then(items => {
       const date = new Date();
-      setEvents(items.map((item: IJSONEvent) => ({
+      setEvents(items.map((item: IJSONEvent) => {
+        const startsTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[0][0], item.time[0][1], item.time[0][2]);
+        const endsTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[1][0], item.time[1][1], item.time[1][2]);
+        const eventWeather = getEventWeather(startsTime, endsTime);
+        return {
                 activity: item.activity,
-                time: [new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[0][0], item.time[0][1], item.time[0][2]), 
-                       new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[1][0], item.time[1][1], item.time[1][2])],
+                time: [startsTime, endsTime],
                 location: item.location,
                 note: item.note,
                 climate: item.climate,
-      })));
+                modify: eventWeather === "Rain" || eventWeather === "Snow",
+      }}));
     });
     fetch("notification.json")
     .then(response => response.json())
@@ -80,7 +85,7 @@ const App = ()=> {
   }
 
   useEffect(() => {
-    if (events) setEventsByDate(eventsToEventsByDate(events));
+    if (events) console.log(events); setEventsByDate(eventsToEventsByDate(events));
   }, [events]);
 
   useEffect(() => {
@@ -105,7 +110,7 @@ const App = ()=> {
           <StatusBar/>
         </div>
         <div id="homeIndicator" onClick={callOpenAi}/>
-        <img id="iPhoneFrame" draggable="false" src="img/iPhoneFrame.png" alt=""/>
+        <img id="iPhoneFrame" draggable="false" src={iPhoneFrame} alt=""/>
       </div>
     </div>
   );
