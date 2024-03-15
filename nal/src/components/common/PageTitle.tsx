@@ -1,23 +1,23 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import './PageTitle.css';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
-import { showNotiState, showEventState, notiCheckedState, notificationState, pageTitleRightClickAvailableState } from '../../utils/atom';
+import { showNotiState, showEventState, notiCheckedState, notificationState } from '../../utils/atom';
 import { useEffect, useState } from 'react';
 
 interface Props {
     pageTitleMode: string; // NOTI or MODI // EVENT
     modiMode?: string; // Activity or Time or Location
     onClickRight?: ()=>void;
+    rightClickAvailable: boolean;
 }
 
 const PageTitle = (props: Props) => {
-    const {pageTitleMode, modiMode, onClickRight} = props;
+    const {pageTitleMode, modiMode, onClickRight, rightClickAvailable} = props;
     const setShowNoti = useSetRecoilState(showNotiState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const setNotiChecked = useSetRecoilState(notiCheckedState);
     const [notification, setNotification] = useRecoilState(notificationState);
     const [backwardClicked, setBackwardClicked] = useState<boolean>(false);
-    const pageTitleRightClickAvailable = useRecoilValue(pageTitleRightClickAvailableState);
 
     const TitleText = () => {
         switch(pageTitleMode){
@@ -48,7 +48,7 @@ const PageTitle = (props: Props) => {
             setNotiChecked(true);
             setShowNoti(false);
         }
-    }, [notification])
+    }, [notification]);
 
     return (
         <div id="title">
@@ -56,11 +56,11 @@ const PageTitle = (props: Props) => {
                 <Arrow id="backward" onClick={backwardOnClick}/>
                 <div id="titleText">{TitleText()}</div>
             </div>
-            <div id="titleRight" onClick={pageTitleRightClickAvailable?onClickRight:()=>{}}>
+            <div id="titleRight" onClick={rightClickAvailable?onClickRight:()=>{}}>
                 {pageTitleMode === "NOTI" && 
-                <div id="deleteAll" style={{color: pageTitleRightClickAvailable?"var(--purple)":"gray"}}>Delete all</div>}
+                <div id="deleteAll" style={{color: rightClickAvailable?"var(--purple)":"gray"}}>Delete all</div>}
                 {pageTitleMode === "EVENT" && 
-                <div id="done" style={{color: pageTitleRightClickAvailable?"var(--purple)":"gray"}}>Done</div> }
+                <div id="done" style={{color: rightClickAvailable?"var(--purple)":"gray"}}>Done</div> }
             </div>
         </div>
     )

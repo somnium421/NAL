@@ -21,6 +21,7 @@ ol {padding: 0; margin: 0;}
     overflow: hidden;
     font-family: 'SF Pro Rounded';
     --purple: #5A3FFF;
+    --pink: rgb(255, 118, 118);
     --lightPurple: #F8F7FF;
     --padding: 2.3vh;
     cursor: default;

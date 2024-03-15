@@ -7,12 +7,18 @@ import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
-import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, todayWeatherState } from './utils/atom';
+import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, currentWeatherState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
 import { IJSONEvent, IJSONNotification, eventsToEventsByDate, getCurrentWeather } from './utils/util';
 import NotiPage from './pages/NotiPage';
 import LaunchPage from './pages/LaunchPage';
+import OpenAI from "openai";
+import { config } from './utils/apiKey';
+const openai = new OpenAI({
+  apiKey: config.OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
 const App = ()=> {
   const [mode, setMode] = useRecoilState(modeState);
@@ -22,7 +28,9 @@ const App = ()=> {
   const showNoti = useRecoilValue(showNotiState);
   const setNotification = useSetRecoilState(notificationState);
   const setRecord = useSetRecoilState(recordState);
-  const [todayWeather, setTodayWeather] = useRecoilState(todayWeatherState);
+  const [currentWeather, setCurrentWeather] = useRecoilState(currentWeatherState);
+  
+  
 
   useEffect(() => {
     fetch("schedule.json")
@@ -53,18 +61,31 @@ const App = ()=> {
   useEffect(() => {
       const weather = getCurrentWeather();
       if (weather instanceof Promise) {
-          weather.then((weather) => setTodayWeather(weather));
+          weather.then((weather) => setCurrentWeather(weather));
       }
-      else setTodayWeather(weather);
+      else setCurrentWeather(weather);
   }, []);
+
+  const callOpenAi = async () => {
+    try {
+      console.log('clicked')
+      const response = await openai.chat.completions.create({
+        messages: [{role: "user", content: "Hi!"}],
+        model: "gpt-3.5-turbo",
+      });
+      console.log(response.choices[0].message.content);
+    } catch (error) {
+      console.error("OpenAI API 호출 오류:", error);
+    }
+  }
 
   useEffect(() => {
     if (events) setEventsByDate(eventsToEventsByDate(events));
   }, [events]);
 
   useEffect(() => {
-    if (todayWeather.main !== "") setMode("HOME");
-  }, [todayWeather])
+    if (currentWeather.main !== "") setMode("HOME");
+  }, [currentWeather]);
 
   return (
     <div>
@@ -83,7 +104,7 @@ const App = ()=> {
           {mode === "LAUNCH" && <LaunchPage/>}
           <StatusBar/>
         </div>
-        <div id="homeIndicator"/>
+        <div id="homeIndicator" onClick={callOpenAi}/>
         <img id="iPhoneFrame" draggable="false" src="img/iPhoneFrame.png" alt=""/>
       </div>
     </div>

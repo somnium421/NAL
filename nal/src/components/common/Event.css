@@ -7,7 +7,7 @@
 }
 
 .needModify {
-    color: red;
+    color: var(--pink);
 }
 
 .eventActivity {

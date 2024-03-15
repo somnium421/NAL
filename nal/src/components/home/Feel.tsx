@@ -6,16 +6,45 @@ import fine from '../../img/Fine.png';
 import hot from '../../img/Hot.png';
 import tooHot from '../../img/TooHot.png';
 import { useRecoilState } from 'recoil';
-import { showFeelState } from '../../utils/atom';
+import { recordState, showFeelState } from '../../utils/atom';
+import { WeatherSnapshot, getCurrentWeather } from '../../utils/util';
 
-const items = [[tooCold, "Too Cold"], [cold, "Cold"], [fine, "Fine"], [hot, "Hot"], [tooHot, "Too Hot"]];
+const feels = [[tooCold, "Too Cold"], [cold, "Cold"], [fine, "Fine"], [hot, "Hot"], [tooHot, "Too Hot"]];
 
 const Buttons = () => {
   const [showFeel, setShowFeel] = useRecoilState(showFeelState);
+  const [record, setRecord] = useRecoilState(recordState);
+  const currentWeather = getCurrentWeather() as WeatherSnapshot;
+
   return (
-    items.map(item => <div key={item[1]} className="feelButton" onClick={() => setShowFeel(false)}>
-      <img src={item[0]} alt="" className="feelButtonImg"/>
-      <div>{item[1]}</div>
+    feels.map(feel => <div key={feel[1]} className="feelButton" onClick={() => {
+      const tmp = [...record];
+      tmp.push({
+        temperature: {
+          current: currentWeather.temperature.current,
+          feel: currentWeather.temperature.feel,
+          high: currentWeather.temperature.high,
+          low: currentWeather.temperature.low,
+        },
+        main: "Clouds",
+        humidity: currentWeather.humidity,
+        pressure: currentWeather.pressure,
+        wind: {
+          direction: currentWeather.wind.direction,
+          speed: currentWeather.wind.speed,
+        },
+        photos: {
+          main: "",
+          other: [],
+        },
+        felt: feel[1],
+        date: new Date(),
+      });
+      setRecord(tmp);
+      setShowFeel(false);
+    }}>
+      <img src={feel[0]} alt="" className="feelButtonImg"/>
+      <div>{feel[1]}</div>
     </div>)
   )
 }

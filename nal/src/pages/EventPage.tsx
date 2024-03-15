@@ -1,9 +1,9 @@
 import './EventPage.css';
 import PageTitle from '../components/common/PageTitle';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentEventState, eventsByDateState, eventsState, pageTitleRightClickAvailableState, showEventState } from '../utils/atom';
+import { currentEventState, eventsByDateState, eventsState, showEventState } from '../utils/atom';
 import { ReactComponent as Search } from '../svg/Search.svg'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
 import { dateToYearMonthDate, eventsToEventsByDate } from '../utils/util';
@@ -18,7 +18,6 @@ const EventPage = () => {
     const [showTimeCarousel, setShowTimeCarousel] = useState<string>("NO"); // NO or STARTS or ENDS
     const [events, setEvents] = useRecoilState(eventsState);
     const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
-    const setPageTitleRightClickAvailable = useSetRecoilState(pageTitleRightClickAvailableState);
 
     const [activityValue, setActivityValue] = useState<string>(currentEvent.activity?currentEvent.activity:"");
     const locationRef = useRef<HTMLInputElement>(null);
@@ -26,7 +25,7 @@ const EventPage = () => {
     const noteRef = useRef<HTMLTextAreaElement>(null);
     const endsDateButtonRef = useRef<HTMLButtonElement>(null);
     const endsHourMinuteButtonRef = useRef<HTMLButtonElement>(null);
-
+    const [pageTitleRightclickAvailable, setPageTitleRightClickAvailable] = useState<boolean>(activityValue!=="");
 
     const [startsDate, setStartsDate] = useState<Date>(currentEvent.time[0]);
     const [startsHour, setStartsHour] = useState<number>(currentEvent.time[0].getHours());
@@ -34,6 +33,13 @@ const EventPage = () => {
     const [endsDate, setEndsDate] = useState<Date>(currentEvent.time[1]);
     const [endsHour, setEndsHour] = useState<number>(currentEvent.time[1].getHours());
     const [endsMinute, setEndsMinute] = useState<number>(currentEvent.time[1].getMinutes());
+
+    const Alert = () => {
+        return <>
+            <div className="alert">Rain is expected at that time</div>
+            <div style={{height: "1vh"}}/>
+        </>
+    }
 
     const ActivityBox = () => (
         <>
@@ -166,28 +172,28 @@ const EventPage = () => {
     }, [events]);
 
     useEffect(() => {
-        if (activityValue) setPageTitleRightClickAvailable(true);
-        else setPageTitleRightClickAvailable(false);
-    }, [activityValue])
-
-    useEffect(() => {
-        if (new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute) <
+        if (activityValue !== "") {
+            if (new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute) <
             new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute)) {
                 endsDateButtonRef.current?.style.setProperty("text-decoration", "none");
                 endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "none");
-                setPageTitleRightClickAvailable(true)
+                setPageTitleRightClickAvailable(true);                
+            }
+            else {
+                endsDateButtonRef.current?.style.setProperty("text-decoration", "line-through");
+                endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "line-through");
+                setPageTitleRightClickAvailable(false);
+            }
         }
-        else {
-            endsDateButtonRef.current?.style.setProperty("text-decoration", "line-through");
-            endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "line-through");
-            setPageTitleRightClickAvailable(false)
-        }
-    }, [startsDate, startsHour, startsMinute, endsDate, endsHour, endsMinute])
+        else setPageTitleRightClickAvailable(false);
+    }, [startsDate, startsHour, startsMinute, endsDate, endsHour, endsMinute, activityValue]);
 
     return (
         <div id="eventPage" className="page">
+            <PageTitle pageTitleMode="EVENT" onClickRight={doneOnClick} rightClickAvailable={pageTitleRightclickAvailable}/>
             <div id="eventPageContent">
                 <div style={{height: "5vh"}}/>
+                {Alert()}
                 {ActivityBox()}
                 <div style={{height: "1vh"}}/>
                 {LocationBox()}
@@ -197,8 +203,7 @@ const EventPage = () => {
                 <textarea id="noteBox" className="eventBox" placeholder="Note" defaultValue={currentEvent.note} ref={noteRef}/>
                 <div style={{height: showEvent==="true"?"11vh":"8vh"}}/>
             </div>
-            <PageTitle pageTitleMode="EVENT" onClickRight={doneOnClick}/>
-            {showEvent==="true" && <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>}
+             {showEvent==="true" && <div id="deleteEvent" onClick={deleteOnClick}>Delete Event</div>}
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { config } from '../utils/apiKey'
 import { IEventsByDate } from './atom';
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 let updated = false;
+let currentWeather: WeatherSnapshot;
 const weatherData: {[key: number]: {main: string, hourly: string[]}} = {};
 
 export type Location = {
@@ -17,14 +18,20 @@ export type Weather = {
         high: number;
         low: number;
     };
+    main: string;
+};
+export type WeatherSnapshot = Weather & {
+    temperature: {
+        current: number;
+        feel: number;
+    }
     humidity: number;
     pressure: number;
-    main: string;
-    wind?: {
+    wind: {
         direction: string;
         speed: number;
-    };
-};
+    }
+}
 export interface IJSONEvent {
     activity: string;
     time: [[number, number, number], [number, number, number]];
@@ -42,8 +49,7 @@ export const currentLocation: Location = {
     latitude: 0,
     name: "",
 };
-let todayWeather: Weather;
-export const windDirection = (degree: number): string => {
+const windDirection = (degree: number): string => {
     if (degree > 337.5) return "N";
     if (degree > 292.5) return "NW";
     if (degree > 247.5) return "W";
@@ -79,13 +85,13 @@ export const getCurrentLocation = (): Location | Promise<Location> => {
         return currentLocation;
     });
 };
-export const getCurrentWeather = (): Weather | Promise<Weather> => {
+export const getCurrentWeather = (): WeatherSnapshot | Promise<WeatherSnapshot> => {
     const location = getCurrentLocation();
     if (location instanceof Promise) {
         return location.then((location) => fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&units=metric`))
         .then((response) => response.json())
         .then((json) => {
-            todayWeather = {
+            currentWeather = {
                 temperature: {
                     current: parseInt(json.main.temp.toFixed()),
                     feel: parseInt(json.main.feels_like.toFixed()),
@@ -102,22 +108,19 @@ export const getCurrentWeather = (): Weather | Promise<Weather> => {
             }
             return location;
         })
-        .then((location) => {
-            return fetch(`https://pro.openweathermap.org/data/2.5/forecast/climate?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&cnt=1&units=metric`);
-        })
+        .then((location) => fetch(`https://pro.openweathermap.org/data/2.5/forecast/climate?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&cnt=1&units=metric`))
         .then((response) => response.json())
         .then((json) => {
-            todayWeather.temperature.high = parseInt(json.list[0].temp.max.toFixed());
-            todayWeather.temperature.low = parseInt(json.list[0].temp.min.toFixed());
+            currentWeather = {...currentWeather, temperature: {...currentWeather.temperature, high: parseInt(json.list[0].temp.max.toFixed()), low: parseInt(json.list[0].temp.min.toFixed())}};
             updated = true;
-            return todayWeather;
+            return currentWeather;
         })
     }
-    else return todayWeather;
+    else return currentWeather;
 };
+/*
 export const getPrevWeather = (start: Date, end: Date) => {
     const ret: Weather[] = [];
-    // const location = getCurrentLocation() as Location;
     start = new Date(2024, 1, 16);
     end = new Date(2024, 1, 18);
     console.log(start, end, start.getTime()/1000, end.getTime()/1000)
@@ -173,6 +176,7 @@ export const getNextWeather = (cnt: number): Promise<Weather[]> => {
         return ret;
     })
 };
+*/
 
 export const getDateWeather = (date: Date): string | Promise<Weather> => {
     if (isSameDate(new Date(), date)) {

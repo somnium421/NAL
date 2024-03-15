@@ -1,8 +1,8 @@
-import { dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util'
+import { dateToHourMinute, dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util'
 import './HomeWeather.css'
 import { ReactComponent as WeatherIcon } from "../../svg/WeatherIcon.svg";
 import { useRecoilValue } from 'recoil';
-import { similarDateRecordState, todayWeatherState } from '../../utils/atom';
+import { similarDateRecordState, currentWeatherState } from '../../utils/atom';
 
 interface Props {
     weatherMode: string; // HOME or MODAL
@@ -10,7 +10,7 @@ interface Props {
 
 const HomeWeather = (props: Props) => {
     const {weatherMode} = props;
-    const todayWeather = useRecoilValue(todayWeatherState);
+    const currentWeather = useRecoilValue(currentWeatherState);
     const similarDateRecord = useRecoilValue(similarDateRecordState);
     
     const TextInfo = () => {
@@ -18,7 +18,7 @@ const HomeWeather = (props: Props) => {
             <div id="textInfo">{
                 weatherMode === "HOME"
                 ?<>It might rain at 4PM<br/>Prepare an umbrella!</>
-                :<>{numberToMonthDateYear(dateToYearMonthDateNumber(new Date(similarDateRecord.date)))}<br/>Yongsan-gu, Seoul</>
+                :<>{dateToHourMinute(new Date(similarDateRecord.date))}<br/>Yongsan-gu, Seoul</>
             }</div>
         )
     }
@@ -28,18 +28,18 @@ const HomeWeather = (props: Props) => {
             <div id="weatherLeft">
                 <TextInfo/>
                 <div id="buttonInfos">
-                    <div className="buttonInfo">Humid. {weatherMode==="HOME"?todayWeather.humidity:similarDateRecord.humidity}%</div>
-                    <div className="buttonInfo">Feels like {weatherMode==="HOME"?todayWeather.temperature.feel:similarDateRecord.temperature.feel}°</div>
-                    <div className="buttonInfo">Pres. {weatherMode==="HOME"?todayWeather.pressure:similarDateRecord.pressure} hPA</div>
-                    <div className="buttonInfo">{(weatherMode==="HOME"?todayWeather.wind?.direction:similarDateRecord.wind.direction)+" "+(weatherMode==="HOME"?todayWeather.wind?.speed:similarDateRecord.wind.speed)}m/s</div>   
+                    <div className="buttonInfo">Humid. {weatherMode==="HOME"?currentWeather.humidity:similarDateRecord.humidity}%</div>
+                    <div className="buttonInfo">Feels like {weatherMode==="HOME"?currentWeather.temperature.feel:similarDateRecord.temperature.feel}°</div>
+                    <div className="buttonInfo">Pres. {weatherMode==="HOME"?currentWeather.pressure:similarDateRecord.pressure} hPA</div>
+                    <div className="buttonInfo">{(weatherMode==="HOME"?currentWeather.wind?.direction:similarDateRecord.wind.direction)+" "+(weatherMode==="HOME"?currentWeather.wind?.speed:similarDateRecord.wind.speed)}m/s</div>   
                 </div>
             </div>
             <div id="weatherRight">
                 <div id="iconTemp">
                     <WeatherIcon id="weatherIcon"/>
-                    {weatherMode==="HOME" && <div id="currentTemp">{todayWeather.temperature.current}°</div>}
+                    <div id="currentTemp">{weatherMode==="HOME"?currentWeather.temperature.current:similarDateRecord.temperature.current}°</div>
                 </div>
-                <div id="highLowTemp">H:{weatherMode==="HOME"?todayWeather.temperature.high:similarDateRecord.temperature.high}°&nbsp;&nbsp;L:{weatherMode==="HOME"?todayWeather?.temperature.low:similarDateRecord.temperature.low}°</div>
+                <div id="highLowTemp">H:{weatherMode==="HOME"?currentWeather.temperature.high:similarDateRecord.temperature.high}°&nbsp;&nbsp;L:{weatherMode==="HOME"?currentWeather?.temperature.low:similarDateRecord.temperature.low}°</div>
             </div>
         </div>
     )

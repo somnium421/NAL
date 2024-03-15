@@ -1,7 +1,8 @@
-import { atom } from 'recoil';
+import { atom, RecoilEnv} from 'recoil';
 import { IEvent } from '../components/common/Event';
 import { IRecord } from '../components/home/HomePhoto';
-import { Weather } from './util';
+import { WeatherSnapshot } from './util';
+RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
 export interface IEventsByDate {
     [key: number]: [number, string][];
@@ -14,11 +15,11 @@ export interface INotification {
 }
 
 export const modeState = atom({
-    key: "mode",
+    key: "modeState",
     default: "LAUNCH",
 });
 export const showNotiState = atom({
-    key: "showNoti",
+    key: "showNotiState",
     default: false,
 });
 export const notiCheckedState = atom({
@@ -26,15 +27,15 @@ export const notiCheckedState = atom({
     default: false,
 })
 export const showEventState = atom({
-    key: "showEvent",
+    key: "showEventState",
     default: "false",
 });
 export const showFeelState = atom({
-    key: "showFeel",
+    key: "showFeelState",
     default: true,
 });
 export const showModalState = atom({
-    key: "showModal",
+    key: "showModalState",
     default: false,
 })
 export const eventsState = atom<IEvent[]>({
@@ -53,7 +54,7 @@ const resetCurrentEvent = (): [Date, Date] => {
 }
 
 export const currentEventState = atom<IEvent>({
-    key: "currentEvent",
+    key: "currentEventState",
     default: {
         time: resetCurrentEvent(),
     },
@@ -64,18 +65,13 @@ export const notificationState = atom<INotification[]>({
     default: [],
 })
 
-export const pageTitleRightClickAvailableState = atom<boolean>({
-    key: "pageTitleRightClickAvailableState",
-    default: false,
-})
-
 export const recordState = atom<IRecord[]>({
     key: "recordState",
     default: [],
 })
 
-export const todayWeatherState = atom<Weather>({
-    key: "todayWeatherState",
+export const currentWeatherState = atom<WeatherSnapshot>({
+    key: "currentWeatherState",
     default: {
         temperature: {
             current: 0,
@@ -94,7 +90,7 @@ export const todayWeatherState = atom<Weather>({
 })
 
 export const similarDateRecordState = atom<IRecord>({
-    key: "similarDateWeatherState",
+    key: "similarDateRecordState",
     default: {
         temperature: {
             current: 0,

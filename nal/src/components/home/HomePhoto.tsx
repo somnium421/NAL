@@ -1,19 +1,9 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import './HomePhoto.css'
 import { showModalState, similarDateRecordState } from '../../utils/atom';
-import { Weather, dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util';
+import { Weather, WeatherSnapshot, dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util';
 
-export interface IRecord extends Weather {
-    temperature: {
-        current: number;
-        feel: number;
-        high: number;
-        low: number;
-    };
-    wind: {
-        direction: string;
-        speed: number;
-    };
+export interface IRecord extends WeatherSnapshot {
     photos: {
         main: string;
         other: string[];

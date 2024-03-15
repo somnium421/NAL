@@ -4,9 +4,10 @@ import HomeModal from '../components/home/HomeModal';
 import HomePhoto from '../components/home/HomePhoto';
 import HomeScroll from '../components/home/HomeScroll';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { notiCheckedState, recordState, showModalState, showNotiState, similarDateRecordState, todayWeatherState } from '../utils/atom';
+import { notiCheckedState, recordState, showModalState, showNotiState, similarDateRecordState, currentWeatherState } from '../utils/atom';
 import { ReactComponent as Noti } from "../svg/Noti.svg";
 import { useEffect } from 'react';
+import { isSameDate } from '../utils/util';
 
 const NotiIcon = () => {
     const notiChecked = useRecoilValue(notiCheckedState);
@@ -20,15 +21,15 @@ const NotiIcon = () => {
 const HomePage = () => {
     const showModal = useRecoilValue(showModalState);
     const record = useRecoilValue(recordState);
-    const todayWeather = useRecoilValue(todayWeatherState);
+    const currentWeather = useRecoilValue(currentWeatherState);
     const setSimilarDateRecord = useSetRecoilState(similarDateRecordState);
 
     useEffect(() => {
         let feelsLikeMaxDiff = 100;
-        if (record.length && todayWeather.main !== "") {
+        if (record.length && currentWeather.main) {
             record.forEach(item => {
-                if (todayWeather.temperature.feel && Math.abs(item.temperature.feel - todayWeather.temperature.feel) < feelsLikeMaxDiff) {
-                    feelsLikeMaxDiff = Math.abs(item.temperature.feel - todayWeather.temperature.feel);
+                if (Math.abs(item.temperature.feel - currentWeather.temperature.feel) < feelsLikeMaxDiff && !isSameDate(new Date(), new Date(item.date))) {
+                    feelsLikeMaxDiff = Math.abs(item.temperature.feel - currentWeather.temperature.feel);
                     setSimilarDateRecord({
                         temperature: item.temperature,
                         humidity: item.humidity,
@@ -42,7 +43,7 @@ const HomePage = () => {
                 }
             })
         }
-    }, [record, todayWeather])
+    }, [record, currentWeather])
     
     return ( 
         <div id="homePage" className="page">
