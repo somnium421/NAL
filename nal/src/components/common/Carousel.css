@@ -12,31 +12,6 @@
     left: 0vh;
 }
 
-.activityCarouselItem {
-    width: 10vh;
-    height: 14.2vh;
-    border: solid var(--borderWidth) gray;
-    border-radius: 1vh;
-    overflow: hidden;
-    background-color: white;
-}
-
-.activityCarouselImg {
-    height: 10vh;
-    pointer-events: none;
-}
-
-.carouselTitle {
-    font-size: 1.4vh;
-    margin-left: 0.5vh;
-}
-
-.carouselBody {
-    font-size: 1.3vh;
-    font-weight: 300;
-    margin: 0 0.5vh;
-}
-
 .hourCarouselItem {
     width: 3.5vh;
     background-color: white;

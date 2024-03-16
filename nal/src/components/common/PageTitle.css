@@ -39,6 +39,10 @@
     font-size: 1.7vh;
 }
 
-#titleRight:hover {
+#deleteAll:hover {
+    color: gray;
+}
+
+#done:hover {
     color: gray;
 }

@@ -22,7 +22,7 @@ export const isCompatible = async (activity: string, location: string = "", weat
     //     else return true;
     // }
     // else return true;
-    return true;
+    return (weather!=="Rain" && weather!=="Snow");
 };
 
 export type Location = {

@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import './PageTitle.css';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
 import { showNotiState, showEventState, notificationState } from '../../utils/atom';

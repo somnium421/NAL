@@ -5,7 +5,7 @@ import { currentEventState, eventsByDateState, eventsState, notificationState, s
 import { useEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
-import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, eventsToNotification } from '../utils/util';
+import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, eventsToNotification, checkEventsModify } from '../utils/util';
 import { IEvent } from '../components/common/Event';
 
 const EventPage = () => {
@@ -118,27 +118,21 @@ const EventPage = () => {
             </>}
         </div>
     );
-
     const doneOnClick = () => {
         const tmpEvents = [...events];
         const startsTime = new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute);
         const endsTime = new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute);
-        const eventWeather = getEventWeather(startsTime, endsTime);
-        const tmpEvent: IEvent = {
-            activity: activityValue,
-            location: locationValue,
-            time: [startsTime, endsTime],
-            note: noteRef.current?.value,
-            modify: eventWeather,
-        }
-        if (showEvent === "true" && currentEvent.idx !== undefined) tmpEvents[currentEvent.idx] = tmpEvent;
-        else tmpEvents.push(tmpEvent);
-        setEvents(tmpEvents);
-        setEventsByDate(eventsToEventsByDate(tmpEvents));
-        setNotification(eventsToNotification(tmpEvents));
-        setGoBack(true);
-    }
-
+        const tmpEvent: IEvent = {activity: activityValue, location: locationValue, time: [startsTime, endsTime], note: noteRef.current?.value,};
+        checkEventsModify([tmpEvent])
+        .then((event) => {
+            if (showEvent === "true" && currentEvent.idx !== undefined) tmpEvents[currentEvent.idx] = event[0];
+            else tmpEvents.push(event[0]);
+            setEvents(tmpEvents);
+            setEventsByDate(eventsToEventsByDate(tmpEvents));
+            setNotification(eventsToNotification(tmpEvents));
+            setGoBack(true);
+        })        
+    };
     const deleteOnClick = () => {
         if (currentEvent.idx !== undefined) {
             const tmpEvents = [...events];
@@ -148,13 +142,11 @@ const EventPage = () => {
             setNotification(eventsToNotification(tmpEvents));
             setGoBack(true);
         }
-    }
-
+    };
     useEffect(() => {
         if (events) setEventsByDate(eventsToEventsByDate(events));
         if (goBack) setShowEvent("false"); 
     }, [events]);
-
     useEffect(() => {
         const startsTime = new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsHour, startsMinute);
         const endsTime = new Date(endsDate.getFullYear(), endsDate.getMonth(), endsDate.getDate(), endsHour, endsMinute);

@@ -17,14 +17,14 @@ const HomeModal = () => {
                     <div style={{height: "0.5vh"}}/>
                     <div id="modalPhotoBoxes">
                         <div id="modalPhotoBox1" className="modalPhotoBox">
-                            <img style={{width: "100%", marginTop: "-1vh"}} src={`img/${similarDateRecord.photos.other[0]}`} alt=""/>
+                            <img style={{width: "100%"}} src={`img/${similarDateRecord.photos.other[0]}`} alt=""/>
                         </div>
                         <div id="modalPhotoBox23">
                             <div id="modalPhotoBox2" className="modalPhotoBox">
-                                <img style={{width: "100%", marginTop: "-7vh"}} src={`img/${similarDateRecord.photos.other[1]}`} alt=""/>
+                                <img style={{width: "100%"}} src={`img/${similarDateRecord.photos.other[1]}`} alt=""/>
                             </div>
                             <div id="modalPhotoBox3" className="modalPhotoBox">
-                                <img style={{width: "100%", marginTop: ""}} src={`img/${similarDateRecord.photos.other[2]}`} alt=""/>
+                                <img style={{height: "100%"}} src={`img/${similarDateRecord.photos.other[2]}`} alt=""/>
                             </div>
                         </div>   
                     </div>            

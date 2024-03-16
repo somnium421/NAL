@@ -1,11 +1,10 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import './Carousel.css';
 import { ReactComponent as Clear } from '../../svg/Clear.svg';
 import { ReactComponent as Rain } from '../../svg/Rain.svg';
 import { ReactComponent as Snow } from '../../svg/Snow.svg';
 import { ReactComponent as Clouds } from '../../svg/Clouds.svg';
-import Shopping from '../../img/Shopping.jpg';
-import { DateWeather, getDateWeather, getHourlyWeather } from '../../utils/util';
+import { DateWeather, getDateWeather } from '../../utils/util';
 
 interface Props {
     mode: string; // ACTIVITY or LOCATION or HOUR or MINUTE
@@ -13,45 +12,6 @@ interface Props {
     onClick: React.Dispatch<React.SetStateAction<any>>;
     clicked?: string;
     date?: Date;
-}
-
-const ActivityCarouselItems = (props: Props) => {
-    const content: JSX.Element[] = [];
-    return (
-        <>
-        <div className="activityCarouselItem">
-            <img src={Shopping} alt="" className="activityCarouselImg"/>
-            <div className="carouselTitle">Shopping</div>
-            <div className="carouselBody">Daejeon Mall</div>
-        </div>
-        <div className="activityCarouselItem">
-            <img src={Shopping} alt="" className="activityCarouselImg"/>
-            <div className="carouselTitle">Shopping</div>
-            <div className="carouselBody">Daejeon Mall</div>
-        </div>
-        <div className="activityCarouselItem">
-            <img src={Shopping} alt="" className="activityCarouselImg"/>
-            <div className="carouselTitle">Shopping</div>
-            <div className="carouselBody">Daejeon Mall</div>
-        </div>
-        <div className="activityCarouselItem">
-            <img src={Shopping} alt="" className="activityCarouselImg"/>
-            <div className="carouselTitle">Shopping</div>
-            <div className="carouselBody">Daejeon Mall</div>
-        </div>
-        </>
-    )
-}
-
-const LocationCarouselItems = () => {
-    const content: JSX.Element[] = [];
-    return (
-        <div className="locationCarouselItem">
-            <img src={Shopping} alt="" className="locationCarouselImg"/>
-            <div className="carouselTitle">Shopping</div>
-            <div className="carouselBody">in Daejeon Mall</div>
-        </div>
-    )
 }
 
 const HourCarouselItems = (props: Props) => {
@@ -165,8 +125,6 @@ const Carousel = (props: Props) => {
         onMouseDown={handleMouseDown} onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpLeave} onMouseLeave={handleMouseUpLeave}>
             <div id="slider" ref={sliderRef} style={{transform: `translateX(${currentX}vh)`}}>
-                {mode === "ACTIVITY" && ActivityCarouselItems(props)}
-                {mode === "LOCATION" && LocationCarouselItems()}
                 {mode === "HOUR" && HourCarouselItems(props)}
                 {mode === "MINUTE" && MinuteCarouselItems(props)}
             </div>

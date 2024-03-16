@@ -131,11 +131,13 @@ const Calendar = (props: Props) => {
             <div>
                 <Arrow id="prevMonth" className="calendarArrow" onClick={() => {
                     const newDate = new Date(year, month-1, 1);
+                    if (showEvent==="false") onClick(newDate);
                     setYear(newDate.getFullYear());
                     setMonth(newDate.getMonth());
                 }}/>
                 <Arrow id="nextMonth" className="calendarArrow" onClick={() => {
                     const newDate = new Date(year, month+1, 1);
+                    if (showEvent==="false") onClick(newDate);
                     setYear(newDate.getFullYear());
                     setMonth(newDate.getMonth());
                 }}/>
