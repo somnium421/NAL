@@ -1,25 +1,19 @@
 import './NotiPage.css'
 import PageTitle from '../components/common/PageTitle';
 import NotiComp from '../components/noti/NotiComp';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { notificationState } from '../utils/atom';
-import { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { notificationState, recordState } from '../utils/atom';
 
 const NotiPage = () => {
-    const notification = useRecoilValue(notificationState);
+    const [notification, setNotification] = useRecoilState(notificationState);
     const resetNotification = useResetRecoilState(notificationState);
-    const [pageTitleRightClickAvailable, setPageTitleRightClickAvailable] = useState<boolean>(true);
-
-    useEffect(() => {
-        if (notification.length) setPageTitleRightClickAvailable(true);
-        else setPageTitleRightClickAvailable(false);
-    }, [notification]);
+    const record = useRecoilValue(recordState);
 
     return (
         <div id="notiPage" className="page">
-            <PageTitle pageTitleMode="NOTI" onClickRight={resetNotification} rightClickAvailable={pageTitleRightClickAvailable}/>
+            <PageTitle pageTitleMode="NOTI" onClickRight={resetNotification} rightClickAvailable={notification.length!==0}/>
             <div id="notiCompLists">
-                {notification?.map((item, idx) => <NotiComp key={idx} idx={idx}/>)}
+                {notification.map((item, idx) => <NotiComp key={idx} item={item}/>)}
             </div>
         </div>
     );    

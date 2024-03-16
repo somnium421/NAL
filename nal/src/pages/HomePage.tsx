@@ -4,17 +4,17 @@ import HomeModal from '../components/home/HomeModal';
 import HomePhoto from '../components/home/HomePhoto';
 import HomeScroll from '../components/home/HomeScroll';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { notiCheckedState, recordState, showModalState, showNotiState, similarDateRecordState, currentWeatherState } from '../utils/atom';
+import { recordState, showModalState, showNotiState, similarDateRecordState, currentWeatherState, notificationState } from '../utils/atom';
 import { ReactComponent as Noti } from "../svg/Noti.svg";
 import { useEffect } from 'react';
 import { isSameDate } from '../utils/util';
 
 const NotiIcon = () => {
-    const notiChecked = useRecoilValue(notiCheckedState);
+    const notiUnchecked = useRecoilValue(notificationState).filter((item) => !item.checked).length;
     const setShowNoti = useSetRecoilState(showNotiState);
     return (<div id="notiIcon">
         <Noti id="noti" onClick={()=>setShowNoti(true)}/>
-        {!notiChecked && <div id="notiDot"/>}
+        {notiUnchecked && <div id="notiDot"/>}
     </div>)
 }
 

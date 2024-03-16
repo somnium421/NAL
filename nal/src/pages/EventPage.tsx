@@ -1,12 +1,12 @@
 import './EventPage.css';
 import PageTitle from '../components/common/PageTitle';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentEventState, eventsByDateState, eventsState, showEventState } from '../utils/atom';
+import { currentEventState, eventsByDateState, eventsState, notificationState, showEventState } from '../utils/atom';
 import { ReactComponent as Search } from '../svg/Search.svg'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
-import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, checkEventsWeather } from '../utils/util';
+import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, eventsToNotification } from '../utils/util';
 import { IEvent } from '../components/common/Event';
 
 const EventPage = () => {
@@ -20,7 +20,6 @@ const EventPage = () => {
     const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
 
     const [activityValue, setActivityValue] = useState<string>(currentEvent.activity?currentEvent.activity:"");
-    const locationRef = useRef<HTMLInputElement>(null);
     const [locationValue, setLocationValue] = useState<string>(currentEvent.location?currentEvent.location:"")
     const noteRef = useRef<HTMLTextAreaElement>(null);
     const endsDateButtonRef = useRef<HTMLButtonElement>(null);
@@ -34,6 +33,8 @@ const EventPage = () => {
     const [endsHour, setEndsHour] = useState<number>(currentEvent.time[1].getHours());
     const [endsMinute, setEndsMinute] = useState<number>(currentEvent.time[1].getMinutes());
     const [eventWeather, setEventWeather] = useState<string>("No");
+    const [goBack, setGoBack] = useState<boolean>(false);
+    const [notification, setNotification] = useRecoilState(notificationState);
 
     const Alert = () => {
         return <>{eventWeather !== "No" && 
@@ -63,7 +64,7 @@ const EventPage = () => {
 
     const LocationBox = () => (
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Location" defaultValue={locationValue} ref={locationRef}/>
+            <input type="text" placeholder="Location" defaultValue={locationValue} onChange={(e)=> setLocationValue(e.target.value)}/>
         </div>
     );
 
@@ -83,11 +84,11 @@ const EventPage = () => {
                     }}>{`${startsHour}:${String(startsMinute).padStart(2, "0")}`}</button>
                 </div>
             </div>
-            {showCalendar==="STARTS" &&
+           {showCalendar==="STARTS" &&
             <>
                 <hr color="white"/>
                 <Calendar onClick={setStartsDate} clickedDate={startsDate} showDot={false}
-                          location={locationRef.current?.value===""?"":locationRef.current?.value}/>
+                          location={locationValue}/>
             </>}
             {showTimeCarousel==="STARTS" && 
             <>
@@ -119,7 +120,7 @@ const EventPage = () => {
             <>
                 <hr color="white"/>
                 <Calendar onClick={setEndsDate} clickedDate={endsDate} showDot={false}
-                          location={locationRef.current?.value===""?"":locationRef.current?.value}/>
+                          location={locationValue}/>
             </>}
             {showTimeCarousel==="ENDS" && 
             <>
@@ -145,25 +146,30 @@ const EventPage = () => {
             location: locationValue,
             time: [startsTime, endsTime],
             note: noteRef.current?.value,
-            modify: eventWeather === "Rain" || eventWeather === "Snow",
+            modify: eventWeather,
         }
         if (showEvent === "true" && currentEvent.idx !== undefined) tmpEvents[currentEvent.idx] = tmpEvent;
         else tmpEvents.push(tmpEvent);
         setEvents(tmpEvents);
-        setShowEvent("false");
+        setEventsByDate(eventsToEventsByDate(tmpEvents));
+        setNotification(eventsToNotification(tmpEvents));
+        setGoBack(true);
     }
 
     const deleteOnClick = () => {
-        const tmpEvents = [...events];
         if (currentEvent.idx !== undefined) {
+            const tmpEvents = [...events];
             tmpEvents.splice(currentEvent.idx, 1)
             setEvents(tmpEvents);
+            setEventsByDate(eventsToEventsByDate(tmpEvents));
+            setNotification(eventsToNotification(tmpEvents));
+            setGoBack(true);
         }
-        setShowEvent("false");
     }
 
     useEffect(() => {
         if (events) setEventsByDate(eventsToEventsByDate(events));
+        if (goBack) setShowEvent("false"); 
     }, [events]);
 
     useEffect(() => {

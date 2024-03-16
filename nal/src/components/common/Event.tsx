@@ -1,7 +1,7 @@
 import './Event.css';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentEventState, eventsState, showEventState } from '../../utils/atom';
-import { dateToHourMinute } from '../../utils/util';
+import { dateToHourMinute, dateToYearMonthDate } from '../../utils/util';
 
 export interface IEvent  {
     idx?: number;
@@ -9,14 +9,13 @@ export interface IEvent  {
     time: [Date, Date];
     location?: string;
     note?: string;
-    climate?: string;
     timeMode?: string; // NO or START or END or ALL
-    modify?: boolean;
+    modify?: string;
 }
 
 interface Props {
     idx: number;
-    timeMode: string;
+    timeMode?: string;
 }
 
 const Event = (props: Props) => {
@@ -26,25 +25,31 @@ const Event = (props: Props) => {
     const setCurrentEvent = useSetRecoilState(currentEventState);
 
     const startTime = () => {
-        if (timeMode === "NO" || timeMode === "START") return dateToHourMinute(events[idx].time[0]);
-        else if (timeMode === "ALL") return "All Day";
-        else return "~";
+        if (timeMode !== undefined) {
+            if (timeMode === "NO" || timeMode === "START") return dateToHourMinute(events[idx].time[0]);
+            else if (timeMode === "ALL") return "All Day";
+            else return "~";
+        }
+        else return `${dateToYearMonthDate(events[idx].time[0])} ${dateToHourMinute(events[idx].time[0])}`;
     }
 
     const endTime = () => {
-        if (timeMode === "NO" || timeMode === "END") return dateToHourMinute(events[idx].time[1]);
-        else if (timeMode === "START") return "~";
-        else return <>&nbsp;</>
+        if (timeMode !== undefined) {
+            if (timeMode === "NO" || timeMode === "END") return dateToHourMinute(events[idx].time[1]);
+            else if (timeMode === "START") return "~";
+            else return <>&nbsp;</>
+        }
+        else return `${dateToYearMonthDate(events[idx].time[1])} ${dateToHourMinute(events[idx].time[1])}`;
     }
 
     return (
-        <li className={`event ${events[idx].modify?"needModify":""}`} onClick={() => {
+        <li className={`event ${events[idx].modify!=="No"?"needModify":""}`} onClick={() => {
             setCurrentEvent({...events[idx], idx: idx});
             setShowEvent("true");
         }}>
             <div>
-                <div className="eventActivity">{events[idx]?.activity}</div>
-                <div className="eventLocation">{events[idx]?.location}</div>
+                <div className="eventActivity">{events[idx].activity}</div>
+                <div className="eventLocation">{events[idx].location}</div>
             </div>
             <div>
                 <div className="eventTime">{events[idx] && startTime()}</div>

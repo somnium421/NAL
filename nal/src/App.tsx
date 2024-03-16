@@ -10,7 +10,7 @@ import NavBar from './components/fund/NavBar';
 import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, currentWeatherState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
-import { IJSONEvent, IJSONNotification, checkEventsWeather, eventsToEventsByDate, getCurrentWeather, getEventWeather } from './utils/util';
+import { IJSONEvent, IJSONNotification, checkEventsWeather, eventsToEventsByDate, eventsToNotification, getCurrentWeather, getEventWeather } from './utils/util';
 import NotiPage from './pages/NotiPage';
 import LaunchPage from './pages/LaunchPage';
 import OpenAI from "openai";
@@ -27,9 +27,9 @@ const App = ()=> {
   const [events, setEvents] = useRecoilState(eventsState);
   const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
   const showNoti = useRecoilValue(showNotiState);
-  const setNotification = useSetRecoilState(notificationState);
   const setRecord = useSetRecoilState(recordState);
   const [currentWeather, setCurrentWeather] = useRecoilState(currentWeatherState);
+  const [notification, setNotification] = useRecoilState(notificationState);
   
   
 
@@ -38,7 +38,7 @@ const App = ()=> {
     .then(response => response.json())
     .then(items => {
       const date = new Date();
-      setEvents(items.map((item: IJSONEvent) => {
+      const tmp = checkEventsWeather(items.map((item: IJSONEvent) => {
         const startsTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[0][0], item.time[0][1], item.time[0][2]);
         const endsTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[1][0], item.time[1][1], item.time[1][2]);
         const eventWeather = getEventWeather(startsTime, endsTime);
@@ -47,28 +47,28 @@ const App = ()=> {
                 time: [startsTime, endsTime],
                 location: item.location,
                 note: item.note,
-                climate: item.climate,
                 modify: eventWeather === "Rain" || eventWeather === "Snow",
       }}));
-    });
-    fetch("notification.json")
-    .then(response => response.json())
-    .then(items => {
-        setNotification(items);
+      setEvents(tmp);
+      setEventsByDate(eventsToEventsByDate(tmp));
+      setNotification(eventsToNotification(tmp));
     });
     fetch("record.json")
     .then(response => response.json())
     .then(items => {
       setRecord(items);
-    })
-  }, []);
-
-  useEffect(() => {
-      const weather = getCurrentWeather();
+    });
+    const weather = getCurrentWeather();
       if (weather instanceof Promise) {
-          weather.then((weather) => setCurrentWeather(weather));
+        weather.then((weather) => {
+          setCurrentWeather(weather);
+          setMode("HOME");
+        });
       }
-      else setCurrentWeather(weather);
+      else {
+        setCurrentWeather(weather);
+        setMode("HOME");
+      }
   }, []);
 
   const callOpenAi = async () => {
@@ -82,15 +82,7 @@ const App = ()=> {
     } catch (error) {
       console.error("OpenAI API 호출 오류:", error);
     }
-  }
-
-  useEffect(() => {
-    if (events) console.log(events); setEventsByDate(eventsToEventsByDate(events));
-  }, [events]);
-
-  useEffect(() => {
-    if (currentWeather.main !== "") setMode("HOME");
-  }, [currentWeather]);
+  };
 
   return (
     <div>

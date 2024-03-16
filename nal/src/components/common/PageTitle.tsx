@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import './PageTitle.css';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
-import { showNotiState, showEventState, notiCheckedState, notificationState } from '../../utils/atom';
+import { showNotiState, showEventState, notificationState } from '../../utils/atom';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -15,7 +15,6 @@ const PageTitle = (props: Props) => {
     const {pageTitleMode, modiMode, onClickRight, rightClickAvailable} = props;
     const setShowNoti = useSetRecoilState(showNotiState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
-    const setNotiChecked = useSetRecoilState(notiCheckedState);
     const [notification, setNotification] = useRecoilState(notificationState);
     const [backwardClicked, setBackwardClicked] = useState<boolean>(false);
 
@@ -30,11 +29,7 @@ const PageTitle = (props: Props) => {
     const backwardOnClick = () => {
         switch(pageTitleMode) {
             case "NOTI": {
-                const tmpNotification = [...notification].map(item => ({
-                    type: item.type,
-                    date: item.date,
-                    checked: true,
-                }));
+                const tmpNotification = [...notification].map(item => ({...item, checked: true,}));
                 setNotification(tmpNotification);
                 setBackwardClicked(true);
                 break;
@@ -45,7 +40,6 @@ const PageTitle = (props: Props) => {
 
     useEffect(() => {
         if (backwardClicked) {
-            setNotiChecked(true);
             setShowNoti(false);
         }
     }, [notification]);

@@ -59,9 +59,10 @@
 }
 
 .carouselWeatherIcon {
-    width: 1.8vh;
-    height: 1.8vh;
+    width: 1.5vh;
+    height: 1.5vh;
     pointer-events: none;
+    color: lightgray;
 }
 
 .minuteCarouselItem {

@@ -13,8 +13,9 @@ export interface IEventsByDate {
 
 export interface INotification {
     type: string;
-    date: number;
     checked: boolean;
+    eventIdx?: number;
+    modifyReason?: string;
 }
 
 export const modeState = atom({
@@ -25,10 +26,6 @@ export const showNotiState = atom({
     key: "showNotiState",
     default: false,
 });
-export const notiCheckedState = atom({
-    key: "notiCheckedState",
-    default: false,
-})
 export const showEventState = atom({
     key: "showEventState",
     default: "false",

@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './Carousel.css';
-import Clear from '../../img/Clear.png';
-import Clouds from '../../img/Clouds.png';
-import Snow from '../../img/Snow.png';
-import Rain from '../../img/Rain.png';
+import { ReactComponent as Clear } from '../../svg/Clear.svg';
+import { ReactComponent as Rain } from '../../svg/Rain.svg';
+import { ReactComponent as Snow } from '../../svg/Snow.svg';
+import { ReactComponent as Clouds } from '../../svg/Clouds.svg';
 import Shopping from '../../img/Shopping.jpg';
 import { DateWeather, getDateWeather, getHourlyWeather } from '../../utils/util';
 
@@ -63,10 +63,10 @@ const HourCarouselItems = (props: Props) => {
 
     const CarouselWeatherIcon = (props: {weather: string}) => {
         switch(props.weather) {
-            case "Clear": return <img src={Clear} alt="" className="carouselWeatherIcon"/>
-            case "Clouds": return <img src={Clouds} alt="" className="carouselWeatherIcon"/>
-            case "Snow": return <img src={Snow} alt="" className="carouselWeatherIcon"/>
-            case "Rain": return <img src={Rain} alt="" className="carouselWeatherIcon"/>
+            case "Clear": return <Clear className="carouselWeatherIcon"/>
+            case "Clouds": return <Clouds className="carouselWeatherIcon"/>
+            case "Snow": return <Snow className="carouselWeatherIcon"/>
+            case "Rain": return <Rain className="carouselWeatherIcon"/>
             default: return <></>
         }
     }
@@ -84,6 +84,7 @@ const HourCarouselItems = (props: Props) => {
                     }
                 }}>
                 <CarouselWeatherIcon weather={dateWeather.hourly[i]}/>
+                <div style={{height: "0.2vh"}}/>
                 <div style={{pointerEvents: "none"}}>{i}</div>
             </div>)
     }

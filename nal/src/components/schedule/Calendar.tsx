@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css';
 import { DateWeather, dateToYearMonthDateNumber, getCurrentLocation, getDateWeather, isSameDate } from '../../utils/util';
-import Rain from '../../img/Rain.png';
-import Clear from '../../img/Clear.png';
-import Clouds from '../../img/Clouds.png';
-import Snow from '../../img/Snow.png';
+import { ReactComponent as Clear } from '../../svg/Clear.svg';
+import { ReactComponent as Rain } from '../../svg/Rain.svg';
+import { ReactComponent as Snow } from '../../svg/Snow.svg';
+import { ReactComponent as Clouds } from '../../svg/Clouds.svg';
 import { useRecoilValue } from 'recoil';
 import { eventsByDateState, eventsState, showEventState } from '../../utils/atom';
 import { ReactComponent as Arrow } from "../../svg/Arrow.svg";
@@ -39,25 +39,34 @@ const Calendar = (props: Props) => {
     const events = useRecoilValue(eventsState);
     const eventsByDate = useRecoilValue(eventsByDateState);
     const [isEventsByDateReady, setIsEventsByDateReady] = useState<boolean>(false);
-    const [todayWeatherIcon, setTodayWeatherIcon] = useState<string>();
 
-    const CalendarDots = (date: Date) => {
+    const CalendarDots = (date: Date, clicked: boolean) => {
         let content:JSX.Element[] = [];
         if (eventsByDate[dateToYearMonthDateNumber(date)]) {
-            for (let i: number = 0; i<Math.min(3, eventsByDate[dateToYearMonthDateNumber(date)].length); i++) {
-                content.push(<div key={i} className="calendarDot"/>);
+            const totalN = Math.min(3, eventsByDate[dateToYearMonthDateNumber(date)].length);
+            let modifyN = 0;
+            eventsByDate[dateToYearMonthDateNumber(date)].forEach((item) => {
+                if (events[item.idx].modify !== "No") modifyN++;
+            });
+            modifyN = Math.min(3, modifyN);
+            for (let i: number = 0; i < totalN; i++) {
+                // let dotColor = clicked?"lightgray":"gray";
+                let dotColor = "lightgray";
+                if (!clicked && i<modifyN) dotColor = "var(--purple)"; 
+                content.push(<div key={i} style={{backgroundColor: dotColor}} className="calendarDot"/>);
             }
         }
         return (<div className="calendarDots">{content}</div>)
     }
 
-    const CalendarWeatherIcon = (date: Date) => {
+    const CalendarWeatherIcon = (date: Date, clicked: boolean) => {
         const dateWeather = getDateWeather(date) as DateWeather;
+        const iconColor = clicked?"lightgray":"gray";
         switch (dateWeather.main) {
-            case "Clear": return <img src={Clear} alt="" className="calendarWeatherIcon"/>;
-            case "Rain": return <img src={Rain} alt="" className="calendarWeatherIcon"/>;
-            case "Clouds": return <img src={Clouds} alt="" className="calendarWeatherIcon"/>;
-            case "Snow": return <img src={Snow} alt="" className="calendarWeatherIcon"/>;
+            case "Clear": return <Clear style={{color: iconColor}} className="calendarWeatherIcon"/>;
+            case "Rain": return <Rain style={{color: iconColor}} className="calendarWeatherIcon"/>;
+            case "Clouds": return <Clouds style={{color: iconColor}} className="calendarWeatherIcon"/>;
+            case "Snow": return <Snow style={{color: iconColor}} className="calendarWeatherIcon"/>;
             case "No": return <div style={{height: "1.6vh"}}/>
         }
     }
@@ -87,9 +96,9 @@ const Calendar = (props: Props) => {
                         }}}>
                             {dates[key] !== 0
                             ?<>
-                            {showWeather && CalendarWeatherIcon(new Date(year, month, dates[key]))}
+                            {showWeather && CalendarWeatherIcon(new Date(year, month, dates[key]), isSameDate(calendarClickedDate, new Date(year, month, dates[key])))}
                             <div>{dates[key]}</div>
-                            {showDot && CalendarDots(new Date(year, month, dates[key]))}
+                            {showDot && CalendarDots(new Date(year, month, dates[key]), isSameDate(calendarClickedDate, new Date(year, month, dates[key])))}
                             </>
                             :<div>&nbsp;</div>}
                         </div>

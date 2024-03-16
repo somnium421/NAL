@@ -1,6 +1,6 @@
 import { IEvent } from '../components/common/Event';
 import { config } from '../utils/apiKey'
-import { IEventsByDate } from './atom';
+import { IEventsByDate, INotification } from './atom';
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 let updated = false;
 let currentWeather: WeatherSnapshot;
@@ -41,7 +41,6 @@ export interface IJSONEvent {
     time: [[number, number, number], [number, number, number]];
     location: string;
     note: string;
-    climate: string;
 };
 export interface IJSONNotification {
     type: string;
@@ -215,7 +214,7 @@ export const checkEventsWeather = (events: IEvent[]) => {
     return events.map((event) => {
         const eventWeather = getEventWeather(event.time[0], event.time[1]);
         return {
-            ...event, modify: eventWeather === "Snow" || eventWeather === "Rain",
+            ...event, modify: eventWeather,
         }
     });
 }
@@ -223,7 +222,6 @@ export const eventsToEventsByDate = (events: IEvent[]) => {
     const eventsByDate: IEventsByDate = {};
     
     events.forEach((event, idx) => {
-        
         if (isSameDate(event.time[0], event.time[1])) {
             if (!eventsByDate[dateToYearMonthDateNumber(event.time[0])]) eventsByDate[dateToYearMonthDateNumber(event.time[0])] = [];
             eventsByDate[dateToYearMonthDateNumber(event.time[0])].push({idx, timeMode: "NO"});
@@ -261,4 +259,19 @@ export const getEventWeather = (startsTime: Date, endsTime: Date): string => {
         }
     }
     return "No";    
+};
+
+export const eventsToNotification = (events: IEvent[]): INotification[] => {
+    const tmp: INotification[] = [];
+    events.forEach((event, idx) => {
+        if (event.modify !== "No") {
+            tmp.push({
+                type: "MODIFY",
+                checked: false,
+                eventIdx: idx,
+                modifyReason: event.modify,
+            })
+        }
+    });
+    return tmp;
 }

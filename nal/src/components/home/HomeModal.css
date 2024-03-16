@@ -1,6 +1,6 @@
 #homeModal {
     background-color: rgba(0,0,0,0.3);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(0.3vh);
 }
 
 #modal {
@@ -9,11 +9,12 @@
     top: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
-    background-color: rgba(200, 200, 200, 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 2vh;
     padding: 1.5vh;
     box-sizing: border-box;
     pointer-events: none;
+    backdrop-filter: blur(2vh);
 }
 
 #modalPhoto {

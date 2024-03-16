@@ -5,19 +5,26 @@ import fine from '../../img/Fine.png';
 import hot from '../../img/Hot.png';
 import tooHot from '../../img/TooHot.png';
 import { useRecoilState } from 'recoil';
-import { recordState, showFeelState } from '../../utils/atom';
+import { notificationState, recordState, showFeelState } from '../../utils/atom';
 import { WeatherSnapshot, getCurrentWeather } from '../../utils/util';
+import { useEffect, useState } from 'react';
 
 const feels = [[tooCold, "Too Cold"], [cold, "Cold"], [fine, "Fine"], [hot, "Hot"], [tooHot, "Too Hot"]];
 
 const Buttons = () => {
   const [showFeel, setShowFeel] = useRecoilState(showFeelState);
   const [record, setRecord] = useRecoilState(recordState);
+  const [notification, setNotification] = useRecoilState(notificationState);
   const currentWeather = getCurrentWeather() as WeatherSnapshot;
+  const [backwardClicked, setBackwardClicked] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (backwardClicked) setShowFeel(false);
+  }, [record, notification])
 
   return (
     feels.map(feel => <div key={feel[1]} className="feelButton" onClick={() => {
-      const tmp = [...record];
+      let tmp = [...record];
       tmp.push({
         temperature: {
           current: currentWeather.temperature.current,
@@ -40,14 +47,13 @@ const Buttons = () => {
         date: new Date(),
       });
       setRecord(tmp);
-      setShowFeel(false);
+      setBackwardClicked(true);
     }}>
       <img src={feel[0]} alt="" className="feelButtonImg"/>
       <div>{feel[1]}</div>
     </div>)
   )
-}
-
+};
 
 const Feel = () => {
   return (
