@@ -33,40 +33,39 @@ const EventPage = () => {
     const [goBack, setGoBack] = useState<boolean>(false);
     const [notification, setNotification] = useRecoilState(notificationState);
 
+    const closeAll = () => {
+        setShowCalendar("NO");
+        setShowTimeCarousel("NO");
+    }
     const Alert = () => {
         return <>{eventWeather !== "No" && 
-        <>
-            <div className="alert">{eventWeather} is expected during that time</div>
-            <div style={{height: "1vh"}}/>
-        </>
+               <><div className="alert">{eventWeather} is expected during that time</div>
+               <div style={{height: "1vh"}}/></>
         }</>
-    }
-
+    };
     const ActivityBox = () => (
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Activity" defaultValue={activityValue} onChange={(e)=> setActivityValue(e.target.value)}/>
+            <input type="text" placeholder="Activity" defaultValue={activityValue} 
+             onChange={(e)=> setActivityValue(e.target.value)} onFocus={closeAll}/>
         </div>
     );
-
     const LocationBox = () => (
         <div className="eventBox activityLocation">
-            <input type="text" placeholder="Location" defaultValue={locationValue} onChange={(e)=> setLocationValue(e.target.value)}/>
+            <input type="text" placeholder="Location" defaultValue={locationValue} 
+             onChange={(e)=> setLocationValue(e.target.value)} onFocus={closeAll}/>
         </div>
     );
-
     const TimeBox = () => (
         <div id="timeBox" className="eventBox">
             <div className="timeBoxElem">Starts
                 <div>
                     <button onClick={() => {
-                        if (showCalendar === "STARTS") setShowCalendar("NO");
-                        else setShowCalendar("STARTS");
-                        setShowTimeCarousel("NO");
+                        if (showCalendar === "STARTS") closeAll();
+                        else {closeAll(); setShowCalendar("STARTS");}
                     }}>{dateToYearMonthDate(startsDate)}</button>
                     <button onClick={() => {
-                        if (showTimeCarousel === "STARTS") setShowTimeCarousel("NO");
-                        else setShowTimeCarousel("STARTS");
-                        setShowCalendar("NO");
+                        if (showTimeCarousel === "STARTS") closeAll();
+                        else {closeAll(); setShowTimeCarousel("STARTS");}
                     }}>{`${startsHour}:${String(startsMinute).padStart(2, "0")}`}</button>
                 </div>
             </div>
@@ -91,14 +90,12 @@ const EventPage = () => {
             <div className="timeBoxElem">Ends
                 <div>
                     <button ref={endsDateButtonRef} onClick={() => {
-                        if (showCalendar === "ENDS") setShowCalendar("NO");
-                        else setShowCalendar("ENDS");
-                        setShowTimeCarousel("NO");
+                        if (showCalendar === "ENDS") closeAll();
+                        else {closeAll(); setShowCalendar("ENDS");}
                     }}>{dateToYearMonthDate(endsDate)}</button>
                     <button ref={endsHourMinuteButtonRef} onClick={() => {
-                        if (showTimeCarousel === "ENDS") setShowTimeCarousel("NO");
-                        else setShowTimeCarousel("ENDS");
-                        setShowCalendar("NO");
+                        if (showTimeCarousel === "ENDS") closeAll();
+                        else {closeAll(); setShowTimeCarousel("ENDS");}
                     }}>{`${endsHour}:${String(endsMinute).padStart(2, "0")}`}</button>
                 </div>
             </div>
@@ -170,6 +167,7 @@ const EventPage = () => {
         else {
             endsDateButtonRef.current?.style.setProperty("text-decoration", "line-through");
             endsHourMinuteButtonRef.current?.style.setProperty("text-decoration", "line-through");
+            setEventWeather("No");
         }
         if (activityValue !== "" && startsTime < endsTime) setPageTitleRightClickAvailable(true);                
         else setPageTitleRightClickAvailable(false);

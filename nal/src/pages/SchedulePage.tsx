@@ -17,6 +17,7 @@ const SchedulePage = () => {
     return (
         <div id="schedulePage" className="page">
             <div id="calendarBox"><Calendar onClick={setClickedDate}/></div>
+            <div style={{height: "1vh"}}/>
             <div id="eventList"><EventList date={clickedDate}/></div>
             <AddButton id="addButton" onClick={()=>{
                 setCurrentEvent({

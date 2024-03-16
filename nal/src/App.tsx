@@ -10,7 +10,7 @@ import NavBar from './components/fund/NavBar';
 import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, currentWeatherState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
-import { IJSONEvent, checkEventsWeather, eventsToEventsByDate, eventsToNotification, getCurrentWeather, getEventWeather } from './utils/util';
+import { IJSONEvent, checkEventsModify, eventsToEventsByDate, eventsToNotification, getCurrentWeather, getEventWeather } from './utils/util';
 import NotiPage from './pages/NotiPage';
 import LaunchPage from './pages/LaunchPage';
 import iPhoneFrame from './img/iPhoneFrame.png';
@@ -32,7 +32,7 @@ const App = ()=> {
     .then(response => response.json())
     .then(items => {
       const date = new Date();
-      const tmp = checkEventsWeather(items.map((item: IJSONEvent) => {
+      checkEventsModify(items.map((item: IJSONEvent) => {
         const startsTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[0][0], item.time[0][1], item.time[0][2]);
         const endsTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()+item.time[1][0], item.time[1][1], item.time[1][2]);
         const eventWeather = getEventWeather(startsTime, endsTime);
@@ -42,10 +42,12 @@ const App = ()=> {
                 location: item.location,
                 note: item.note,
                 modify: eventWeather === "Rain" || eventWeather === "Snow",
-      }}));
-      setEvents(tmp);
-      setEventsByDate(eventsToEventsByDate(tmp));
-      setNotification(eventsToNotification(tmp));
+      }}))
+      .then((events) => {
+        setEvents(events);
+        setEventsByDate(eventsToEventsByDate(events));
+        setNotification(eventsToNotification(events));
+      })
     });
     fetch("record.json")
     .then(response => response.json())

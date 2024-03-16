@@ -9,10 +9,10 @@
 
 #homeScroll {
     position: absolute;
-    bottom: -20%;
     width: 99%;
     left: 50%;
     transform: translateX(-50%);
+    top: 60vh;
     display: flex;
     flex-direction: column;
     border-radius: 4vh 4vh 0vh 0vh;

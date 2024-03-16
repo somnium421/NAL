@@ -14,10 +14,14 @@ const openai = new OpenAI({
 export const isCompatible = async (activity: string, location: string = "", weather: string) => {
     // const response = await openai.chat.completions.create({
     // messages: [{role: "user", 
-    //             content: `Return True or False; ${activity} ${location!=="" && `in ${location}`} and ${weather} is a good match`}],
+    //             content: `Answer True or False; ${activity} ${location!=="" && `in ${location}`} is an outdoor activity`}],
     // model: "gpt-3.5-turbo",
     // });
-    // return response.choices[0].message.content === "True";
+    // if (response.choices[0].message.content?.toLowerCase().startsWith("t")) {
+    //     if (weather==="Rain" || weather==="Snow") return false;
+    //     else return true;
+    // }
+    // else return true;
     return true;
 };
 
@@ -136,21 +140,22 @@ export const getCurrentWeather = (): WeatherSnapshot | Promise<WeatherSnapshot> 
     }
     else return currentWeather;
 };
-
-export const getDateWeather = (date: Date): DateWeather | Promise<Weather> => {
-    // if (isSameDate(new Date(), date)) {
-    //     const currentWeather = getCurrentWeather();
-    //     if (currentWeather instanceof Promise) return currentWeather;
-    //     else return currentWeather.main;
-    // }
+export const getDateWeather = (date: Date): DateWeather => {
     if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)];
     else return makeDateWeather(date);
-}
-
+};
 export const makeDateWeather = (date: Date): DateWeather => {
     let value = Math.random();
+    if (isSameDate(new Date(), date)) {
+        const currentWeather = getCurrentWeather() as Weather;
+        switch (currentWeather.main) {
+            case "Clear": value = 0; break;
+            case "Clouds": value = 0.6; break;
+            case "Rain": value = 1; break;
+            case "Snow": value = 1; break;
+        }
+    }
     if (isSameDate(new Date(), new Date(date.getFullYear(), date.getMonth(), date.getDate()-1))) value = 1;
-
     if (dateToYearMonthDateNumber(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+7)) < dateToYearMonthDateNumber(date)) weatherData[dateToYearMonthDateNumber(date)] = {main: "No", hourly: []};
     else if (value < 0.5) weatherData[dateToYearMonthDateNumber(date)] = {main: "Clear", hourly: ["Clear", "Clear", "Clear", "Clouds", "Clouds", "Clouds", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear",
                                                                                              "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clear", "Clouds", "Clouds", "Clear", "Clear",]};
@@ -166,13 +171,10 @@ export const makeDateWeather = (date: Date): DateWeather => {
 };
 export const getHourlyWeather = (date: Date) => {
 };
-export const checkEventsWeather = (events: IEvent[]) => {
-    return events.map((event) => {
-        const eventWeather = getEventWeather(event.time[0], event.time[1]);
-        return {
-            ...event, modify: eventWeather,
-        }
-    });
+export const checkEventsModify = async (events: IEvent[]) => {
+    const promises = events.map((event) => isCompatible(event.activity!, event.location, getEventWeather(event.time[0], event.time[1])));
+    const compatible = await Promise.all(promises);
+    return events.map((event, idx) => ({...event, modify: compatible[idx]?"No":getEventWeather(event.time[0], event.time[1])}));
 }
 export const eventsToEventsByDate = (events: IEvent[]) => {
     const eventsByDate: IEventsByDate = {};
