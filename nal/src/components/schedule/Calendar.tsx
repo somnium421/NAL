@@ -50,7 +50,7 @@ const Calendar = (props: Props) => {
             modifyN = Math.min(3, modifyN);
             for (let i: number = 0; i < totalN; i++) {
                 let dotColor = "lightgray";
-                if (!clicked && i<modifyN) dotColor = "var(--purple)"; 
+                if (!clicked && i<modifyN && new Date() < date) dotColor = "var(--purple)"; 
                 content.push(<div key={i} style={{backgroundColor: dotColor}} className="calendarDot"/>);
             }
         }

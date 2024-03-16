@@ -1,6 +1,27 @@
 [
     {
         "temperature": {
+            "current": -7,
+            "feel": -10,
+            "high": -5,
+            "low": -12
+        },
+        "humidity": 40,
+        "pressure": 1019,
+        "main": "Clouds",
+        "wind": {
+            "direction": "NW",
+            "speed": 2
+        },
+        "photos": {
+            "main": "DSCF9377.jpg",
+            "other": ["DSC01673.jpg", "DSC01686.jpg", "DSCF9438.jpg"]
+        },
+        "felt": "too cold",
+        "date": "2022-12-14T00:30:00.000Z"
+    },
+    {
+        "temperature": {
             "current": 3,
             "feel": 0,
             "high": 5,
@@ -18,6 +39,69 @@
             "other": ["DSC01673.jpg", "DSC01686.jpg", "DSCF9438.jpg"]
         },
         "felt": "cold",
-        "date": "2022-03-01T00:30:00.000Z"
+        "date": "2022-02-14T00:30:00.000Z"
+    }, 
+    {
+        "temperature": {
+            "current": 13,
+            "feel": 10,
+            "high": 15,
+            "low": 8
+        },
+        "humidity": 40,
+        "pressure": 1019,
+        "main": "Clouds",
+        "wind": {
+            "direction": "NW",
+            "speed": 2
+        },
+        "photos": {
+            "main": "DSCF9377.jpg",
+            "other": ["DSC01673.jpg", "DSC01686.jpg", "DSCF9438.jpg"]
+        },
+        "felt": "cold",
+        "date": "2022-03-14T00:30:00.000Z"
+    },
+    {
+        "temperature": {
+            "current": 23,
+            "feel": 20,
+            "high": 25,
+            "low": 18
+        },
+        "humidity": 40,
+        "pressure": 1019,
+        "main": "Clouds",
+        "wind": {
+            "direction": "NW",
+            "speed": 2
+        },
+        "photos": {
+            "main": "DSCF9377.jpg",
+            "other": ["DSC01673.jpg", "DSC01686.jpg", "DSCF9438.jpg"]
+        },
+        "felt": "fine",
+        "date": "2022-05-14T00:30:00.000Z"
+    },
+    {
+        "temperature": {
+            "current": 30,
+            "feel": 35,
+            "high": 32,
+            "low": 25
+        },
+        "humidity": 40,
+        "pressure": 1019,
+        "main": "Clouds",
+        "wind": {
+            "direction": "NW",
+            "speed": 2
+        },
+        "photos": {
+            "main": "DSCF9377.jpg",
+            "other": ["DSC01673.jpg", "DSC01686.jpg", "DSCF9438.jpg"]
+        },
+        "felt": "too hot",
+        "date": "2022-08-14T00:30:00.000Z"
     }
 ]

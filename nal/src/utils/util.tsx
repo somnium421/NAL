@@ -175,7 +175,7 @@ export const getHourlyWeather = (date: Date) => {
 export const checkEventsModify = async (events: IEvent[]) => {
     const promises = events.map((event) => isCompatible(event.activity!, event.location, getEventWeather(event.time[0], event.time[1])));
     const compatible = await Promise.all(promises);
-    return events.map((event, idx) => ({...event, modify: compatible[idx]?"No":getEventWeather(event.time[0], event.time[1])}));
+    return events.map((event, idx) => ({...event, modify: (compatible[idx] || event.time[1] < new Date())?"No":getEventWeather(event.time[0], event.time[1])}));
 }
 export const eventsToEventsByDate = (events: IEvent[]) => {
     const eventsByDate: IEventsByDate = {};
@@ -222,7 +222,7 @@ export const getEventWeather = (startsTime: Date, endsTime: Date): string => {
 export const eventsToNotification = (events: IEvent[]): INotification[] => {
     const tmp: INotification[] = [];
     events.forEach((event, idx) => {
-        if (event.modify !== "No") {
+        if (event.modify !== "No" && new Date() < event.time[1]) {
             tmp.push({
                 type: "MODIFY",
                 checked: false,

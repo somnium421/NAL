@@ -37,7 +37,7 @@ const EventPage = () => {
         setShowTimeCarousel("NO");
     }
     const Alert = () => {
-        return <>{eventWeather !== "No" && 
+        return <>{eventWeather !== "No" && new Date() < endsDate &&
                <><div className="alert">{eventWeather} is expected during that time</div>
                <div style={{height: "1vh"}}/></>
         }</>
