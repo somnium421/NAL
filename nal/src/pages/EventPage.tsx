@@ -1,9 +1,8 @@
 import './EventPage.css';
 import PageTitle from '../components/common/PageTitle';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { currentEventState, eventsByDateState, eventsState, notificationState, showEventState } from '../utils/atom';
-import { ReactComponent as Search } from '../svg/Search.svg'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
 import Carousel from '../components/common/Carousel';
 import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, eventsToNotification } from '../utils/util';
@@ -13,8 +12,6 @@ const EventPage = () => {
     const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const [showCalendar, setShowCalendar] = useState<string>("NO"); // NO or STARTS or ENDS
-    const [showActivityCarousel, setShowActivityCarousel] = useState<boolean>(false);
-    const [showLocationCarousel, setShowLocationCarousel] = useState<boolean>(false);
     const [showTimeCarousel, setShowTimeCarousel] = useState<string>("NO"); // NO or STARTS or ENDS
     const [events, setEvents] = useRecoilState(eventsState);
     const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
@@ -46,20 +43,9 @@ const EventPage = () => {
     }
 
     const ActivityBox = () => (
-        <>
         <div className="eventBox activityLocation">
             <input type="text" placeholder="Activity" defaultValue={activityValue} onChange={(e)=> setActivityValue(e.target.value)}/>
-            <Search className="searchIcon" onClick={() => {
-                setShowActivityCarousel(prev => !prev);
-                setShowLocationCarousel(false);
-                setShowCalendar("NO");
-                setShowTimeCarousel("NO");
-            }}/>
         </div>
-        {showActivityCarousel && 
-        <div style={{margin: "1vh -2.1vh"}}><Carousel mode="ACTIVITY" onClick={setActivityValue} margin={2.1}/></div>
-        }
-        </>
     );
 
     const LocationBox = () => (

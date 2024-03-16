@@ -10,7 +10,7 @@ export interface IEvent  {
     location?: string;
     note?: string;
     timeMode?: string; // NO or START or END or ALL
-    modify?: string;
+    modify?: string; // Rain or Snow or No
 }
 
 interface Props {

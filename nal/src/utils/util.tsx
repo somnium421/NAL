@@ -1,10 +1,25 @@
 import { IEvent } from '../components/common/Event';
 import { config } from '../utils/apiKey'
 import { IEventsByDate, INotification } from './atom';
+import OpenAI from "openai";
 const WEATHER_API_KEY = config.WEATHER_API_KEY;
 let updated = false;
 let currentWeather: WeatherSnapshot;
 const weatherData: {[key: number]: DateWeather} = {};
+const openai = new OpenAI({
+  apiKey: config.OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
+
+export const isCompatible = async (activity: string, location: string = "", weather: string) => {
+    // const response = await openai.chat.completions.create({
+    // messages: [{role: "user", 
+    //             content: `Return True or False; ${activity} ${location!=="" && `in ${location}`} and ${weather} is a good match`}],
+    // model: "gpt-3.5-turbo",
+    // });
+    // return response.choices[0].message.content === "True";
+    return true;
+};
 
 export type Location = {
     longitude: number
@@ -121,65 +136,6 @@ export const getCurrentWeather = (): WeatherSnapshot | Promise<WeatherSnapshot> 
     }
     else return currentWeather;
 };
-/*
-export const getPrevWeather = (start: Date, end: Date) => {
-    const ret: Weather[] = [];
-    start = new Date(2024, 1, 16);
-    end = new Date(2024, 1, 18);
-    console.log(start, end, start.getTime()/1000, end.getTime()/1000)
-    const location = {
-        latitude: 37.5356,
-        longitude: 126.6389,
-    }
-    return fetch(`https://history.openweathermap.org/data/2.5/history/city?lat=${location.latitude}&lon=${location.longitude}&type=date&start=${start.getTime()/1000}&cnt=200&appid=${WEATHER_API_KEY}&units=metric`)
-    .then((response) => response.json())
-    .then((json) => {
-        console.log(json);
-        for (let i: number = 0; i<json.list.length; i++) {
-            const element = json.list[i].main;
-            const tmpWeather: Weather = {
-                temperature: {
-                    high: element.temp_max.toFixed(),
-                    low: element.temp_min.toFixed(),
-                },
-                humidity: element.humidity,
-                pressure: element.pressure,
-                main: json.list[i].weather[0].main,
-            };
-            ret.push(tmpWeather);
-        }
-        console.log(ret);
-    })
-};
-export const getNextWeather = (cnt: number): Promise<Weather[]> => {
-    const ret: Weather[] = [];
-    if (cnt > 30) cnt = 30;
-    // const location = getCurrentLocation() as Location;
-    const location = {
-        latitude: 37.5356,
-        longitude: 126.6389,
-    }
-    return fetch(`https://pro.openweathermap.org/data/2.5/forecast/climate?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&0&cnt=${cnt}&units=metric`)
-    .then((response) => response.json())
-    .then((json) => {
-        for (let i: number = 0; i<json.list.length; i++) {
-            const element = json.list[i];
-            const tmpWeather: Weather = {
-                temperature: {
-                    high: element.temp.max.toFixed(),
-                    low: element.temp.max.toFixed(),
-                },
-                humidity: element.humidity,
-                pressure: element.pressure,
-                main: element.weather[0].main,
-            };
-            ret.push(tmpWeather);
-        }
-        console.log(ret);
-        return ret;
-    })
-};
-*/
 
 export const getDateWeather = (date: Date): DateWeather | Promise<Weather> => {
     // if (isSameDate(new Date(), date)) {
@@ -260,7 +216,6 @@ export const getEventWeather = (startsTime: Date, endsTime: Date): string => {
     }
     return "No";    
 };
-
 export const eventsToNotification = (events: IEvent[]): INotification[] => {
     const tmp: INotification[] = [];
     events.forEach((event, idx) => {

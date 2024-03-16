@@ -10,16 +10,10 @@ import NavBar from './components/fund/NavBar';
 import { eventsByDateState, eventsState, modeState, notificationState, recordState, showEventState, showNotiState, currentWeatherState } from './utils/atom';
 import { CSSTransition } from 'react-transition-group';
 import { useEffect } from 'react';
-import { IJSONEvent, IJSONNotification, checkEventsWeather, eventsToEventsByDate, eventsToNotification, getCurrentWeather, getEventWeather } from './utils/util';
+import { IJSONEvent, checkEventsWeather, eventsToEventsByDate, eventsToNotification, getCurrentWeather, getEventWeather } from './utils/util';
 import NotiPage from './pages/NotiPage';
 import LaunchPage from './pages/LaunchPage';
-import OpenAI from "openai";
-import { config } from './utils/apiKey';
 import iPhoneFrame from './img/iPhoneFrame.png';
-const openai = new OpenAI({
-  apiKey: config.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
 
 const App = ()=> {
   const [mode, setMode] = useRecoilState(modeState);
@@ -71,19 +65,6 @@ const App = ()=> {
       }
   }, []);
 
-  const callOpenAi = async () => {
-    try {
-      console.log('clicked')
-      const response = await openai.chat.completions.create({
-        messages: [{role: "user", content: "Hi!"}],
-        model: "gpt-3.5-turbo",
-      });
-      console.log(response.choices[0].message.content);
-    } catch (error) {
-      console.error("OpenAI API 호출 오류:", error);
-    }
-  };
-
   return (
     <div>
       <div id="iPhone">
@@ -101,7 +82,7 @@ const App = ()=> {
           {mode === "LAUNCH" && <LaunchPage/>}
           <StatusBar/>
         </div>
-        <div id="homeIndicator" onClick={callOpenAi}/>
+        <div id="homeIndicator"/>
         <img id="iPhoneFrame" draggable="false" src={iPhoneFrame} alt=""/>
       </div>
     </div>

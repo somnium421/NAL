@@ -18,8 +18,8 @@ const NavBar = ()=> {
                     ?<Schedule className="navBarIcon" style={{color: "var(--purple)"}}/>
                     :<Schedule className="navBarIcon" style={{color: "black"}} onClick={()=>setMode("SCHEDULE")}/>}
                     { mode === "MORE"
-                    ?<div><More className="navBarIcon" style={{color: "var(--purple)"}}/></div>
-                    :<div onClick={()=>setMode("MORE")}><More className="navBarIcon" style={{color: "black"}}/></div>}
+                    ?<More className="navBarIcon" style={{color: "var(--purple)"}}/>
+                    :<More className="navBarIcon" style={{color: "black"}}/>}
                 </div>
             </div>
         </div>

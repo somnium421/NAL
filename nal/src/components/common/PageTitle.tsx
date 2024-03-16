@@ -50,11 +50,11 @@ const PageTitle = (props: Props) => {
                 <Arrow id="backward" onClick={backwardOnClick}/>
                 <div id="titleText">{TitleText()}</div>
             </div>
-            <div id="titleRight" onClick={rightClickAvailable?onClickRight:()=>{}}>
+            <div id="titleRight" onClick={rightClickAvailable?onClickRight:()=>{}} style={{color: rightClickAvailable?"var(--purple)":"gray"}}>
                 {pageTitleMode === "NOTI" && 
-                <div id="deleteAll" style={{color: rightClickAvailable?"var(--purple)":"gray"}}>Delete all</div>}
+                <div id="deleteAll">Delete all</div>}
                 {pageTitleMode === "EVENT" && 
-                <div id="done" style={{color: rightClickAvailable?"var(--purple)":"gray"}}>Done</div> }
+                <div id="done">Done</div> }
             </div>
         </div>
     )
