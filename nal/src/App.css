@@ -28,17 +28,13 @@ ol {padding: 0; margin: 0;}
     user-select: none;
 }
 
-.purple {
-    color: var(--purple);
-}
-
 #iPhoneFrame {
     position: absolute;
     display: block;
     top: 2.1vh;
     width: 93%;
     left: 50%;
-    transform: translate(-50%, 0%);
+    transform: translateX(-50%);
     pointer-events: none; 
 }
 
@@ -77,18 +73,15 @@ ol {padding: 0; margin: 0;}
     transform: translateX(39vh);
     box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0);
 }
-
 .sidePage-enter-active {
     transform: translateX(0);
     box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0.1);
     transition: all 0.5s;
 }
-
 .sidePage-exit {
     transform: translateX(0);
     box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0.1);
 }
-
 .sidePage-exit-active {
     transform: translateX(39vh);
     box-shadow: -2vh 0 3vh 3vh rgba(0, 0, 0, 0);

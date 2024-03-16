@@ -3,7 +3,6 @@ import './App.css';
 import './fonts/font.css';
 import HomePage from './pages/HomePage';
 import SchedulePage from './pages/SchedulePage';
-import MorePage from './pages/MorePage';
 import EventPage from './pages/EventPage';
 import StatusBar from './components/fund/StatusBar';
 import NavBar from './components/fund/NavBar';
@@ -18,14 +17,12 @@ import iPhoneFrame from './img/iPhoneFrame.png';
 const App = ()=> {
   const [mode, setMode] = useRecoilState(modeState);
   const showEvent = useRecoilValue(showEventState);
-  const [events, setEvents] = useRecoilState(eventsState);
-  const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
   const showNoti = useRecoilValue(showNotiState);
+  const setEvents = useSetRecoilState(eventsState);
+  const setEventsByDate = useSetRecoilState(eventsByDateState);
   const setRecord = useSetRecoilState(recordState);
-  const [currentWeather, setCurrentWeather] = useRecoilState(currentWeatherState);
-  const [notification, setNotification] = useRecoilState(notificationState);
-  
-  
+  const setCurrentWeather = useSetRecoilState(currentWeatherState);
+  const setNotification = useSetRecoilState(notificationState);
 
   useEffect(() => {
     fetch("schedule.json")
@@ -73,13 +70,12 @@ const App = ()=> {
         <div id="screen">
           {mode === "HOME" && <HomePage/>}
           {mode === "SCHEDULE" && <SchedulePage/>}
-          {mode === "MORE" && <MorePage/>}
           <NavBar/>
           <CSSTransition in={showNoti} timeout={500} classNames="sidePage" unmountOnExit>
-              <NotiPage/>
+            <NotiPage/>
           </CSSTransition>
           <CSSTransition in={showEvent !== "false"} timeout={500} classNames="sidePage" unmountOnExit>
-              <EventPage/>
+            <EventPage/>
           </CSSTransition>
           {mode === "LAUNCH" && <LaunchPage/>}
           <StatusBar/>

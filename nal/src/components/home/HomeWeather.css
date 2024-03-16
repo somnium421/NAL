@@ -37,11 +37,6 @@
     position: relative;
     display: flex;
     justify-content: end;
-    /* background-color: aqua; */
-}
-
-#weatherIcon {
-    /* filter: drop-shadow(0 0 1vh black); */
 }
 
 #currentTemp {
@@ -50,7 +45,6 @@
     font-size: 10vh;
     text-align: right;
     letter-spacing: -0.4vh;
-    /* background-color: red; */
 }
 
 #highLowTemp {

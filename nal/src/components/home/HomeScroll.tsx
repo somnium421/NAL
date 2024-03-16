@@ -9,6 +9,7 @@ import EventList from '../common/EventList'
 const HomeScroll = () => {
     const showFeel = useRecoilValue(showFeelState);
     const events = useRecoilValue(eventsState);
+
     return (
         <div id="scroll">
             <div id="homeScroll">
@@ -21,6 +22,7 @@ const HomeScroll = () => {
                 <div style={{height: "1vh"}}></div>
                 <div id="upcomingEvents">
                     <div id="upcomingEventsTitle">Upcoming Events</div>
+                    <div style={{height: "0.7vh"}}/>
                     <EventList/>
                 </div>
                 </>}

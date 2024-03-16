@@ -92,6 +92,7 @@ export const numberToMonthDateYear = (date: number) => {
     return `${monthText[Math.floor(date/100)%100-1]} ${date%100}, ${Math.floor(date/10000)}`;
 };
 export const isSameDate = (date1: Date, date2: Date): boolean => date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+
 export const getCurrentLocation = (): Location | Promise<Location> => {
     if (updated) return currentLocation;
     return new Promise((res: (value: GeolocationPosition)=>void) =>
@@ -187,7 +188,7 @@ export const eventsToEventsByDate = (events: IEvent[]) => {
         else {
             for(let date = event.time[0]; date <= event.time[1]; date = new Date(date.getFullYear(), date.getMonth(), date.getDate()+1)) {
                 if (!eventsByDate[dateToYearMonthDateNumber(date)]) eventsByDate[dateToYearMonthDateNumber(date)] = [];
-
+                
                 if (isSameDate(date, event.time[0])) eventsByDate[dateToYearMonthDateNumber(date)].push({idx, timeMode: "START"});
                 else if (isSameDate(date, event.time[1])) eventsByDate[dateToYearMonthDateNumber(date)].push({idx, timeMode: "END"});
                 else eventsByDate[dateToYearMonthDateNumber(date)].push({idx, timeMode: "ALL"});

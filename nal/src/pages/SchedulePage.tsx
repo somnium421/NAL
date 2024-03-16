@@ -2,16 +2,16 @@ import './SchedulePage.css'
 import Calendar from '../components/schedule/Calendar'
 import EventList from '../components/common/EventList'
 import { ReactComponent as AddButton } from '../svg/ScheduleAdd.svg';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { currentEventState, eventsState, showEventState } from '../utils/atom';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { currentEventState, showEventState } from '../utils/atom';
 import { useEffect, useState } from 'react';
-import { eventsToEventsByDate } from '../utils/util';
 
 const SchedulePage = () => {
-    const [showEvent, setShowEvent] = useRecoilState(showEventState);
-    const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
-    const [clickedDate, setClickedDate] = useState<Date>(new Date());
+    const setShowEvent = useSetRecoilState(showEventState);
+    const setCurrentEvent = useSetRecoilState(currentEventState);
     const resetCurrentEvent = useResetRecoilState(currentEventState);
+    const [clickedDate, setClickedDate] = useState<Date>(new Date());
+
     useEffect(() => resetCurrentEvent(), []);
 
     return (

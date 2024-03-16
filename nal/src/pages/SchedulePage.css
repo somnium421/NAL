@@ -4,24 +4,12 @@
 }
 
 #calendarBox {
-    /* position: absolute; */
-    /* width: 99%; */
-    /* left: 50%; */
-    /* transform: translateX(-50%); */
-    /* border-radius: 0 0 4vh 4vh; */
-    /* box-shadow: 0 1vh 10vh 0vh rgba(100,100,100,0.3); */
-    /* box-sizing: border-box; */
-    /* color: black; */
     --calendarPadding: 4vh;
     background-color: white;
     padding: 5.7vh var(--calendarPadding) 1vh var(--calendarPadding);
 }
 
 #eventList {
-    /* position: absolute; */
-    /* top: 49vh; */
-    /* width: 100%; */
-    /* box-sizing: border-box; */
     padding: 0 var(--padding);
 }
 

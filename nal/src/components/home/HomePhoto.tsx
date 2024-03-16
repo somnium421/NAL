@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import './HomePhoto.css'
 import { showModalState, similarDateRecordState } from '../../utils/atom';
-import { Weather, WeatherSnapshot, dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util';
+import { WeatherSnapshot, dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util';
 
 export interface IRecord extends WeatherSnapshot {
     photos: {
@@ -20,7 +20,9 @@ const HomePhoto = () => {
         <div id="homePhoto" onClick={()=>setShowModal(true)}>
             <img id="exampleImg" src={`img/${similarDateRecord.photos.main}`} alt=""/>
             <div id="homePhotoText">
-                <div id="homePhotoTextTop">Today is similar to <span id="asdf" className="gradient">{numberToMonthDateYear(dateToYearMonthDateNumber(new Date(similarDateRecord.date)))}</span></div>
+                <div id="homePhotoTextTop">Today is similar to <span id="asdf" className="gradient">
+                    {numberToMonthDateYear(dateToYearMonthDateNumber(new Date(similarDateRecord.date)))}
+                </span></div>
                 <div id="homePhotoTextBottom"><span id="weatherFelt">Weather felt</span> {similarDateRecord.felt}</div>
             </div>
         </div>

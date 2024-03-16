@@ -5,14 +5,13 @@ import { showNotiState, showEventState, notificationState } from '../../utils/at
 import { useEffect, useState } from 'react';
 
 interface Props {
-    pageTitleMode: string; // NOTI or MODI // EVENT
-    modiMode?: string; // Activity or Time or Location
+    pageTitleMode: string; // NOTI or EVENT
     onClickRight?: ()=>void;
     rightClickAvailable: boolean;
 }
 
 const PageTitle = (props: Props) => {
-    const {pageTitleMode, modiMode, onClickRight, rightClickAvailable} = props;
+    const {pageTitleMode, onClickRight, rightClickAvailable} = props;
     const setShowNoti = useSetRecoilState(showNotiState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
     const [notification, setNotification] = useRecoilState(notificationState);
@@ -21,7 +20,6 @@ const PageTitle = (props: Props) => {
     const TitleText = () => {
         switch(pageTitleMode){
             case "NOTI": return "Notification";
-            case "MODI": return `Modify ${modiMode}`;
             case "EVENT": return `${showEvent==="new"?"New ":""}Event`;
         }
     }
@@ -50,11 +48,10 @@ const PageTitle = (props: Props) => {
                 <Arrow id="backward" onClick={backwardOnClick}/>
                 <div id="titleText">{TitleText()}</div>
             </div>
-            <div id="titleRight" onClick={rightClickAvailable?onClickRight:()=>{}} style={{color: rightClickAvailable?"var(--purple)":"gray"}}>
-                {pageTitleMode === "NOTI" && 
-                <div id="deleteAll">Delete all</div>}
-                {pageTitleMode === "EVENT" && 
-                <div id="done">Done</div> }
+            <div id="titleRight" onClick={rightClickAvailable?onClickRight:()=>{}} 
+                 style={{color: rightClickAvailable?"var(--purple)":"gray"}}>
+                {pageTitleMode === "NOTI" && <div id="deleteAll">Delete all</div>}
+                {pageTitleMode === "EVENT" && <div id="done">Done</div> }
             </div>
         </div>
     )

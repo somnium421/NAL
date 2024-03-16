@@ -28,16 +28,15 @@ const DaysRow = () => {
 }
 
 const Calendar = (props: Props) => {
-    const today = new Date();
-    const {onClick, showWeather = true, showDot = true, clickedDate = today} = props;
-    const [calendarClickedDate, setCalendarClickedDate] = useState<Date>(clickedDate);
-    const showEvent = useRecoilValue(showEventState);
-    const [currentLocationName, setCurrentLocationName] = useState<string>("");
+    const {onClick, showWeather = true, showDot = true, clickedDate = new Date()} = props;
     const location = getCurrentLocation();
-    const [year, setYear] = useState<number>(clickedDate.getFullYear());
-    const [month, setMonth] = useState<number>(clickedDate.getMonth());
+    const showEvent = useRecoilValue(showEventState);
     const events = useRecoilValue(eventsState);
     const eventsByDate = useRecoilValue(eventsByDateState);
+    const [calendarClickedDate, setCalendarClickedDate] = useState<Date>(clickedDate);
+    const [currentLocationName, setCurrentLocationName] = useState<string>("");
+    const [year, setYear] = useState<number>(clickedDate.getFullYear());
+    const [month, setMonth] = useState<number>(clickedDate.getMonth());
     const [isEventsByDateReady, setIsEventsByDateReady] = useState<boolean>(false);
 
     const CalendarDots = (date: Date, clicked: boolean) => {
@@ -50,14 +49,13 @@ const Calendar = (props: Props) => {
             });
             modifyN = Math.min(3, modifyN);
             for (let i: number = 0; i < totalN; i++) {
-                // let dotColor = clicked?"lightgray":"gray";
                 let dotColor = "lightgray";
                 if (!clicked && i<modifyN) dotColor = "var(--purple)"; 
                 content.push(<div key={i} style={{backgroundColor: dotColor}} className="calendarDot"/>);
             }
         }
         return (<div className="calendarDots">{content}</div>)
-    }
+    };
 
     const CalendarWeatherIcon = (date: Date, clicked: boolean) => {
         const dateWeather = getDateWeather(date) as DateWeather;
@@ -69,7 +67,7 @@ const Calendar = (props: Props) => {
             case "Snow": return <Snow style={{color: iconColor}} className="calendarWeatherIcon"/>;
             case "No": return <div style={{height: "1.6vh"}}/>
         }
-    }
+    };
 
     const Dates = () => {
         let content:JSX.Element[] = [];
@@ -86,7 +84,7 @@ const Calendar = (props: Props) => {
                     let className = "dateComp";
                     if (dates[key] === 0) className += " null";
                     else if (isSameDate(calendarClickedDate, new Date(year, month, dates[key]))) className += " clicked";
-                    else if (isSameDate(today, new Date(year, month, dates[key]))) className += " today";
+                    else if (isSameDate(new Date(), new Date(year, month, dates[key]))) className += " today";
                     return (
                         <div key={"date"+key} className={className} onClick={() => {
                             if (dates[key] !== 0) {
@@ -107,6 +105,13 @@ const Calendar = (props: Props) => {
             </div>);
         }
         return content;
+    };
+
+    const onClickArrow = (direction: number) => {
+        const newDate = new Date(year, month+direction, 1);
+        if (showEvent==="false") onClick(newDate);
+        setYear(newDate.getFullYear());
+        setMonth(newDate.getMonth());
     }
 
     useEffect(() => {
@@ -129,18 +134,8 @@ const Calendar = (props: Props) => {
         <div id="yearMonthArrows">
             <div id="yearMonth">{monthList[month%12]+" "+year}</div>
             <div>
-                <Arrow id="prevMonth" className="calendarArrow" onClick={() => {
-                    const newDate = new Date(year, month-1, 1);
-                    if (showEvent==="false") onClick(newDate);
-                    setYear(newDate.getFullYear());
-                    setMonth(newDate.getMonth());
-                }}/>
-                <Arrow id="nextMonth" className="calendarArrow" onClick={() => {
-                    const newDate = new Date(year, month+1, 1);
-                    if (showEvent==="false") onClick(newDate);
-                    setYear(newDate.getFullYear());
-                    setMonth(newDate.getMonth());
-                }}/>
+                <Arrow id="prevMonth" className="calendarArrow" onClick={() => {onClickArrow(-1)}}/>
+                <Arrow id="nextMonth" className="calendarArrow" onClick={() => {onClickArrow(1)}}/>
             </div>
         </div>
         <div style={{height: "1.3vh"}}/>

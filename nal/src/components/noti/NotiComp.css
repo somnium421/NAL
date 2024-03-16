@@ -1,10 +1,10 @@
 .notiComp {
+    display: flex;
+    align-items: center;
+    padding: 1vh 0vh 1vh 1vh;
     background-color: var(--lightPurple);
     border-radius: 1.5vh;
-    padding: 1vh 0vh 1vh 1vh;
-    display: flex;
-    transition: background 0.3s ease;
-    align-items: center;
+    transition: background 0.3s;
 }
 
 .notiComp:hover {
@@ -16,7 +16,6 @@
     height: 0.6vh;
     border-radius: 50%;
     margin-left: 0.5vh;
-    background-color: var(--purple);
 }
 
 .notiCompContent {

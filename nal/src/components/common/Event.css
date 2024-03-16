@@ -2,8 +2,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0.6vh var(--padding);
-    border-radius: 1.3vh;
-    transition: color 0.2s ease;
+    transition: color 0.2s;
 }
 
 .needModify {

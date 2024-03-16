@@ -1,6 +1,5 @@
-import { dateToHourMinute, dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util'
+import { dateToHourMinute } from '../../utils/util'
 import './HomeWeather.css'
-import { ReactComponent as WeatherIcon } from "../../svg/WeatherIcon.svg";
 import Clear from '../../img/Clear.png';
 import Rain from '../../img/Rain.png';
 import Snow from '../../img/Snow.png';

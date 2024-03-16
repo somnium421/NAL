@@ -1,6 +1,6 @@
 import './EventPage.css';
-import PageTitle from '../components/common/PageTitle';
-import { useRecoilState } from 'recoil';
+import PageTitle from '../components/fund/PageTitle';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentEventState, eventsByDateState, eventsState, notificationState, showEventState } from '../utils/atom';
 import { useEffect, useRef, useState } from 'react';
 import Calendar from '../components/schedule/Calendar';
@@ -9,20 +9,17 @@ import { getEventWeather, dateToYearMonthDate, eventsToEventsByDate, eventsToNot
 import { IEvent } from '../components/common/Event';
 
 const EventPage = () => {
-    const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
+    const currentEvent = useRecoilValue(currentEventState);
     const [showEvent, setShowEvent] = useRecoilState(showEventState);
+    const [events, setEvents] = useRecoilState(eventsState);
+    const setEventsByDate = useSetRecoilState(eventsByDateState);
+    const setNotification = useSetRecoilState(notificationState);
     const [showCalendar, setShowCalendar] = useState<string>("NO"); // NO or STARTS or ENDS
     const [showTimeCarousel, setShowTimeCarousel] = useState<string>("NO"); // NO or STARTS or ENDS
-    const [events, setEvents] = useRecoilState(eventsState);
-    const [eventsByDate, setEventsByDate ] = useRecoilState(eventsByDateState);
 
     const [activityValue, setActivityValue] = useState<string>(currentEvent.activity?currentEvent.activity:"");
     const [locationValue, setLocationValue] = useState<string>(currentEvent.location?currentEvent.location:"")
-    const noteRef = useRef<HTMLTextAreaElement>(null);
-    const endsDateButtonRef = useRef<HTMLButtonElement>(null);
-    const endsHourMinuteButtonRef = useRef<HTMLButtonElement>(null);
     const [pageTitleRightclickAvailable, setPageTitleRightClickAvailable] = useState<boolean>(activityValue!=="");
-
     const [startsDate, setStartsDate] = useState<Date>(currentEvent.time[0]);
     const [startsHour, setStartsHour] = useState<number>(currentEvent.time[0].getHours());
     const [startsMinute, setStartsMinute] = useState<number>(currentEvent.time[0].getMinutes());
@@ -31,7 +28,9 @@ const EventPage = () => {
     const [endsMinute, setEndsMinute] = useState<number>(currentEvent.time[1].getMinutes());
     const [eventWeather, setEventWeather] = useState<string>("No");
     const [goBack, setGoBack] = useState<boolean>(false);
-    const [notification, setNotification] = useRecoilState(notificationState);
+    const noteRef = useRef<HTMLTextAreaElement>(null);
+    const endsDateButtonRef = useRef<HTMLButtonElement>(null);
+    const endsHourMinuteButtonRef = useRef<HTMLButtonElement>(null);
 
     const closeAll = () => {
         setShowCalendar("NO");

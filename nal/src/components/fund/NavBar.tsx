@@ -3,7 +3,7 @@ import './NavBar.css';
 import { ReactComponent as Home } from "../../svg/Home.svg";
 import { ReactComponent as Schedule } from "../../svg/Schedule.svg";
 import { ReactComponent as More } from "../../svg/More.svg";
-import { modeState, showNotiState } from '../../utils/atom';
+import { modeState } from '../../utils/atom';
 
 const NavBar = ()=> {
     const [mode, setMode] = useRecoilState(modeState);
@@ -23,7 +23,6 @@ const NavBar = ()=> {
                 </div>
             </div>
         </div>
-        
     );
 }
   

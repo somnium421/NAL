@@ -12,7 +12,7 @@ const NotiComp = (props: Props) => {
     const {item} = props;
     const events = useRecoilValue(eventsState);
     const [notification, setNotification] = useRecoilState(notificationState);
-    const [currentEvent, setCurrentEvent] = useRecoilState(currentEventState);
+    const setCurrentEvent = useSetRecoilState(currentEventState);
     const setShowEvent = useSetRecoilState(showEventState);
     const [showDot, setShowDot] = useState<boolean>(!item.checked);
     let event: IEvent;
@@ -20,7 +20,7 @@ const NotiComp = (props: Props) => {
 
     const NotiContent = () => {
         switch (item.type) {
-            case "MODIFY": return <><div className="modifyTitle">Rain is expected during the event</div>
+            case "MODIFY": return <><div className="modifyTitle">{item.modifyReason} is expected during the event</div>
             <Event idx={item.eventIdx!}/></>
         }
     }

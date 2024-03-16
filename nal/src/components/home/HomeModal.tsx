@@ -1,10 +1,10 @@
 import './HomeModal.css';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { showModalState, similarDateRecordState } from '../../utils/atom';
 import HomeWeather from '../../components/home/HomeWeather';
 
 const HomeModal = () => {
-    const [showModal, setShowModal] = useRecoilState(showModalState);
+    const setShowModal = useSetRecoilState(showModalState);
     const similarDateRecord = useRecoilValue(similarDateRecordState);
 
     return (

@@ -1,13 +1,12 @@
 import './NotiPage.css'
-import PageTitle from '../components/common/PageTitle';
+import PageTitle from '../components/fund/PageTitle';
 import NotiComp from '../components/noti/NotiComp';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { notificationState, recordState } from '../utils/atom';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { notificationState } from '../utils/atom';
 
 const NotiPage = () => {
-    const [notification, setNotification] = useRecoilState(notificationState);
+    const notification = useRecoilValue(notificationState);
     const resetNotification = useResetRecoilState(notificationState);
-    const record = useRecoilValue(recordState);
 
     return (
         <div id="notiPage" className="page">

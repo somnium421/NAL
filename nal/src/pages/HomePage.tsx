@@ -25,8 +25,8 @@ const HomePage = () => {
     const setSimilarDateRecord = useSetRecoilState(similarDateRecordState);
 
     useEffect(() => {
-        let feelsLikeMaxDiff = 100;
         if (record.length && currentWeather.main) {
+            let feelsLikeMaxDiff = 100;
             record.forEach(item => {
                 if (Math.abs(item.temperature.feel - currentWeather.temperature.feel) < feelsLikeMaxDiff && !isSameDate(new Date(), new Date(item.date))) {
                     feelsLikeMaxDiff = Math.abs(item.temperature.feel - currentWeather.temperature.feel);
@@ -43,7 +43,7 @@ const HomePage = () => {
                 }
             })
         }
-    }, [record, currentWeather])
+    }, [record, currentWeather]);
     
     return ( 
         <div id="homePage" className="page">

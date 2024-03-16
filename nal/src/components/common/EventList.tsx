@@ -1,8 +1,7 @@
-import './EventList.css'
 import Event from './Event'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { eventsByDateState, eventsState, modeState } from '../../utils/atom';
-import { dateToYearMonthDateNumber, eventsToEventsByDate, numberToMonthDateYear } from '../../utils/util';
+import { dateToYearMonthDateNumber, numberToMonthDateYear } from '../../utils/util';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -11,8 +10,7 @@ interface Props {
 
 const EventList = (props: Props) => {
     const {date = new Date()} = props;
-    const events = useRecoilValue(eventsState);
-    const [eventsByDate, setEventsByDate] = useRecoilState(eventsByDateState);
+    const eventsByDate = useRecoilValue(eventsByDateState);
     const mode = useRecoilValue(modeState);
     const [closestNextDate, setClosestNextDate] = useState<number>(0);
     
@@ -32,7 +30,7 @@ const EventList = (props: Props) => {
         else title = numberToMonthDateYear(closestNextDate);
 
         return <>
-            <div className="eventListTitle">{title}</div>
+            <div style={{fontSize: "1.7vh"}}>{title}</div>
             <hr style={{borderColor: "black"}}/>
         </>
     }
