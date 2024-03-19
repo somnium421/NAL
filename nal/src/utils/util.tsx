@@ -101,45 +101,39 @@ export const getCurrentLocation = (): Location | Promise<Location> => {
         currentLocation.longitude = pos.coords.longitude;
         currentLocation.latitude = pos.coords.latitude;
         return fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&limit=1&appid=${WEATHER_API_KEY}`)
-    })
-    .then((response) => response.json())
+    }).then((response) => response.json())
     .then((json) => {
         currentLocation.name = json[0].name;
         return currentLocation;
     });
 };
 export const getCurrentWeather = (): WeatherSnapshot | Promise<WeatherSnapshot> => {
-    const location = getCurrentLocation();
-    if (location instanceof Promise) {
-        return location.then((location) => fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&units=metric`))
-        .then((response) => response.json())
-        .then((json) => {
+    if (updated) return currentWeather;
+    const location = getCurrentLocation() as Promise<Location>;
+    return location.then((location) => 
+        Promise.all([fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&units=metric`),
+                        fetch(`https://pro.openweathermap.org/data/2.5/forecast/daily?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&cnt=1&units=metric`)])
+        .then((response) => Promise.all(response.map((item) => item.json())))
+        .then(([json1, json2]) => {
             currentWeather = {
                 temperature: {
-                    current: parseInt(json.main.temp.toFixed()),
-                    feel: parseInt(json.main.feels_like.toFixed()),
-                    high: 0,
-                    low: 0,
+                    current: parseInt(json1.main.temp.toFixed()),
+                    feel: parseInt(json1.main.feels_like.toFixed()),
+                    high: parseInt(json2.list[0].temp.max.toFixed()), 
+                    low: parseInt(json2.list[0].temp.min.toFixed())
                 },
-                humidity: json.main.humidity,
-                pressure: json.main.pressure,
-                main: json.weather[0].main,
+                humidity: json1.main.humidity,
+                pressure: json1.main.pressure,
+                main: json1.weather[0].main,
                 wind: {
-                    direction: windDirection(json.wind.deg),
-                    speed: parseInt(json.wind.speed.toFixed()),
+                    direction: windDirection(json1.wind.deg),
+                    speed: parseInt(json1.wind.speed.toFixed()),
                 }
             }
-            return location;
-        })
-        .then((location) => fetch(`https://pro.openweathermap.org/data/2.5/forecast/climate?lat=${location.latitude}&lon=${location.longitude}&appid=${WEATHER_API_KEY}&cnt=1&units=metric`))
-        .then((response) => response.json())
-        .then((json) => {
-            currentWeather = {...currentWeather, temperature: {...currentWeather.temperature, high: parseInt(json.list[0].temp.max.toFixed()), low: parseInt(json.list[0].temp.min.toFixed())}};
             updated = true;
             return currentWeather;
         })
-    }
-    else return currentWeather;
+    )
 };
 export const getDateWeather = (date: Date): DateWeather => {
     if (weatherData[dateToYearMonthDateNumber(date)]) return weatherData[dateToYearMonthDateNumber(date)];
@@ -148,7 +142,7 @@ export const getDateWeather = (date: Date): DateWeather => {
 export const makeDateWeather = (date: Date): DateWeather => {
     let value = Math.random();
     if (isSameDate(new Date(), date)) {
-        const currentWeather = getCurrentWeather() as Weather;
+        const currentWeather = getCurrentWeather() as WeatherSnapshot;
         switch (currentWeather.main) {
             case "Clear": value = 0; break;
             case "Clouds": value = 0.6; break;
