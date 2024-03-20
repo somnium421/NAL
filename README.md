@@ -19,15 +19,23 @@ And it was implemented as a web application by me.*
 - Due to abrupt, unanticipated weather changes, even well-planned events can be ruined easily.
 
 ## Main Feature
+![HomePage](doc/HomePage.png)
 - **Personalized Weather** 
     - Based on weather information and user records about weather, NAL looks for the past day that is most similar to today's weather. By showing the your photos of the most similar day, it lets you remind the past sentiments and the feelings effectively.
 
+    - The weather information on the home page is real value from OpenWeatherMap API.
+
+- **Notification for Sudden Weather Changes** 
+    - When the weather forecast suddenly changes, it may ruin your schedule. NAL notifies you immediately and helps to modify a plan easily.
+
+    - OpenAI API is used here to check if an event is compatible with the weather forecast
+
+![SchedulePage](doc/SchedulePage.png)
 - **Scheduling Based on Weather** 
     - Weather plays an important role in scheduling. NAL provides an intuitive calendar that gives you a quick look at your monthly schedules and weather forecasts.
 
-- **Notification for Sudden Weather Changes** 
-    - When the weather forecast suddenly changes, it may ruin your schedule. NAL notifies you immediately and helps to modify a plan easily. 
-
+    - The weather information on the schedule page is designated value to provide better test scenario.
+ 
 ## Impact
 - **Inclusive weather app for everyone** 
     - Weather data is difficult to understand for whom lack the ability to analyze numerical data, such as children or elederly, even though they are more vulnerable to weather changes than the usual. Weather information based on users' own experience allows them to expect weather most intuitively. 
